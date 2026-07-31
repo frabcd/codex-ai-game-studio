@@ -1,0 +1,38 @@
+{
+  "name": "ai-game-studio-windows",
+  "version": "1.1.0",
+  "description": "A native-first Windows toolchain planner with deterministic cross-platform adaptations for Codex AI Game Studio.",
+  "author": {
+    "name": "frabcd",
+    "url": "https://github.com/frabcd"
+  },
+  "homepage": "https://frabcd.github.io/codex-ai-game-studio/platforms/windows/",
+  "repository": "https://github.com/frabcd/codex-ai-game-studio",
+  "license": "MIT",
+  "keywords": [
+    "windows",
+    "codex",
+    "game-development",
+    "directml",
+    "cuda",
+    "toolchain"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Game Studio for Windows",
+    "shortDescription": "Plan a native Windows game toolchain safely.",
+    "longDescription": "Inspects Windows game-development capabilities read-only, plans one native setup, and adapts POSIX-, macOS-, or Metal-bound tools without claiming binary compatibility. Downloads, installs, configuration changes, and substitutions require digest confirmation.",
+    "developerName": "frabcd",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Native Windows and architecture detection",
+      "Unity, Godot, Unreal, Blender, and 2D editor discovery",
+      "CUDA, DirectML, CPU, and WARP routing",
+      "Deterministic platform adaptation with rollback"
+    ],
+    "websiteURL": "https://frabcd.github.io/codex-ai-game-studio/platforms/windows/",
+    "privacyPolicyURL": "https://frabcd.github.io/codex-ai-game-studio/privacy/",
+    "termsOfServiceURL": "https://frabcd.github.io/codex-ai-game-studio/terms/",
+    "defaultPrompt": "Use $ai-game-studio-windows:setup-windows-edition to inspect this Windows project and propose a native setup without changes."
+  }
+}

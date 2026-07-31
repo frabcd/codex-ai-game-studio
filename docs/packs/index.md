@@ -12,5 +12,6 @@ Packs are local marketplace plugins. Each contains an inert adapter, setup skill
 - [Unreal Engine](unreal/)
 - [Blender](blender/)
 - [Pixel art](pixel/)
+- [img2threejs](img2threejs/) — pinned image-to-procedural-Three.js reconstruction with staged visual gates
 
 Only one MCP server per host application may be active. Use the core doctor and a pack plan, review the exact source pin/download/license/permissions, then confirm its digest.

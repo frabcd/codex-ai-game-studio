@@ -1,0 +1,41 @@
+{
+  "name": "ai-game-studio-img2threejs",
+  "version": "1.1.0",
+  "description": "A pinned, quality-gated image-to-procedural-Three.js workflow for Codex AI Game Studio.",
+  "author": {
+    "name": "frabcd",
+    "url": "https://github.com/frabcd"
+  },
+  "homepage": "https://frabcd.github.io/codex-ai-game-studio/packs/img2threejs/",
+  "repository": "https://github.com/frabcd/codex-ai-game-studio",
+  "license": "Apache-2.0",
+  "keywords": [
+    "image-to-3d",
+    "threejs",
+    "procedural-modeling",
+    "visual-qa",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Game Studio · img2threejs",
+    "shortDescription": "Rebuild image references as gated Three.js code.",
+    "longDescription": "Vendors img2threejs v1.4.3 with staged intake, specification, procedural build, multi-view review, and bounded correction gates.",
+    "developerName": "frabcd",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Image-to-procedural-Three.js reconstruction",
+      "Quality-contract and pass-gated generation",
+      "Multi-view visual review and bounded correction"
+    ],
+    "websiteURL": "https://frabcd.github.io/codex-ai-game-studio/packs/img2threejs/",
+    "privacyPolicyURL": "https://frabcd.github.io/codex-ai-game-studio/privacy/",
+    "termsOfServiceURL": "https://frabcd.github.io/codex-ai-game-studio/terms/",
+    "brandColor": "#7C5CFC",
+    "composerIcon": "./assets/logo.svg",
+    "logo": "./assets/logo.svg",
+    "logoDark": "./assets/logo.svg",
+    "screenshots": [],
+    "defaultPrompt": "Use $ai-game-studio-img2threejs:img2threejs to plan a gated procedural Three.js reconstruction from my reference."
+  }
+}

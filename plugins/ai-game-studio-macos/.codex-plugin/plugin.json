@@ -1,0 +1,37 @@
+{
+  "name": "ai-game-studio-macos",
+  "version": "1.1.0",
+  "description": "An opt-in macOS edition for native Codex AI Game Studio detection, planning, and platform-safe tool adaptation.",
+  "author": {
+    "name": "frabcd",
+    "url": "https://github.com/frabcd"
+  },
+  "homepage": "https://frabcd.github.io/codex-ai-game-studio/platforms/macos/",
+  "repository": "https://github.com/frabcd/codex-ai-game-studio",
+  "license": "MIT",
+  "keywords": [
+    "macos",
+    "apple-silicon",
+    "metal",
+    "game-development",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Game Studio for macOS",
+    "shortDescription": "Plan a native macOS game-creation toolchain safely.",
+    "longDescription": "Detects Apple Silicon or Intel macOS projects without mutation, proposes native engine and DCC routes, and adapts Windows-only or GPU-bound workflows without claiming binary compatibility.",
+    "developerName": "frabcd",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read-only macOS toolchain detection",
+      "Apple Silicon and Intel routing",
+      "Reversible cross-platform adaptation plans"
+    ],
+    "websiteURL": "https://frabcd.github.io/codex-ai-game-studio/platforms/macos/",
+    "privacyPolicyURL": "https://frabcd.github.io/codex-ai-game-studio/privacy/",
+    "termsOfServiceURL": "https://frabcd.github.io/codex-ai-game-studio/terms/",
+    "brandColor": "#5A67D8",
+    "defaultPrompt": "Use $ai-game-studio-macos:setup-macos-edition to inspect this Mac and propose one native setup. Do not change anything yet."
+  }
+}

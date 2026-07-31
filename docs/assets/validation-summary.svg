@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
   <title id="title">Codex AI Game Studio local validation summary</title>
-  <desc id="description">A release candidate validation dashboard showing 62 tests passed, seven plugins, 92 bundled skills, 163 catalog repositories, full Claude parity counts, five passing pack mocks, and deterministic release builds.</desc>
+  <desc id="description">A release candidate validation dashboard showing 108 tests passed, ten plugins, 95 bundled skills, 163 catalog repositories, full Claude parity counts, five passing pack mocks, and deterministic 16-file release builds.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#081226"/>
@@ -28,18 +28,18 @@
   <circle cx="1450" cy="90" r="190" fill="#7c5cfc" fill-opacity=".18"/>
   <circle cx="90" cy="820" r="240" fill="#08c7f7" fill-opacity=".12"/>
   <rect x="64" y="58" width="12" height="116" rx="6" fill="url(#accent)" filter="url(#glow)"/>
-  <text x="108" y="100" class="label">LOCAL RELEASE CANDIDATE · 2026-07-30</text>
+  <text x="108" y="100" class="label">LOCAL RELEASE CANDIDATE · 2026-07-31</text>
   <text x="108" y="158" class="value" font-size="62">Every required local gate passed.</text>
 
   <rect x="64" y="214" width="462" height="226" rx="24" class="panel"/>
   <text x="98" y="260" class="label">STANDARD-LIBRARY TESTS</text>
-  <text x="98" y="346" class="value"><tspan class="pass">62</tspan><tspan fill="#8ea6c9"> / 62</tspan></text>
+  <text x="98" y="346" class="value"><tspan class="pass">108</tspan><tspan fill="#8ea6c9"> / 108</tspan></text>
   <text x="98" y="397" class="small">Windows local runner · PASS</text>
 
   <rect x="569" y="214" width="462" height="226" rx="24" class="panel"/>
   <text x="603" y="260" class="label">DISTRIBUTION SURFACE</text>
-  <text x="603" y="346" class="value">7 <tspan font-size="34" fill="#8ea6c9">plugins</tspan></text>
-  <text x="603" y="397" class="small">85 core · 92 bundled skills</text>
+  <text x="603" y="346" class="value">10 <tspan font-size="34" fill="#8ea6c9">plugins</tspan></text>
+  <text x="603" y="397" class="small">85 core · 95 bundled skills</text>
 
   <rect x="1074" y="214" width="462" height="226" rx="24" class="panel"/>
   <text x="1108" y="260" class="label">OFFLINE REGISTRY</text>
@@ -63,6 +63,6 @@
 
   <rect x="816" y="666" width="720" height="168" rx="24" class="panel"/>
   <text x="850" y="712" class="label">RELEASE REPRODUCIBILITY</text>
-  <text x="850" y="763" class="mono">11 FILES · BYTE-IDENTICAL SHA-256</text>
+  <text x="850" y="763" class="mono">16 FILES · BYTE-IDENTICAL SHA-256</text>
   <text x="850" y="807" class="small"><tspan class="pass">✓</tspan> ZIPs · checksums · SPDX 2.3 SBOM</text>
 </svg>

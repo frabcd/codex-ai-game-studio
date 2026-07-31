@@ -8,6 +8,7 @@ on:
       - SUPPORT.md
       - SECURITY.md
       - CONTRIBUTING.md
+      - assets/**
       - docs/**
       - tools/build_pages.py
       - .github/workflows/pages.yml

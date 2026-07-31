@@ -7,14 +7,25 @@
 - Optional Unity, Godot, Unreal, Blender, pixel-art, and automation packs.
 - Production recipes and rights/technical/visual/performance/playability gates.
 
-## v1.1 — evidence and ergonomics
+## v1.1 — platform editions and procedural Three.js
+
+- Pinned Apache-2.0 img2threejs workflow with strict reconstruction and visual
+  quality gates.
+- Native Windows and macOS plugins with explicit setup skills and deterministic
+  capability adaptation.
+- Curated Windows and macOS release marketplaces with exactly one matching
+  platform plugin.
+- Digest-confirmed edition selection and rollback without implicit external
+  installation.
+
+## v1.2 — evidence and ergonomics
 
 - More open, redistributable sprite/mesh/animation/audio QA fixtures.
 - Richer screenshot and artifact regression reports.
 - Project-specific budget presets and comparative catalog explanations.
 - Additional translations driven by maintainers who can review them.
 
-## v1.2 — integration depth
+## v1.3 — integration depth
 
 - Upstream-tested pack compatibility matrices and signed adapter manifests.
 - Optional self-hosted-runner integration suites for compatible editors.

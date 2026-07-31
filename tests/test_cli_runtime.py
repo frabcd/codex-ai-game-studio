@@ -20,7 +20,7 @@ class CliSurfaceTests(unittest.TestCase):
     def test_version(self) -> None:
         result = self.run_cli("--version")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout.strip(), "1.0.0")
+        self.assertEqual(result.stdout.strip(), "1.1.0")
 
     def test_native_launcher_for_current_platform(self) -> None:
         scripts = CLI.parent
@@ -32,7 +32,7 @@ class CliSurfaceTests(unittest.TestCase):
             command = ["/bin/sh", str(scripts / "ai-game-studio.sh"), "--version"]
         result = subprocess.run(command, cwd=REPO, capture_output=True, text=True, check=False, timeout=30)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout.strip(), "1.0.0")
+        self.assertEqual(result.stdout.strip(), "1.1.0")
 
     def test_required_command_surface(self) -> None:
         root_help = self.run_cli("--help")

@@ -8,7 +8,8 @@ description: Plan, generate, validate, and ship games with Codex.
 
 ![Codex AI Game Studio](assets/hero.png)
 
-**85 skills · 49 roles · 163 verified repositories · five editor MCP packs · Windows, macOS, and Linux**
+**85 core skills · 95 bundled skills · 49 roles · 163 verified repositories ·
+five editor MCP packs · Windows and macOS editions**
 
 Codex AI Game Studio is a local-first game-production plugin. It combines studio planning, generative assets, engine routing, visual/playability QA, and reversible setup. The core has no hosted backend.
 
@@ -17,6 +18,9 @@ Codex AI Game Studio is a local-first game-production plugin. It combines studio
 ```text
 codex plugin marketplace add frabcd/codex-ai-game-studio --ref main
 codex plugin add ai-game-studio@frabcd-ai-game-studio
+codex plugin add ai-game-studio-windows@frabcd-ai-game-studio
+# On macOS, install ai-game-studio-macos instead of ai-game-studio-windows.
+codex plugin add ai-game-studio-img2threejs@frabcd-ai-game-studio
 ```
 
 Start a new task and invoke:
@@ -28,6 +32,8 @@ $ai-game-studio:start Inspect this project read-only and propose the safest next
 ## Documentation
 
 - [Tutorial workbook](TUTORIALS.md)
+- [Windows edition](platforms/windows.md)
+- [macOS edition](platforms/macos.md)
 - [Architecture](ARCHITECTURE.md)
 - [Validation and before/after examples](EXAMPLES.md)
 - [Catalog contribution guide](CATALOG_CONTRIBUTING.md)

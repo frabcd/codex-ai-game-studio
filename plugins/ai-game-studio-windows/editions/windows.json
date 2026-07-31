@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "id": "windows",
+  "plugin": "ai-game-studio-windows",
+  "display_name": "Codex AI Game Studio for Windows",
+  "target_os": "Windows",
+  "version": "1.1.0",
+  "license": "MIT",
+  "distribution": "local-codex-marketplace",
+  "supported_architectures": [
+    "amd64",
+    "arm64"
+  ],
+  "shells": [
+    {
+      "id": "powershell-7",
+      "executable": "pwsh.exe",
+      "role": "preferred",
+      "read_only_detection": [
+        "Get-Command pwsh.exe -ErrorAction SilentlyContinue",
+        "pwsh.exe -NoProfile -Command \"(Get-Host).Version.ToString()\""
+      ],
+      "limitations": [
+        "The executable must resolve to a native Windows binary for the detected architecture."
+      ]
+    },
+    {
+      "id": "windows-powershell",
+      "executable": "powershell.exe",
+      "role": "compatibility-fallback",
+      "read_only_detection": [
+        "Get-Command powershell.exe -ErrorAction SilentlyContinue",
+        "powershell.exe -NoProfile -Command \"(Get-Host).Version.ToString()\""
+      ],
+      "limitations": [
+        "Windows PowerShell 5.1 lacks some PowerShell 7 language and encoding behavior; prefer standard-library Python for shared portable helpers."
+      ]
+    }
+  ],
+  "package_managers": [
+    {
+      "id": "winget",
+      "executable": "winget.exe",
+      "read_only_detection": [
+        "Get-Command winget.exe -ErrorAction SilentlyContinue",
+        "winget.exe --version"
+      ],
+      "install_policy": "Use only a verified package identifier and exact version recorded in a confirmed transaction."
+    },
+    {
+      "id": "chocolatey",
+      "executable": "choco.exe",
+      "read_only_detection": [
+        "Get-Command choco.exe -ErrorAction SilentlyContinue",
+        "choco.exe --version"
+      ],
+      "install_policy": "Use only when the repository, package maintainer, checksum, version, and license are verified in the plan."
+    },
+    {
+      "id": "scoop",
+      "executable": "scoop.ps1",
+      "read_only_detection": [
+        "Get-Command scoop -ErrorAction SilentlyContinue",
+        "scoop --version"
+      ],
+      "install_policy": "Use only a pinned manifest from a verified bucket after confirmation."
+    }
+  ],
+  "gpu_backends": [
+    {
+      "id": "cuda",
+      "hardware": "NVIDIA GPU",
+      "read_only_detection": [
+        "Get-CimInstance Win32_VideoController | Select-Object Name,AdapterRAM,DriverVersion",
+        "Get-Command nvidia-smi.exe -ErrorAction SilentlyContinue"
+      ],
+      "limitations": [
+        "CUDA capability is unverified until the GPU, driver, runtime, required compute capability, and VRAM meet the selected tool's pinned requirements."
+      ]
+    },
+    {
+      "id": "directml",
+      "hardware": "DirectX 12-capable Windows GPU",
+      "read_only_detection": [
+        "Get-CimInstance Win32_VideoController | Select-Object Name,AdapterCompatibility,DriverVersion",
+        "Get-Command dxdiag.exe -ErrorAction SilentlyContinue"
+      ],
+      "limitations": [
+        "DirectML is capability-equivalent for selected inference tools, not a binary replacement for CUDA or Metal, and output/performance must be benchmarked."
+      ]
+    },
+    {
+      "id": "cpu",
+      "hardware": "Windows-supported CPU",
+      "read_only_detection": [
+        "Get-CimInstance Win32_Processor | Select-Object Name,Architecture,NumberOfCores,NumberOfLogicalProcessors"
+      ],
+      "limitations": [
+        "CPU execution can be substantially slower and may require reduced model or asset settings."
+      ]
+    },
+    {
+      "id": "warp",
+      "hardware": "Windows Advanced Rasterization Platform",
+      "read_only_detection": [
+        "Get-Command dxdiag.exe -ErrorAction SilentlyContinue"
+      ],
+      "limitations": [
+        "WARP is a software graphics fallback for validation and is not evidence of acceptable production rendering or inference performance."
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "id": "unity",
+      "display_name": "Unity and Unity Hub",
+      "project_markers": [
+        "ProjectSettings/ProjectVersion.txt",
+        "Packages/manifest.json"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Unity Hub/Unity Hub.exe",
+        "%ProgramFiles%/Unity/Hub/Editor/*/Editor/Unity.exe"
+      ],
+      "read_only_detection": [
+        "Resolve project markers and existing editor paths without starting Unity or Unity Hub."
+      ]
+    },
+    {
+      "id": "godot",
+      "display_name": "Godot Engine",
+      "project_markers": [
+        "project.godot"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Godot/Godot*.exe",
+        "%LocalAppData%/Programs/Godot/Godot*.exe"
+      ],
+      "read_only_detection": [
+        "Resolve native Godot executables and project version features without importing the project."
+      ]
+    },
+    {
+      "id": "unreal",
+      "display_name": "Unreal Engine",
+      "project_markers": [
+        "*.uproject",
+        "Source/*.Build.cs"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Epic Games/UE_*/Engine/Binaries/Win64/UnrealEditor.exe",
+        "%ProgramFiles%/Epic Games/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe"
+      ],
+      "read_only_detection": [
+        "Read the project engine association and resolve installed native editors without launching or compiling Unreal."
+      ]
+    },
+    {
+      "id": "blender",
+      "display_name": "Blender",
+      "project_markers": [
+        "*.blend"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Blender Foundation/Blender */blender.exe"
+      ],
+      "read_only_detection": [
+        "Resolve the Blender executable and version metadata without opening a scene."
+      ]
+    },
+    {
+      "id": "aseprite",
+      "display_name": "Aseprite",
+      "project_markers": [
+        "*.aseprite"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Aseprite/Aseprite.exe",
+        "%LocalAppData%/Programs/Aseprite/Aseprite.exe"
+      ],
+      "read_only_detection": [
+        "Resolve the licensed native Aseprite installation without opening an asset."
+      ]
+    },
+    {
+      "id": "pixelorama",
+      "display_name": "Pixelorama",
+      "project_markers": [
+        "*.pxo"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Pixelorama/Pixelorama.exe",
+        "%LocalAppData%/Programs/Pixelorama/Pixelorama.exe"
+      ],
+      "read_only_detection": [
+        "Resolve a native Windows Pixelorama build and architecture without opening an asset."
+      ]
+    },
+    {
+      "id": "tiled",
+      "display_name": "Tiled",
+      "project_markers": [
+        "*.tmx",
+        "*.tsx",
+        "*.world"
+      ],
+      "executable_hints": [
+        "%ProgramFiles%/Tiled/tiled.exe",
+        "%LocalAppData%/Programs/Tiled/tiled.exe"
+      ],
+      "read_only_detection": [
+        "Resolve the native Tiled executable and project files without loading or rewriting maps."
+      ]
+    }
+  ],
+  "native_capabilities": [
+    "Run standard-library Python helpers as native Windows processes.",
+    "Run thin PowerShell launchers without nested shell-string evaluation.",
+    "Discover game engines, DCC tools, GPU providers, package managers, and existing MCP configuration read-only.",
+    "Route each host application to at most one confirmed MCP server.",
+    "Create digest-bound setup, disable, and rollback proposals with project-state backups."
+  ],
+  "adaptation_rules": [
+    {
+      "id": "posix-shell-entrypoint",
+      "source_constraint": "The upstream workflow supplies only a POSIX shell launcher or assumes POSIX paths and process semantics.",
+      "preferred_native": "Port the launcher mechanically to standard-library Python or argument-array PowerShell while preserving the pinned source behavior and tests.",
+      "alternatives": [
+        "Use a verified native Windows entrypoint from the same pinned upstream source.",
+        "Use a verified capability-equivalent Windows tool with comparable artifacts and quality gates.",
+        "Use WSL or a documented manual handoff only after its filesystem, GUI, process, and performance limitations are accepted."
+      ],
+      "limitations": [
+        "A port is not accepted until path, quoting, exit-code, signal, encoding, and rollback tests pass on the detected architecture.",
+        "POSIX binaries are never labeled as native Windows binaries."
+      ],
+      "requires_confirmation": true
+    },
+    {
+      "id": "macos-application-bundle",
+      "source_constraint": "The workflow depends on a macOS application bundle, Apple framework, or macOS-only automation surface.",
+      "preferred_native": "Build or adapt portable upstream source for Windows only when the license, dependency graph, architecture, and upstream tests permit it.",
+      "alternatives": [
+        "Select a verified Windows application that provides the required import, export, automation, and quality capabilities.",
+        "Use an interchange-file manual handoff with an explicit artifact contract.",
+        "Use a hosted service only after cost, privacy, data retention, rights, and network requirements are confirmed."
+      ],
+      "limitations": [
+        "macOS application bundles and Apple frameworks are not binary-compatible with Windows.",
+        "Feature names do not establish output-quality or workflow parity; evidence must be captured."
+      ],
+      "requires_confirmation": true
+    },
+    {
+      "id": "homebrew-only-distribution",
+      "source_constraint": "The documented installation route is Homebrew-only even though the underlying source may be portable.",
+      "preferred_native": "Resolve the same pinned upstream release through a verified Windows package, signed release artifact, or reproducible source build.",
+      "alternatives": [
+        "Use winget, Chocolatey, or Scoop only when package identity, publisher, version, checksum, and license match the proposal.",
+        "Use a portable archive from the pinned upstream release after checksum verification.",
+        "Use a capability-equivalent tool or manual setup after confirmation."
+      ],
+      "limitations": [
+        "Matching package names across registries do not prove common provenance.",
+        "Unpinned community manifests are not eligible for automatic execution."
+      ],
+      "requires_confirmation": true
+    },
+    {
+      "id": "metal-only-compute",
+      "source_constraint": "The generation or validation workflow requires Apple Metal or Metal Performance Shaders.",
+      "preferred_native": "Route to a verified DirectML, CUDA, or CPU implementation using the same model/version and compatible preprocessing when available.",
+      "alternatives": [
+        "Use CUDA when a compatible NVIDIA GPU, driver, runtime, VRAM budget, license, and deterministic test fixture are verified.",
+        "Use DirectML when the selected tool explicitly supports it and representative quality and performance gates pass.",
+        "Use CPU, a hosted provider, or a manual cross-machine handoff after confirming performance, privacy, cost, and provenance effects."
+      ],
+      "limitations": [
+        "DirectML, CUDA, CPU, and Metal backends are capability routes, not binary-compatible replacements.",
+        "Backend changes can alter determinism, precision, memory use, throughput, and output quality."
+      ],
+      "requires_confirmation": true
+    },
+    {
+      "id": "apple-silicon-binary",
+      "source_constraint": "The upstream dependency publishes only an Apple-Silicon executable or assumes Apple ARM frameworks.",
+      "preferred_native": "Compile portable, licensed source for Windows arm64 or amd64 only when the dependency graph and tests explicitly support that target.",
+      "alternatives": [
+        "Select an upstream Windows build with an immutable pin and verified signature or checksum.",
+        "Select a verified capability-equivalent Windows implementation for the detected architecture.",
+        "Use a hosted or manual handoff after confirming rights, privacy, cost, output format, and quality limits."
+      ],
+      "limitations": [
+        "Apple-Silicon executables cannot run as native Windows arm64 or amd64 executables.",
+        "Architecture translation is not proposed as evidence of application, driver, or plugin compatibility."
+      ],
+      "requires_confirmation": true
+    }
+  ],
+  "wsl_fallback": {
+    "default": false,
+    "requires_confirmation": true,
+    "allowed_for": [
+      "A verified command-line dependency with no feasible native route and no GUI or editor-control requirement.",
+      "A reproducible build or conversion step whose input and output stay on the same WSL filesystem."
+    ],
+    "not_allowed_for": [
+      "Direct GUI editor or DCC automation.",
+      "Silent access to Windows credentials or MCP configuration.",
+      "Cross-boundary project writes without an explicit path, performance, ownership, and rollback review."
+    ],
+    "disclosures": [
+      "State the distribution, filesystem boundary, network boundary, process ownership, expected performance, and exact files crossing between WSL and Windows."
+    ]
+  },
+  "transaction_contract": {
+    "sequence": [
+      "Run edition doctor read-only.",
+      "Create one Windows edition plan at the requested plan path.",
+      "Present actions, pins, downloads, licenses, permissions, backups, rollback, expiry, and digest.",
+      "Wait for the user to repeat the exact SHA-256 digest.",
+      "Apply only the unchanged, unexpired plan with the confirmed digest.",
+      "Run health checks and issue a transaction receipt."
+    ],
+    "read_only_command": "& \"${PLUGIN_ROOT}\\scripts\\ai-game-studio-windows.ps1\" doctor --project <root>",
+    "plan_command": "& \"${PLUGIN_ROOT}\\scripts\\ai-game-studio-windows.ps1\" plan --project <root> --output <plan.json>",
+    "apply_command": "& \"${PLUGIN_ROOT}\\scripts\\ai-game-studio-windows.ps1\" apply --project <root> --plan <plan.json> --confirmed-digest <digest>",
+    "digest_algorithm": "sha256",
+    "confirmation": "The user must repeat the displayed digest verbatim; general approval does not authorize apply.",
+    "plan_writes": [
+      "Only the explicitly requested plan output path may be written before confirmation."
+    ],
+    "pre_confirmation_prohibitions": [
+      "No package installation, download, editor launch, MCP activation, hook trust, configuration write, model retrieval, or platform substitution."
+    ]
+  },
+  "permissions": [
+    "Read OS, architecture, PowerShell, package-manager, application, GPU, disk, and network metadata.",
+    "Read selected project markers, Git status, existing MCP configuration names, and credential environment-variable names without reading secret values.",
+    "After digest confirmation, write only transaction-listed Codex, MCP, project-state, lock, adapter, and editor integration files.",
+    "After digest confirmation, spawn only pinned executables with argument arrays and the disclosed filesystem and localhost network scopes.",
+    "After digest confirmation, perform only the downloads whose URL, immutable pin, license, expected size, destination, and checksum policy appear in the transaction."
+  ],
+  "health_checks": [
+    "Confirm native Windows and the selected amd64 or arm64 architecture.",
+    "Recompute hashes for selected executables and reject mismatches.",
+    "Confirm exactly one active MCP server for each host application.",
+    "Verify selected engine and DCC versions against project markers without destructive import.",
+    "Verify the selected CUDA, DirectML, CPU, or WARP route using a representative non-destructive fixture.",
+    "Validate .ai-game-studio/project.json and .ai-game-studio/lock.json against the confirmed transaction.",
+    "Record evidence paths, remaining limitations, and the transaction ID."
+  ],
+  "uninstall": [
+    "Generate edition disable windows as a new digest-bound proposal.",
+    "Stop transaction-owned processes and disable transaction-owned MCP entries only after confirmation.",
+    "Remove only transaction-owned launchers, adapters, and configuration after backups are verified.",
+    "Leave external editors, engines, models, and pre-existing package-manager state untouched unless their removal is separately listed and confirmed."
+  ],
+  "rollback": [
+    "Generate edition rollback <transaction-id> as a separate proposal with its own expiry and digest.",
+    "Restore .ai-game-studio/project.json, .ai-game-studio/lock.json, MCP configuration, and modified project/editor files from transaction backups.",
+    "Restore the previous single-server host selections and environment entries.",
+    "Remove only files created by the selected transaction and report files retained because ownership is uncertain.",
+    "Run the read-only doctor and health checks again and preserve the rollback receipt."
+  ],
+  "activation": {
+    "mode": "confirmed-transaction-only",
+    "project_state": ".ai-game-studio/project.json",
+    "lock_file": ".ai-game-studio/lock.json"
+  }
+}

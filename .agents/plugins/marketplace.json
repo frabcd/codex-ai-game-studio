@@ -87,6 +87,42 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"
+    },
+    {
+      "name": "ai-game-studio-img2threejs",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ai-game-studio-img2threejs"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "ai-game-studio-windows",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ai-game-studio-windows"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "ai-game-studio-macos",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ai-game-studio-macos"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     }
   ]
 }

@@ -493,6 +493,82 @@ until I confirm the digest.
 - Migration map, parity report, generated instructions/agents/hooks, validation output, negative scan for Claude-only runtime references, and a backup manifest.
 - Rollback removes generated Codex files and restores any shared docs; it does not rewrite history or delete Claude assets by default.
 
+## 15. Reference image to procedural Three.js code
+
+Install the optional Apache-2.0 pack first:
+
+```text
+codex plugin add ai-game-studio-img2threejs@frabcd-ai-game-studio
+```
+
+### What to say
+
+```text
+Use $ai-game-studio-img2threejs:img2threejs with this reference image.
+Validate the reference, ask for my intended game use and quality target, and
+write a quality contract before code. Reconstruct it as procedural Three.js in
+ordered passes, review deterministic multi-view captures at every gate, state
+what still differs, and keep generated work in my approved project directory.
+Never claim unseen geometry or an approximation is exact.
+```
+
+### What Codex inspects
+
+- The supplied image, visible silhouette and components, material cues, hidden-view uncertainty, reference rights, existing Three.js project conventions, animation or interaction needs, and target runtime budget.
+
+### What it asks
+
+- Intended use, fidelity versus stylization, missing views, action anchors, animation expectations, supported device class, acceptable correction budget, output directory, and whether the reference depicts a real person's likeness or protected design.
+
+### What it proposes
+
+- An observation record, quality contract, component/material specification, ordered blockout-to-optimization passes, capture matrix, per-pass acceptance gates, provenance, performance limits, and bounded correction loop.
+
+### What it may change after confirmation
+
+- Specifications, procedural Three.js source, renders, and review evidence in the approved project directory. The pack does not install dependencies, upload references, replace production assets, or control an editor by itself.
+
+### Expected artifacts and rollback
+
+- Image probe, specification, pass ledger, Three.js source, deterministic multi-view captures, visual comparison, performance evidence, known limitations, and provenance.
+- Keep prior accepted passes. Rollback restores the last accepted specification/source and removes only named candidates; it never alters the input reference.
+
+See the complete [img2threejs pack guide](https://frabcd.github.io/codex-ai-game-studio/packs/img2threejs/).
+
+## 16. Choose the native Windows or macOS edition
+
+### What to say
+
+On Windows:
+
+```text
+Use $ai-game-studio-windows:setup-windows-edition to inspect this project and
+propose one native Windows setup. Adapt incompatible POSIX, Metal, or macOS-only
+steps by capability, disclose limitations, and wait for my full plan digest.
+```
+
+On macOS:
+
+```text
+Use $ai-game-studio-macos:setup-macos-edition to inspect this project and
+propose one native macOS setup. Adapt incompatible EXE, PowerShell, CUDA, or
+DirectML-only steps by capability, disclose limitations, and wait for my full
+plan digest.
+```
+
+### What Codex inspects, asks, and proposes
+
+- It reads OS, architecture, native versus translated execution, shell, package-manager presence, GPU backends, disk, project markers, editor/DCC installations, and existing MCP configuration without launching or installing anything.
+- It asks which outputs and constraints are non-negotiable, then proposes one native-first route, exact limitations, licenses, permissions, tests, downloads, fallbacks, backups, and rollback.
+- Edition apply changes only `.ai-game-studio/project.json` and `.ai-game-studio/lock.json` after the exact digest is confirmed. Engine packs, external tools, Rosetta, WSL, hosted services, and model downloads require separate plans.
+
+### Expected artifacts and rollback
+
+- Read-only doctor report, adaptation matrix, digest-bound edition plan, selected-edition state and lock, health-check evidence, and a rollback transaction.
+- Disable or rollback restores the two project-state files. It never silently removes independently installed applications or tools.
+
+Use the detailed [Windows guide](https://frabcd.github.io/codex-ai-game-studio/platforms/windows/) or [macOS guide](https://frabcd.github.io/codex-ai-game-studio/platforms/macos/) for native alternatives, exact commands, and platform-specific prompts.
+
 ## If a preferred tool cannot run
 
 Say:

@@ -15,6 +15,30 @@ The adaptation preserves the 73 source workflow names and ports 49 roles, 12 hoo
 
 The complete derived-file mapping, status, test, source path, and destination is recorded in `parity/ledger.json`. This notice and that ledger must remain with redistributed derived files.
 
+## img2threejs
+
+The optional `ai-game-studio-img2threejs` plugin includes a modified,
+runtime-focused snapshot of:
+
+- Project: [img2threejs/img2threejs](https://github.com/img2threejs/img2threejs)
+- Release tag: `v1.4.3`
+- Pinned source commit: `9a8ecf129a58c1b557a1f03f7727f6295672cd51`
+- Source license: Apache License 2.0
+- Source copyright: the img2threejs contributors and copyright holders stated
+  by the upstream project
+
+The snapshot preserves the reconstruction forge, quality gates, and required
+reference material. Packaging changes remove repository-development files and
+generated caches, reduce `SKILL.md` frontmatter to Codex-supported fields, add
+Codex UI metadata, and replace host-specific path assumptions with
+plugin-relative guidance. Runtime hardening moves indexes outside the installed
+plugin, adds Windows/macOS native image conversion with hash-locked external
+fallbacks, bounds and validates optional metadata downloads, and requires a
+confirmed absolute path and SHA-256 before an external texture extractor can
+run. The exact source and modification record is stored in
+`plugins/ai-game-studio-img2threejs/UPSTREAM.json`; the upstream Apache-2.0
+license remains in the plugin and skill distribution.
+
 ## Repository catalog
 
 `sources/AI_GAME_GENERATION_GITHUB_LANDSCAPE.md` is the immutable source snapshot used to produce the 163-record offline catalog. Its SHA-256 is:

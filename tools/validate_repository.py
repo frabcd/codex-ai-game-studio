@@ -13,6 +13,7 @@ import argparse
 import ast
 import json
 import re
+import subprocess
 import sys
 import tomllib
 from dataclasses import dataclass
@@ -76,13 +77,36 @@ EXPECTED_PLUGINS = frozenset(
     {
         "ai-game-studio",
         "ai-game-studio-automation",
-        "ai-game-studio-unity",
-        "ai-game-studio-godot",
-        "ai-game-studio-unreal",
         "ai-game-studio-blender",
+        "ai-game-studio-godot",
+        "ai-game-studio-img2threejs",
+        "ai-game-studio-macos",
         "ai-game-studio-pixel",
+        "ai-game-studio-unity",
+        "ai-game-studio-unreal",
+        "ai-game-studio-windows",
     }
 )
+EXPECTED_PLUGIN_SKILLS = {
+    "ai-game-studio": PARITY_SKILLS | NATIVE_SKILLS,
+    "ai-game-studio-automation": frozenset({"migrate-claude", "setup-automation"}),
+    "ai-game-studio-blender": frozenset({"setup-blender"}),
+    "ai-game-studio-godot": frozenset({"setup-godot"}),
+    "ai-game-studio-img2threejs": frozenset({"img2threejs"}),
+    "ai-game-studio-macos": frozenset({"setup-macos-edition"}),
+    "ai-game-studio-pixel": frozenset({"setup-pixel"}),
+    "ai-game-studio-unity": frozenset({"setup-unity"}),
+    "ai-game-studio-unreal": frozenset({"setup-unreal"}),
+    "ai-game-studio-windows": frozenset({"setup-windows-edition"}),
+}
+PLUGIN_LICENSES = {
+    name: "Apache-2.0" if name == "ai-game-studio-img2threejs" else "MIT"
+    for name in EXPECTED_PLUGINS
+}
+EXPECTED_EDITIONS = {
+    "windows": ("Windows", "ai-game-studio-windows"),
+    "macos": ("Darwin", "ai-game-studio-macos"),
+}
 
 EXPECTED_HOOK_EVENTS = frozenset(
     {
@@ -99,6 +123,8 @@ EXPECTED_HOOK_EVENTS = frozenset(
 )
 
 PINNED_UPSTREAM_COMMIT = "984023ddac0d5e27624f2baacde6105e45de375f"
+PINNED_IMG2THREEJS_COMMIT = "9a8ecf129a58c1b557a1f03f7727f6295672cd51"
+RELEASE_VERSION = "1.1.0"
 HEX_SHA = re.compile(r"^[0-9a-f]{40}$")
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:[-+][0-9A-Za-z.-]+)?$")
 ACTION_USE = re.compile(r"^\s*-?\s*uses:\s*([^\s#]+)", re.MULTILINE)
@@ -172,6 +198,8 @@ class Validator:
         self.validate_parity()
         self.validate_catalog()
         self.validate_packs()
+        self.validate_editions()
+        self.validate_img2threejs()
         self.validate_hooks()
         self.validate_markdown_links()
         self.validate_workflows()
@@ -213,8 +241,19 @@ class Validator:
                 self.error("plugin-name", manifest_path, f"manifest name must be {name!r}")
             if not SEMVER.fullmatch(str(manifest.get("version", ""))):
                 self.error("plugin-version", manifest_path, "version must be strict semantic versioning")
-            if manifest.get("license") != "MIT":
-                self.error("plugin-license", manifest_path, "license must be MIT")
+            elif manifest.get("version") != RELEASE_VERSION:
+                self.error(
+                    "plugin-version",
+                    manifest_path,
+                    f"manifest version must be the release version {RELEASE_VERSION}",
+                )
+            expected_license = PLUGIN_LICENSES.get(name)
+            if manifest.get("license") != expected_license:
+                self.error(
+                    "plugin-license",
+                    manifest_path,
+                    f"license must be {expected_license}",
+                )
             author = manifest.get("author")
             if not isinstance(author, dict) or author.get("name") != "frabcd":
                 self.error("plugin-author", manifest_path, "author.name must be frabcd")
@@ -292,43 +331,48 @@ class Validator:
                 self.error("plugin-path", manifest_path, f"{key} is missing or escapes plugin: {value!r}")
 
     def validate_skills(self) -> None:
-        skills_root = self.root / "plugins" / "ai-game-studio" / "skills"
-        found: dict[str, Path] = {
-            path.parent.name: path for path in skills_root.glob("*/SKILL.md")
-        }
-        expected = PARITY_SKILLS | NATIVE_SKILLS
-        if set(found) != expected:
-            self.error(
-                "skill-set",
-                skills_root,
-                f"expected 73 parity + 12 native skills; missing={sorted(expected - set(found))}, extra={sorted(set(found) - expected)}",
-            )
-        if len(found) != 85:
-            self.error("skill-count", skills_root, f"expected 85, found {len(found)}")
-
-        for directory_name, skill_path in sorted(found.items()):
-            frontmatter, issue = parse_frontmatter(skill_path)
-            if issue:
-                self.error("skill-frontmatter", skill_path, issue)
-                continue
-            if set(frontmatter) != {"name", "description"}:
+        total = 0
+        for plugin_name, expected in EXPECTED_PLUGIN_SKILLS.items():
+            skills_root = self.root / "plugins" / plugin_name / "skills"
+            found: dict[str, Path] = {
+                path.parent.name: path for path in skills_root.glob("*/SKILL.md")
+            }
+            total += len(found)
+            if set(found) != expected:
                 self.error(
-                    "skill-frontmatter",
-                    skill_path,
-                    f"only name and description are allowed, found {sorted(frontmatter)}",
+                    "skill-set",
+                    skills_root,
+                    f"missing={sorted(expected - set(found))}, extra={sorted(set(found) - expected)}",
                 )
-            if frontmatter.get("name") != directory_name:
-                self.error("skill-name", skill_path, f"name must match directory {directory_name!r}")
-            if not frontmatter.get("description", "").strip():
-                self.error("skill-description", skill_path, "description must not be empty")
-            yaml_path = skill_path.parent / "agents" / "openai.yaml"
-            if not yaml_path.is_file():
-                self.error("skill-metadata", yaml_path, "missing agents/openai.yaml")
-            else:
-                text = yaml_path.read_text(encoding="utf-8")
-                expected_invocation = f"$ai-game-studio:{directory_name}"
-                if "default_prompt:" not in text or expected_invocation not in text:
-                    self.error("skill-prompt", yaml_path, f"default_prompt must mention {expected_invocation}")
+            for directory_name, skill_path in sorted(found.items()):
+                frontmatter, issue = parse_frontmatter(skill_path)
+                if issue:
+                    self.error("skill-frontmatter", skill_path, issue)
+                    continue
+                if set(frontmatter) != {"name", "description"}:
+                    self.error(
+                        "skill-frontmatter",
+                        skill_path,
+                        f"only name and description are allowed, found {sorted(frontmatter)}",
+                    )
+                if frontmatter.get("name") != directory_name:
+                    self.error("skill-name", skill_path, f"name must match directory {directory_name!r}")
+                if not frontmatter.get("description", "").strip():
+                    self.error("skill-description", skill_path, "description must not be empty")
+                yaml_path = skill_path.parent / "agents" / "openai.yaml"
+                if not yaml_path.is_file():
+                    self.error("skill-metadata", yaml_path, "missing agents/openai.yaml")
+                else:
+                    text = yaml_path.read_text(encoding="utf-8")
+                    expected_invocation = f"${plugin_name}:{directory_name}"
+                    if "default_prompt:" not in text or expected_invocation not in text:
+                        self.error(
+                            "skill-prompt",
+                            yaml_path,
+                            f"default_prompt must mention {expected_invocation}",
+                        )
+        if total != 95:
+            self.error("skill-count", self.root / "plugins", f"expected 95 bundled skills, found {total}")
 
     def validate_parity(self) -> None:
         ledger_path = self.root / "parity" / "ledger.json"
@@ -518,6 +562,227 @@ class Validator:
                 args = server.get("args") if isinstance(server, dict) else None
                 if not isinstance(args, list) or not any("${PLUGIN_ROOT}/scripts/" in str(item) for item in args):
                     self.error("pack-mcp", mcp_path, "MCP args must use a PLUGIN_ROOT script path")
+
+    def validate_editions(self) -> None:
+        descriptors: dict[str, tuple[Path, dict[str, object]]] = {}
+        for path in sorted((self.root / "plugins").glob("ai-game-studio-*/editions/*.json")):
+            payload = self.load_json(path)
+            if not isinstance(payload, dict):
+                continue
+            edition_id = payload.get("id")
+            if not isinstance(edition_id, str):
+                self.error("edition-id", path, "descriptor id must be a string")
+                continue
+            if edition_id in descriptors:
+                self.error("edition-duplicate", path, f"duplicate edition ID {edition_id!r}")
+            descriptors[edition_id] = (path, payload)
+        if set(descriptors) != set(EXPECTED_EDITIONS):
+            self.error(
+                "edition-set",
+                self.root / "plugins",
+                f"expected {sorted(EXPECTED_EDITIONS)}, found {sorted(descriptors)}",
+            )
+        required_lists = (
+            "supported_architectures",
+            "shells",
+            "package_managers",
+            "gpu_backends",
+            "applications",
+            "native_capabilities",
+            "adaptation_rules",
+            "permissions",
+            "health_checks",
+            "uninstall",
+            "rollback",
+        )
+        for edition_id, (path, descriptor) in sorted(descriptors.items()):
+            expected = EXPECTED_EDITIONS.get(edition_id)
+            if expected is None:
+                continue
+            target_os, plugin_name = expected
+            for key in ("plugin", "display_name", "target_os", "version", "license", "activation"):
+                if key not in descriptor:
+                    self.error("edition-field", path, f"missing {key}")
+            if descriptor.get("plugin") != plugin_name:
+                self.error("edition-plugin", path, f"plugin must be {plugin_name}")
+            if descriptor.get("target_os") != target_os:
+                self.error("edition-os", path, f"target_os must be {target_os}")
+            if descriptor.get("version") != RELEASE_VERSION:
+                self.error("edition-version", path, f"version must be {RELEASE_VERSION}")
+            if descriptor.get("license") != "MIT":
+                self.error("edition-license", path, "license must be MIT")
+            for key in required_lists:
+                value = descriptor.get(key)
+                if not isinstance(value, list) or not value:
+                    self.error("edition-field", path, f"{key} must be a non-empty array")
+            for key in ("shells", "package_managers", "gpu_backends", "applications"):
+                values = descriptor.get(key)
+                if isinstance(values, list) and any(
+                    not isinstance(item, dict) or not isinstance(item.get("id"), str)
+                    for item in values
+                ):
+                    self.error(
+                        "edition-field",
+                        path,
+                        f"{key} entries must be objects with string IDs",
+                    )
+            activation = descriptor.get("activation")
+            if not isinstance(activation, dict) or activation.get("mode") != "confirmed-transaction-only":
+                self.error("edition-confirmation", path, "activation.mode must be confirmed-transaction-only")
+            if not isinstance(activation, dict) or activation.get("project_state") != ".ai-game-studio/project.json":
+                self.error("edition-state", path, "activation.project_state must use the scoped project state")
+            if not isinstance(activation, dict) or activation.get("lock_file") != ".ai-game-studio/lock.json":
+                self.error("edition-state", path, "activation.lock_file must use the scoped lock file")
+            for rule in descriptor.get("adaptation_rules", []):
+                if not isinstance(rule, dict):
+                    self.error("edition-rule", path, "adaptation rules must be objects")
+                    continue
+                missing = {
+                    "id",
+                    "source_constraint",
+                    "preferred_native",
+                    "alternatives",
+                    "limitations",
+                    "requires_confirmation",
+                } - set(rule)
+                if missing:
+                    self.error("edition-rule", path, f"adaptation rule missing {sorted(missing)}")
+                if rule.get("requires_confirmation") is not True:
+                    self.error("edition-rule", path, "every substitution must require confirmation")
+                if not rule.get("limitations"):
+                    self.error("edition-rule", path, "every adaptation must disclose limitations")
+            expected_launcher = (
+                "ai-game-studio-windows.ps1"
+                if edition_id == "windows"
+                else "ai-game-studio-macos.sh"
+            )
+            plugin_root = self.root / "plugins" / plugin_name
+            if not (plugin_root / "scripts" / "edition.py").is_file():
+                self.error("edition-launcher", plugin_root, "missing scripts/edition.py")
+            if not (plugin_root / "scripts" / expected_launcher).is_file():
+                self.error(
+                    "edition-launcher",
+                    plugin_root,
+                    f"missing scripts/{expected_launcher}",
+                )
+            if edition_id == "macos" and (self.root / ".git").exists():
+                launcher_path = plugin_root / "scripts" / expected_launcher
+                try:
+                    relative_launcher = launcher_path.relative_to(self.root).as_posix()
+                    result = subprocess.run(
+                        ["git", "ls-files", "--stage", "--", relative_launcher],
+                        cwd=self.root,
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                        timeout=10,
+                    )
+                except (OSError, subprocess.SubprocessError) as error:
+                    self.error(
+                        "edition-launcher-mode",
+                        launcher_path,
+                        f"could not inspect Git executable mode: {error}",
+                    )
+                else:
+                    fields = result.stdout.strip().split(maxsplit=3)
+                    if result.returncode != 0 or len(fields) != 4 or fields[0] != "100755":
+                        self.error(
+                            "edition-launcher-mode",
+                            launcher_path,
+                            "macOS launcher must be tracked with Git mode 100755",
+                        )
+
+    def validate_img2threejs(self) -> None:
+        plugin_root = self.root / "plugins" / "ai-game-studio-img2threejs"
+        provenance_path = plugin_root / "UPSTREAM.json"
+        provenance = self.load_json(provenance_path) if provenance_path.is_file() else None
+        if not isinstance(provenance, dict):
+            self.error("img2threejs-provenance", provenance_path, "missing upstream provenance")
+        else:
+            expected = {
+                "repository": "img2threejs/img2threejs",
+                "url": "https://github.com/img2threejs/img2threejs",
+                "tag": "v1.4.3",
+                "commit": PINNED_IMG2THREEJS_COMMIT,
+                "license": "Apache-2.0",
+            }
+            for key, value in expected.items():
+                if provenance.get(key) != value:
+                    self.error("img2threejs-provenance", provenance_path, f"{key} must be {value}")
+        skill_root = plugin_root / "skills" / "img2threejs"
+        for relative in (
+            "LICENSE",
+            "forge/next.py",
+            "forge/_shared/image_decode.py",
+            "forge/_shared/spec_search.py",
+            "forge/stage1_intake/fetch_cs2_metadata.py",
+            "forge/stage1_intake/extract_cs2_textures.py",
+            "forge/stage2_spec/validate_sculpt_spec.py",
+            "forge/stage4_review/divine_eye.py",
+            "grimoire/intake/validation_rubric.md",
+            "grimoire/build/geometry_patterns.md",
+        ):
+            path = skill_root / relative
+            if not path.is_file():
+                self.error("img2threejs-resource", path, "required vendored runtime resource is missing")
+        hardened_sources = {
+            "forge/_shared/image_decode.py": (
+                (
+                    "AI_GAME_STUDIO_IMAGEMAGICK_MANIFEST",
+                    "/usr/bin/sips",
+                    "WindowsPowerShell",
+                    "confirmed_plan_digest",
+                    "shell=False",
+                ),
+                ("shutil.which(", "shell" + "=True"),
+            ),
+            "forge/_shared/spec_search.py": (
+                ("AI_GAME_STUDIO_CACHE_DIR", "default_cache_root", "cache_root"),
+                (),
+            ),
+            "forge/stage1_intake/fetch_cs2_metadata.py": (
+                (
+                    "DEFAULT_INDEX_HOSTS",
+                    "DEFAULT_IMAGE_HOSTS",
+                    "MAX_INDEX_BYTES",
+                    "MAX_IMAGE_BYTES",
+                    "--confirmed-host",
+                    "--force-image",
+                    "ensure_public_host",
+                ),
+                (),
+            ),
+            "forge/stage1_intake/extract_cs2_textures.py": (
+                (
+                    "--extractor-manifest",
+                    "confirmed_plan_digest",
+                    "timeout=300",
+                ),
+                ("SOURCE2VIEWER_BINARY", "shutil.which("),
+            ),
+        }
+        for relative, (required_tokens, forbidden_tokens) in hardened_sources.items():
+            path = skill_root / relative
+            if not path.is_file():
+                continue
+            source = path.read_text(encoding="utf-8")
+            for token in required_tokens:
+                if token not in source:
+                    self.error(
+                        "img2threejs-hardening",
+                        path,
+                        f"required portability or security control is missing: {token}",
+                    )
+            for token in forbidden_tokens:
+                if token in source:
+                    self.error(
+                        "img2threejs-hardening",
+                        path,
+                        f"unsafe or unpinned runtime behavior is present: {token}",
+                    )
+        for path in plugin_root.rglob("*"):
+            if "__pycache__" in path.parts or path.suffix.lower() in {".pyc", ".pyo"}:
+                self.error("img2threejs-cache", path, "generated Python cache must not be vendored")
 
     def validate_hooks(self) -> None:
         hooks_path = self.root / "plugins" / "ai-game-studio-automation" / "hooks" / "hooks.json"

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Set up the macOS edition"
+  short_description: "Plan a native macOS setup safely"
+  default_prompt: "Use $ai-game-studio-macos:setup-macos-edition to inspect this Mac and propose one native, reversible game-studio setup."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Image to procedural Three.js"
+  short_description: "Build gated procedural Three.js models"
+  default_prompt: "Use $ai-game-studio-img2threejs:img2threejs to assess my reference and plan a quality-gated procedural Three.js reconstruction."
+policy:
+  allow_implicit_invocation: true

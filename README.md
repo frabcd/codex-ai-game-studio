@@ -4,11 +4,17 @@
 
 [![CI](https://github.com/frabcd/codex-ai-game-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/frabcd/codex-ai-game-studio/actions/workflows/ci.yml)
 [![Catalog](https://img.shields.io/badge/catalog-163%20verified%20repositories-08C7F7)](plugins/ai-game-studio/catalog/catalog.json)
-[![Skills](https://img.shields.io/badge/Codex%20skills-85-7C5CFC)](plugins/ai-game-studio/skills)
-[![License: MIT](https://img.shields.io/badge/license-MIT-FFB347)](LICENSE)
+[![Skills](https://img.shields.io/badge/bundled%20Codex%20skills-95-7C5CFC)](plugins)
+[![Platforms](https://img.shields.io/badge/editions-Windows%20%7C%20macOS-08C7F7)](#choose-your-edition)
+[![License: MIT](https://img.shields.io/badge/core%20license-MIT-FFB347)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/frabcd/codex-ai-game-studio)](https://github.com/frabcd/codex-ai-game-studio/releases)
 
-An installable, safety-first game-production system for Codex: **85 skills, 49 studio roles, 163 verified repositories, five editor MCP packs, and native Windows, macOS, and Linux workflows**. It plans games, finds compatible AI tools, generates and validates assets, automates supported engines, and keeps every setup reversible.
+An installable, safety-first game-production system for Codex: **85 core
+skills, 95 bundled skills, 49 studio roles, 163 verified repositories, five
+editor MCP packs, and dedicated Windows and macOS editions**. It plans games,
+finds compatible AI tools, reconstructs reference images as quality-gated
+procedural Three.js models, generates and validates assets, automates supported
+engines, and keeps every setup reversible.
 
 ## Install
 
@@ -16,9 +22,11 @@ An installable, safety-first game-production system for Codex: **85 skills, 49 s
 Codex, install Codex AI Game Studio from
 https://github.com/frabcd/codex-ai-game-studio.
 Add its marketplace, install the core plugin, inspect this project's OS,
-engine, DCC tools, GPU, and existing MCP servers, propose one compatible setup
-with licenses, downloads, permissions, and rollback steps, and wait for my
-confirmation before changing anything.
+engine, DCC tools, GPU, and existing MCP servers. On Windows or macOS, propose
+exactly the matching edition; on Linux, keep the universal core. Include the
+img2threejs plugin when this project needs image-to-procedural-3D work. Propose
+one compatible setup with licenses, downloads, permissions, and rollback
+steps, and wait for my confirmation before changing anything.
 ```
 
 ```text
@@ -36,10 +44,61 @@ $ai-game-studio:start Help me turn this folder into a playable vertical slice.
 
 The core plugin is self-contained and universal-directory-ready. Engine, DCC, pixel-art, and lifecycle-automation packs stay optional in this GitHub marketplace because they can execute local processes or control desktop applications.
 
+## Choose your edition
+
+The repository ships two curated Codex distributions. Both include the
+universal core, automation and editor packs, and the Apache-2.0 img2threejs
+workflow; each includes exactly one matching platform planner.
+
+### Windows
+
+```text
+codex plugin add ai-game-studio-windows@frabcd-ai-game-studio
+codex plugin add ai-game-studio-img2threejs@frabcd-ai-game-studio
+```
+
+```text
+$ai-game-studio-windows:setup-windows-edition Inspect this machine read-only.
+Prefer native Windows tools. If a useful workflow is macOS, POSIX, Homebrew,
+Apple-Silicon, or Metal bound, adapt licensed portable source when testable;
+otherwise compare verified Windows equivalents. Never claim binary
+compatibility, and wait for my transaction digest before changing anything.
+```
+
+[Download the Windows v1.1.0 edition](https://github.com/frabcd/codex-ai-game-studio/releases/download/v1.1.0/codex-ai-game-studio-windows-v1.1.0.zip)
+· [Windows tutorials](docs/platforms/windows.md)
+
+### macOS
+
+```text
+codex plugin add ai-game-studio-macos@frabcd-ai-game-studio
+codex plugin add ai-game-studio-img2threejs@frabcd-ai-game-studio
+```
+
+```text
+$ai-game-studio-macos:setup-macos-edition Inspect this Mac read-only. Prefer
+native Apple Silicon or Intel tools and Metal, MPS, Core ML, or CPU routes. If
+a useful workflow is Windows, PowerShell, CUDA, or DirectML bound, adapt
+licensed portable source when testable; otherwise compare verified macOS
+equivalents. Disclose Rosetta and hosted fallbacks, and wait for my transaction
+digest before changing anything.
+```
+
+[Download the macOS v1.1.0 edition](https://github.com/frabcd/codex-ai-game-studio/releases/download/v1.1.0/codex-ai-game-studio-macos-v1.1.0.zip)
+· [macOS tutorials](docs/platforms/macos.md)
+
+The edition ZIPs are convenience marketplaces, not preinstalled engines or
+models. A platform selection writes only transaction-listed project state; any
+package, application, MCP, model, Rosetta, WSL, or hosted-service change needs a
+separate confirmed proposal.
+
 ## The 60-second quickstart
 
-1. Install the core with the two commands above and start a new task.
-2. Type `/` and choose **AI Game Studio: Start**, or write `$ai-game-studio:start`.
+1. Install the core with the two commands above. On Windows or macOS, add
+   exactly one matching platform edition; on Linux, use the core directly.
+   Start a new task.
+2. Type `/` and choose **AI Game Studio: Start**, or write
+   `$ai-game-studio:start`.
 3. Describe the outcome—not the tooling. For example: `Make a two-minute Godot arena prototype from this concept art.`
 4. Codex inspects the project and machine **read-only**, searches the offline catalog, and returns one setup/workflow proposal.
 5. Review its exact pins, downloads, licenses, permissions, backups, and rollback. Confirm the displayed digest only if it is right.
@@ -64,6 +123,12 @@ See the official [Codex plugin guide](https://learn.chatgpt.com/docs/plugins) an
 
 - **Full production workflow:** concept, GDD, architecture, backlog, prototype, vertical slice, content, QA, launch, live operations, and retrospectives.
 - **Generative asset pipelines:** 2D sprites and tiles, image/text-to-3D, PBR materials, rigs, animation, worlds, dialogue, voices, music, and sound effects.
+- **Reference-to-code 3D:** the pinned img2threejs forge turns suitable object
+  or character references into procedural Three.js with strict spec,
+  multi-angle, material, structure, and bounded-correction gates.
+- **Native platform editions:** Windows and macOS planners detect the real host
+  and convert incompatible workflows through tested source adaptations or
+  disclosed capability equivalents.
 - **Tool routing:** 163 curated GitHub repositories classified by capability, platform, runtime, GPU, licenses, permissions, risk, and maturity—usable offline.
 - **Editor automation:** opt-in packs for Unity, Godot, Unreal, Blender, and pixel-art workflows, with one MCP server allowed per host application.
 - **Quality evidence:** technical checks, multi-view visual review, temporal consistency, performance budgets, playability smoke tests, provenance, and before/after artifacts.
@@ -83,7 +148,11 @@ flowchart LR
     F --> G["Lockfile, evidence, rollback"]
 ```
 
-Every mutating command starts from `pack plan`. A transaction records `plan_id`, the detected environment, exact actions, downloads, license findings, permissions, backups, rollback operations, expiry, and a canonical digest. `pack apply` refuses missing, expired, altered, or unconfirmed digests.
+Every mutating pack or platform command starts from `pack plan` or
+`edition plan`. A transaction records `plan_id`, the detected environment,
+exact actions, downloads, license findings, permissions, backups, rollback
+operations, expiry, and a canonical digest. `pack apply` and `edition apply`
+refuse missing, expired, altered, or unconfirmed digests.
 
 Read-only inspection may identify executables, versions, project markers, MCP server names, GPU backends, VRAM, free disk, and whether required credential **environment-variable names** exist. It never reads or prints secret values.
 
@@ -101,6 +170,9 @@ Use plain outcomes. The router will select the specialist workflow.
 | Browser | `$ai-game-studio:prototype Build a browser-playable vertical slice using this repository's existing stack and add screenshot plus interaction tests.` |
 | 2D sprites | `$ai-game-studio:sprite-generate Create an eight-direction transparent character animation from these references, preserve the palette, and validate baselines, padding, loops, and rights.` |
 | 3D + PBR | `$ai-game-studio:asset-3d-generate Reconstruct this prop for real-time use, then create a licensed PBR material set and validate topology, UVs, normals, LODs, collision, and engine import.` |
+| Image to procedural Three.js | `$ai-game-studio-img2threejs:img2threejs Reconstruct this reference as an animation-ready procedural Three.js model. Run suitability and strict spec gates first, preserve evidence, render multiple views, and stop if the image cannot support the requested fidelity.` |
+| Windows toolchain | `$ai-game-studio-windows:setup-windows-edition Inspect native Windows, architecture, editors, MCPs, and GPU routes. Adapt incompatible tools without claiming binary compatibility, propose one reversible setup, and wait for my digest.` |
+| macOS toolchain | `$ai-game-studio-macos:setup-macos-edition Inspect this Mac, architecture, editors, MCPs, and Metal/MPS/Core ML routes. Adapt incompatible tools, disclose Rosetta limits, propose one reversible setup, and wait for my digest.` |
 | Rig and animation | `$ai-game-studio:rig-animation Rig this character, retarget the supplied motions, and report weight errors, root motion, foot sliding, and loop continuity before export.` |
 | World generation | `$ai-game-studio:world-generate Build a deterministic greybox for this level brief, prove spawn reachability and navigation, then propose the art pass.` |
 | NPC and audio | `$ai-game-studio:npc-audio-generate Create the dialogue, quest logic, consent-safe voices, music, and SFX plan for this encounter; separate local and hosted options.` |
@@ -121,6 +193,9 @@ codex plugin add ai-game-studio-godot@frabcd-ai-game-studio
 codex plugin add ai-game-studio-unreal@frabcd-ai-game-studio
 codex plugin add ai-game-studio-blender@frabcd-ai-game-studio
 codex plugin add ai-game-studio-pixel@frabcd-ai-game-studio
+codex plugin add ai-game-studio-img2threejs@frabcd-ai-game-studio
+codex plugin add ai-game-studio-windows@frabcd-ai-game-studio
+codex plugin add ai-game-studio-macos@frabcd-ai-game-studio
 ```
 
 | Pack | Pinned default | Inactive alternatives | What activation can access |
@@ -131,6 +206,9 @@ codex plugin add ai-game-studio-pixel@frabcd-ai-game-studio
 | Unreal | `IvanMurzak/Unreal-MCP` | GenOrca | Unreal project/editor, local process, optional network during approved install |
 | Blender | `ahujasid/blender-mcp` | Documented add-ons remain external | Blender scene/editor, local process, optional network during approved install |
 | Pixel | `willibrandon/pixel-mcp` | Pixelorama and Tiled are non-MCP alternatives | Pixel assets/editor, local process, optional network during approved install |
+| img2threejs | Upstream `v1.4.3` / commit `9a8ecf1…` | Request more views, narrower fidelity, or another 3D route | Supplied references, project Three.js code, local Python quality harness |
+| Windows edition | Native Windows `amd64`/`arm64` | WSL, hosted, or manual only when disclosed and confirmed | Read-only host metadata; confirmed edition state only |
+| macOS edition | Native Darwin `arm64`/`x86_64` | Rosetta, hosted, or manual only when disclosed and confirmed | Read-only host metadata; confirmed edition state only |
 
 Only one MCP server per host application may be active. Pack descriptors disclose source pins, commands, conflicts, supported OS/architecture, permissions, health checks, uninstall, and rollback. Merely enabling a pack does not download its upstream server; the inert adapter directs you through `doctor`, `plan`, and digest-confirmed `apply`.
 
@@ -147,8 +225,8 @@ Only one MCP server per host application may be active. Pack descriptors disclos
 
 | Platform | Core | Doctor | Automation | Editor packs | GPU routing |
 |---|:---:|:---:|:---:|:---:|---|
-| Windows x64/arm64 | ✓ | Native + WSL detection | PowerShell + Python | Per-pack support checked | CUDA, DirectML, CPU |
-| macOS Intel/Apple Silicon | ✓ | Native | POSIX + Python | Per-pack support checked | Metal, CPU |
+| Windows x64/arm64 | ✓ | Native + disclosed WSL fallback | PowerShell + Python | Per-pack support checked | CUDA, DirectML, CPU, WARP validation |
+| macOS Intel/Apple Silicon | ✓ | Native + disclosed Rosetta fallback | zsh/POSIX + Python | Per-pack support checked | Metal, MPS, Core ML, CPU |
 | Linux x64/arm64 | ✓ | Native + container clues | POSIX + Python | Per-pack support checked | CUDA, ROCm, Vulkan, CPU |
 
 | Engine/workflow | Detection | Core guidance | Live optional pack |
@@ -156,7 +234,7 @@ Only one MCP server per host application may be active. Pack descriptors disclos
 | Unity | ✓ | ✓ | Unity pack |
 | Godot | ✓ | ✓ | Godot pack |
 | Unreal Engine | ✓ | ✓ | Unreal pack |
-| Browser / Three.js / Phaser / R3F | ✓ | ✓ | Existing project tools |
+| Browser / Three.js / Phaser / R3F | ✓ | ✓ | img2threejs for reference-to-code models |
 | Blender / glTF / FBX pipeline | ✓ | ✓ | Blender pack |
 | Aseprite / pixel art / tiles | ✓ | ✓ | Pixel pack; Pixelorama/Tiled remain external |
 
@@ -201,10 +279,12 @@ Unknown or custom code, weight, dataset, output, or commercial terms block comme
 ## Repository layout
 
 ```text
-.agents/plugins/marketplace.json       Seven installable entries
+.agents/plugins/marketplace.json       Ten installable entries
 plugins/ai-game-studio/                Universal core, 85 skills, CLI, catalog, recipes
 plugins/ai-game-studio-automation/     Hooks, agents, rules, templates, migration
 plugins/ai-game-studio-{engine}/       Optional inert MCP adapters and setup skills
+plugins/ai-game-studio-img2threejs/    Pinned Apache-2.0 image-to-Three.js forge
+plugins/ai-game-studio-{windows,macos}/ Native platform planners and adaptation rules
 parity/                                Pinned upstream coverage ledger
 docs/                                  Tutorials, architecture, legal, migration, support
 tests/                                 Unit, schema, hook, parity, platform, safety tests
@@ -231,6 +311,12 @@ The workflow baseline is adapted from [Donchitos/Claude-Code-Game-Studios](https
 
 Existing Codex ports were used only as prior-art references and were not copied.
 
+The optional img2threejs workflow is pinned to upstream release `v1.4.3` at
+commit `9a8ecf129a58c1b557a1f03f7727f6295672cd51` under Apache-2.0. Its
+runtime-focused vendored snapshot, modifications, and retained license are
+recorded in [NOTICE.md](NOTICE.md) and
+`plugins/ai-game-studio-img2threejs/UPSTREAM.json`.
+
 ## Contributing and roadmap
 
 Issues, pull requests, and Discussions are welcome. Catalog changes require a canonical repository, verification evidence, separate license findings, platform claims, permission review, and a pin. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the catalog guide.
@@ -245,4 +331,6 @@ If this saves your team a production detour, starring the repository helps other
 
 ## License
 
-MIT. Third-party sources and integrations keep their own licenses. See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).
+Original repository code is MIT. The optional vendored img2threejs plugin is
+Apache-2.0, and all other third-party sources and integrations keep their own
+licenses. See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).

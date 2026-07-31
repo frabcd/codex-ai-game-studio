@@ -1,8 +1,44 @@
 # Validation evidence
 
-This page is the evidence record for release candidates. Local evidence was
-reproduced on Windows on 2026-07-30. The linked release-candidate workflows ran
-against tagged commit `304986f24b8d3bdb544c8ee97e70134c8c278c00`.
+This page separates the current v1.1 release-candidate evidence from the
+published v1.0 historical record. Local v1.1 evidence was reproduced on Windows
+on 2026-07-31; hosted Windows, macOS, and Linux evidence will be linked after
+the candidate commit runs through CI.
+
+## v1.1 release-candidate record
+
+| Gate | Local evidence on 2026-07-31 | Status |
+|---|---|---|
+| Repository contract | 85 core skills, 95 bundled skills, 49 roles, 12 mapped hook behaviors, 11 rules, 40 upstream templates, 163 catalog records, two edition descriptors, and pinned img2threejs provenance | **Pass** |
+| Official plugin validator | Every marketplace plugin, including img2threejs, Windows, and macOS | **10/10 pass** |
+| Official skill validator | Core, automation, editor packs, img2threejs, Windows, and macOS skills | **95/95 pass** |
+| Runtime unit tests | Detection, transactions, rollback scope, offline routing, release archives, Pages, both edition launchers, security fixtures, and checkout-independent text normalization | **108/108 pass** |
+| Windows/macOS edition boundary | Repository and marketplace-cache launcher layouts; real host probes; OS mismatch rejection; digest-bound apply/disable/rollback; no external installation during edition selection | **Pass** |
+| img2threejs portability | Native Windows and macOS image-conversion routes, external user cache routing, and plugin-source write rejection | **Pass** |
+| img2threejs security | Public HTTPS allowlists, redirect and size limits, safe numeric outputs, preserve-existing behavior, hash-locked ImageMagick and Source2Viewer manifests, and bounded subprocesses | **Pass** |
+| Documentation build | Legal/support, tutorials, img2threejs, Windows, and macOS routes plus rewritten internal links and copied assets | **43 files; zero broken internal links** |
+| Deterministic release | Two independent out-of-tree builds with identical filenames and SHA-256 values | **16/16 output files identical; 14 artifacts recorded** |
+| Extracted Windows edition installation | Add the packaged local marketplace, install core + Windows + img2threejs, run the installed native doctor, then remove all test state | **Pass; 85 + 1 + 1 skills, v1.1.0, read-only host match, clean removal** |
+| Hosted OS matrix | Windows, macOS, and Linux GitHub Actions | **Pending candidate push** |
+| Clean public installation | Marketplace install from the public v1.1 tag | **Pending candidate publication** |
+
+### v1.1 extracted-edition capture
+
+The Windows edition ZIP was expanded outside the repository and used exactly as
+a local marketplace. The test installed only the three plugins below, ran the
+installed edition launcher, and removed the plugins, marketplace, cache entries,
+and extraction directory afterward.
+
+```text
+marketplace: frabcd-ai-game-studio-windows
+version: 1.1.0
+coreSkills: 85
+windowsEditionSkills: 1
+img2threejsSkills: 1
+doctorTargetMatches: true
+doctorReadOnly: true
+cleanup: complete
+```
 
 ## Reproduce locally
 
@@ -10,7 +46,7 @@ against tagged commit `304986f24b8d3bdb544c8ee97e70134c8c278c00`.
 python tools/validate_repository.py
 python tools/run_official_validators.py --require
 python -m unittest discover -s tests -p "test_*.py"
-python tools/build_release.py --version 1.0.0 --output dist
+python tools/build_release.py --version 1.1.0 --output dist
 ```
 
 Run the pack transaction smoke test once per pack:
@@ -23,7 +59,10 @@ python tools/mock_pack_matrix.py --pack blender
 python tools/mock_pack_matrix.py --pack pixel
 ```
 
-## Release-candidate record
+## v1.0.0 historical record
+
+The linked workflows below ran against tagged commit
+`304986f24b8d3bdb544c8ee97e70134c8c278c00` on 2026-07-30.
 
 | Gate | Expected evidence | Status |
 |---|---|---|

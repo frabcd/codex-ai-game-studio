@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "id": "macos",
+  "plugin": "ai-game-studio-macos",
+  "display_name": "Codex AI Game Studio for macOS",
+  "target_os": "Darwin",
+  "version": "1.1.0",
+  "license": "MIT",
+  "distribution": "local-codex-marketplace",
+  "supported_architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "shells": [
+    {
+      "id": "zsh",
+      "executable": "zsh",
+      "role": "preferred",
+      "read_only_detection": [
+        "zsh --version"
+      ],
+      "limitations": [
+        "Shell presence does not authorize login-shell changes or command-string evaluation."
+      ]
+    },
+    {
+      "id": "posix-sh",
+      "executable": "sh",
+      "role": "portable-fallback",
+      "read_only_detection": [
+        "sh --version"
+      ],
+      "limitations": [
+        "Implementations differ; launchers must remain POSIX-compatible and pass tokenized arguments."
+      ]
+    },
+    {
+      "id": "bash",
+      "executable": "bash",
+      "role": "compatibility-fallback",
+      "read_only_detection": [
+        "bash --version"
+      ],
+      "limitations": [
+        "The system Bash version can be older than Homebrew Bash and must not be assumed interchangeable."
+      ]
+    }
+  ],
+  "package_managers": [
+    {
+      "id": "homebrew",
+      "executable": "brew",
+      "read_only_detection": [
+        "brew --version"
+      ],
+      "install_policy": "Never bootstrap or update Homebrew during detection; use an exact formula/cask version only in a confirmed transaction."
+    },
+    {
+      "id": "macports",
+      "executable": "port",
+      "read_only_detection": [
+        "port version"
+      ],
+      "install_policy": "Use only a verified port/version and disclose any privilege escalation in a confirmed transaction."
+    }
+  ],
+  "gpu_backends": [
+    {
+      "id": "metal",
+      "hardware": "Metal-capable Mac GPU",
+      "read_only_detection": [
+        "system_profiler SPDisplaysDataType"
+      ],
+      "limitations": [
+        "Metal presence does not prove that a selected model or application supports its required operations."
+      ]
+    },
+    {
+      "id": "mps",
+      "hardware": "Apple Silicon or supported AMD Mac GPU",
+      "read_only_detection": [
+        "Probe torch.backends.mps.is_available in the active Python only when torch is already installed."
+      ],
+      "limitations": [
+        "MPS operation coverage, numerics, memory, and performance can differ from CUDA."
+      ]
+    },
+    {
+      "id": "core-ml",
+      "hardware": "Core ML-supported Mac",
+      "read_only_detection": [
+        "Check active-Python coremltools module presence without converting a model."
+      ],
+      "limitations": [
+        "Module presence is not evidence that model conversion or every layer is supported."
+      ]
+    },
+    {
+      "id": "cpu",
+      "hardware": "macOS-supported CPU",
+      "read_only_detection": [
+        "Read architecture and processor metadata without running a workload."
+      ],
+      "limitations": [
+        "CPU execution can be substantially slower and may require reduced model or asset settings."
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "id": "unity",
+      "display_name": "Unity Editor and Unity Hub",
+      "project_markers": [
+        "ProjectSettings/ProjectVersion.txt",
+        "Packages/manifest.json"
+      ]
+    },
+    {
+      "id": "godot",
+      "display_name": "Godot Engine",
+      "project_markers": [
+        "project.godot"
+      ]
+    },
+    {
+      "id": "unreal",
+      "display_name": "Unreal Editor",
+      "project_markers": [
+        "*.uproject",
+        "Source/*.Build.cs"
+      ]
+    },
+    {
+      "id": "blender",
+      "display_name": "Blender",
+      "project_markers": [
+        "*.blend"
+      ]
+    },
+    {
+      "id": "aseprite",
+      "display_name": "Aseprite",
+      "project_markers": [
+        "*.aseprite"
+      ]
+    },
+    {
+      "id": "pixelorama",
+      "display_name": "Pixelorama",
+      "project_markers": [
+        "*.pxo"
+      ]
+    },
+    {
+      "id": "tiled",
+      "display_name": "Tiled",
+      "project_markers": [
+        "*.tmx",
+        "*.tsx",
+        "*.world"
+      ]
+    }
+  ],
+  "native_capabilities": [
+    "read-only Darwin, macOS version, and architecture detection",
+    "native Apple Silicon and Intel project routing",
+    "zsh and POSIX argument-array automation",
+    "Metal, MPS, Core ML, and CPU capability selection",
+    "engine and DCC application discovery without launching applications",
+    "digest-confirmed project edition selection and rollback"
+  ],
+  "read_only_detection": {
+    "commands": [
+      [
+        "/usr/bin/uname",
+        "-s"
+      ],
+      [
+        "/usr/bin/uname",
+        "-m"
+      ],
+      [
+        "/usr/bin/sw_vers",
+        "-productVersion"
+      ],
+      [
+        "/bin/zsh",
+        "--version"
+      ],
+      [
+        "/usr/sbin/system_profiler",
+        "SPDisplaysDataType"
+      ]
+    ],
+    "application_roots": [
+      "/Applications",
+      "/Users/Shared/Epic Games",
+      "~/Applications"
+    ],
+    "project_markers": [
+      "ProjectSettings/ProjectVersion.txt",
+      "project.godot",
+      "*.uproject",
+      "*.blend",
+      "*.aseprite",
+      "*.pxo",
+      "*.tmx"
+    ],
+    "credential_policy": "Inspect environment-variable names and presence only; never read or store secret values.",
+    "mutation_performed": false
+  },
+  "adaptation_order": [
+    "native source adaptation with verified license, build support, and equivalent tests",
+    "verified capability-equivalent native alternative with a comparison",
+    "hosted or manual fallback with network, privacy, cost, and reproducibility disclosure"
+  ],
+  "adaptation_rules": [
+    {
+      "id": "windows-binary-to-native",
+      "source_constraint": "Windows-only executable, DLL, MSI, or Win32 binary",
+      "preferred_native": "Build a separate macOS arm64 or x86_64 implementation from verified source only when its license, dependencies, host APIs, and tests support the target.",
+      "alternatives": [
+        "select a verified native macOS tool that produces the required artifact and passes the same quality gates",
+        "use a hosted or manual workflow after privacy, cost, and rights review"
+      ],
+      "limitations": "Windows binaries are not macOS binaries; rebuilding or replacing behavior can change output, performance, integrations, and support status.",
+      "requires_confirmation": true
+    },
+    {
+      "id": "powershell-windows-to-posix",
+      "source_constraint": "Windows PowerShell script or module that depends on registry, COM, Win32, drive letters, or Windows credential stores",
+      "preferred_native": "Reimplement portable behavior with Python 3 standard library or tokenized zsh/POSIX commands and documented macOS APIs.",
+      "alternatives": [
+        "use the target application's native CLI, SDK, or verified MCP interface",
+        "retain the unsupported host-bound step as a documented manual handoff"
+      ],
+      "limitations": "Textual syntax conversion cannot reproduce Windows-only APIs; PowerShell 7 on macOS does not make Windows modules or APIs portable.",
+      "requires_confirmation": true
+    },
+    {
+      "id": "cuda-to-metal",
+      "source_constraint": "CUDA-only model, library, or generation pipeline",
+      "preferred_native": "Use a verified Metal or MPS implementation with the same model rights, supported operations, artifact format, and quality validation.",
+      "alternatives": [
+        "use a CPU implementation when measured memory and completion time are acceptable",
+        "use a hosted GPU provider after license, privacy, data-transfer, cost, and provenance review"
+      ],
+      "limitations": "Metal and MPS are not CUDA; unsupported operations, numerical differences, model conversions, memory pressure, and lower throughput may prevent equivalent results.",
+      "requires_confirmation": true
+    },
+    {
+      "id": "directml-to-coreml-metal",
+      "source_constraint": "DirectML-only model, library, or GPU execution path",
+      "preferred_native": "Use a verified Core ML, Metal, or MPS execution path that preserves supported operations, model provenance, and output quality gates.",
+      "alternatives": [
+        "use a CPU backend with an explicit performance and memory estimate",
+        "choose a verified native macOS application or hosted service with equivalent artifact outputs"
+      ],
+      "limitations": "DirectML is a Windows API; model conversion or backend substitution can change supported layers, numerical output, speed, and memory use.",
+      "requires_confirmation": true
+    },
+    {
+      "id": "windows-ui-automation-to-app-api",
+      "source_constraint": "Windows desktop automation based on COM, UI Automation, registry, or process injection",
+      "preferred_native": "Use the application's documented macOS CLI, plugin API, SDK, localhost interface, or verified MCP server with bounded permissions.",
+      "alternatives": [
+        "use scoped AppleScript or Accessibility automation only after explicit permission and a dry-run plan",
+        "leave the editor action as a human-reviewed manual step"
+      ],
+      "limitations": "macOS Accessibility and Automation permissions are high trust, app-version-sensitive, and not equivalent to Windows automation APIs.",
+      "requires_confirmation": true
+    },
+    {
+      "id": "intel-macos-to-apple-silicon",
+      "source_constraint": "x86_64-only macOS application on an Apple Silicon host",
+      "preferred_native": "Select a signed universal or arm64 build from the verified publisher and retest project, plugin, and output compatibility.",
+      "alternatives": [
+        "use Rosetta only for a verified x86_64 macOS build after explicit disclosure and confirmation",
+        "choose a verified native application or manual workflow with equivalent output formats"
+      ],
+      "limitations": "Rosetta is a translation fallback, not native compatibility; performance, extensions, low-level drivers, and vendor support can differ.",
+      "requires_confirmation": true
+    }
+  ],
+  "rosetta": {
+    "automatic": false,
+    "disclosure_required": true,
+    "allowed_when": [
+      "the publisher provides a verified x86_64 macOS application",
+      "no universal or arm64 build satisfies the required capability",
+      "the user confirms the separate installation or invocation proposal"
+    ],
+    "limitations": [
+      "translation can reduce performance or increase memory use",
+      "kernel extensions, drivers, and architecture-specific plugins may remain unsupported",
+      "installation and removal are system-level actions outside edition selection"
+    ]
+  },
+  "permissions": [
+    "read OS, architecture, shell, GPU, disk, and application metadata without reading secret values",
+    "read the selected game project and existing MCP configuration",
+    "write only .ai-game-studio/project.json and .ai-game-studio/lock.json after full-digest confirmation",
+    "create bounded transaction backups and audit records inside the selected project",
+    "request separate confirmation for any network download, package-manager action, application control, Accessibility permission, or hosted data transfer"
+  ],
+  "health_checks": [
+    "confirm the host reports Darwin and the architecture is arm64 or x86_64",
+    "confirm zsh or another declared POSIX shell is available without changing the login shell",
+    "report Homebrew and MacPorts presence without bootstrapping or updating either manager",
+    "report Metal, MPS, Core ML, and CPU capability evidence without running a workload",
+    "detect Unity, Godot, Unreal, Blender, Aseprite, Pixelorama, and Tiled without launching them",
+    "validate the selected edition and descriptor digest in project.json and lock.json"
+  ],
+  "uninstall": [
+    "create an edition disable macos proposal and confirm its full digest before changing project state",
+    "leave external editors, package managers, MCP servers, models, and Rosetta untouched unless each has a separately confirmed uninstall plan"
+  ],
+  "rollback": [
+    "create an edition rollback proposal for the selected transaction and confirm its full digest",
+    "restore .ai-game-studio/project.json and .ai-game-studio/lock.json from bounded transaction backups",
+    "report separately installed external components instead of removing them implicitly"
+  ],
+  "artifacts": [
+    "read-only edition doctor report",
+    "digest-bound edition selection plan",
+    ".ai-game-studio/project.json platform selection",
+    ".ai-game-studio/lock.json descriptor pin",
+    "transaction record and rollback proposal"
+  ],
+  "activation": {
+    "mode": "confirmed-transaction-only",
+    "project_state": ".ai-game-studio/project.json",
+    "lock_file": ".ai-game-studio/lock.json"
+  }
+}

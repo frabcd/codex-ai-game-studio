@@ -1,0 +1,83 @@
+{
+  "repository": "img2threejs/img2threejs",
+  "url": "https://github.com/img2threejs/img2threejs",
+  "tag": "v1.4.3",
+  "tag_object": "82a1c24812a728781ae89fc4a5a7231b367ae02f",
+  "commit": "9a8ecf129a58c1b557a1f03f7727f6295672cd51",
+  "license": "Apache-2.0",
+  "retrieved_at": "2026-07-31",
+  "included": [
+    "LICENSE",
+    "SKILL.md",
+    "forge runtime except upstream unit tests",
+    "forge/tests/fixtures/knife_review_scene.json",
+    "grimoire",
+    "docs runtime and evidence resources",
+    "assets/logo.svg"
+  ],
+  "excluded": [
+    ".git",
+    ".github",
+    ".cache",
+    "__pycache__",
+    "*.pyc",
+    "*.pyo",
+    ".gitignore",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "ROADMAP.md",
+    "docs/ARCHITECTURE.md",
+    "docs/TOKEN_COST.md",
+    "docs/issue-triage.md",
+    "scripts/issue_triage.py",
+    "skills/*.md",
+    "forge/tests except fixtures"
+  ],
+  "modifications": [
+    {
+      "path": "skills/img2threejs/SKILL.md",
+      "summary": "Reduced frontmatter to Codex-supported name and description fields; replaced host-specific wording with Codex skill-root and cross-platform Python guidance."
+    },
+    {
+      "path": "skills/img2threejs/forge/next.py",
+      "summary": "Render the next command with the active Python executable and an absolute script path on Windows and POSIX."
+    },
+    {
+      "path": "skills/img2threejs/grimoire/feedback/render_capture.md",
+      "summary": "Replaced Claude-specific browser wording with Codex-native and already-installed browser options."
+    },
+    {
+      "path": "skills/img2threejs/grimoire/scripts.md and docs/cs2/review-gates.md",
+      "summary": "Made command examples interpreter- and shell-neutral for Windows and macOS."
+    },
+    {
+      "path": "skills/img2threejs/grimoire/review/self_correction.md",
+      "summary": "Replaced a non-vendored local-memory reference with the bundled objectness implementation."
+    },
+    {
+      "path": "skills/img2threejs/forge/_shared/spec_search.py, forge/stage1_intake/search_specs.py, and forge/stage2_spec/new_pre_spec_assessment.py",
+      "summary": "Moved bundled index caches outside installed plugin sources and added explicit approved cache-root routing."
+    },
+    {
+      "path": "skills/img2threejs/forge/_shared/image_decode.py and five pixel-analysis stages",
+      "summary": "Added native Windows and macOS common-image conversion plus a confirmed, hash-locked ImageMagick fallback without shell execution."
+    },
+    {
+      "path": "skills/img2threejs/forge/stage1_intake/fetch_cs2_metadata.py",
+      "summary": "Bounded and validated remote metadata and image retrieval, blocked private or local targets and unsafe output names, and constrained redirects."
+    },
+    {
+      "path": "skills/img2threejs/forge/stage1_intake/extract_cs2_textures.py",
+      "summary": "Replaced PATH executable discovery with a confirmed absolute-path, SHA-256, version, license, publisher, and plan-digest manifest plus a bounded process timeout."
+    },
+    {
+      "path": "plugin packaging",
+      "summary": "Added Codex plugin metadata and agents/openai.yaml without changing the staged quality gates."
+    },
+    {
+      "path": "vendored text resources",
+      "summary": "Normalized cross-platform line endings and removed trailing whitespace for deterministic archives without semantic changes."
+    }
+  ]
+}

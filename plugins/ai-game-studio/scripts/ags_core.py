@@ -12,6 +12,7 @@ import base64
 import datetime as dt
 import hashlib
 import hmac
+import importlib.util
 import json
 import os
 import platform
@@ -27,7 +28,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 STATE_DIR = ".ai-game-studio"
 PLAN_TTL_MINUTES = 30
 MAX_SCAN_DEPTH = 5
@@ -464,6 +465,7 @@ def make_plan(
     licenses: list[dict[str, Any]] | None = None,
     permissions: list[str] | None = None,
     metadata: dict[str, Any] | None = None,
+    detected_environment: dict[str, Any] | None = None,
     ttl_minutes: int = PLAN_TTL_MINUTES,
 ) -> dict[str, Any]:
     root = project_root.resolve()
@@ -487,7 +489,7 @@ def make_plan(
         "created_at": iso_z(created),
         "expiry": iso_z(created + dt.timedelta(minutes=ttl_minutes)),
         "project_root": str(root),
-        "detected_environment": doctor(root),
+        "detected_environment": detected_environment if detected_environment is not None else doctor(root),
         "exact_actions": normalized_actions,
         "downloads": downloads or [],
         "licenses": licenses or [],
@@ -648,6 +650,147 @@ def load_descriptors() -> dict[str, dict[str, Any]]:
     return result
 
 
+def edition_descriptor_paths() -> list[Path]:
+    roots = [plugin_root().parent, repository_root() / "plugins"]
+    found: set[Path] = set()
+    for root in roots:
+        if root.is_dir():
+            found.update(path.resolve() for path in root.glob("ai-game-studio-*/editions/*.json") if path.is_file())
+    return sorted(found)
+
+
+def load_edition_descriptors() -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for path in edition_descriptor_paths():
+        payload = safe_json_load(path)
+        if not isinstance(payload, dict) or not isinstance(payload.get("id"), str):
+            continue
+        payload["_descriptor_path"] = str(path)
+        result[payload["id"]] = payload
+    return result
+
+
+def edition_host_detection(edition_id: str, environment: Mapping[str, Any]) -> dict[str, Any]:
+    """Run fixed, read-only probes for the selected platform descriptor.
+
+    Descriptor prose is never executed. Every process call below is a
+    hard-coded argument array, and backend entries distinguish host evidence
+    from compatibility with a later selected model or application.
+    """
+
+    platform_data = environment.get("platform")
+    system = str(platform_data.get("os", "")) if isinstance(platform_data, Mapping) else ""
+    gpu_data = environment.get("gpu")
+    declared_backends = {
+        str(value).lower()
+        for value in (gpu_data.get("backends", []) if isinstance(gpu_data, Mapping) else [])
+    }
+    if edition_id == "windows":
+        host_matches = system == "Windows"
+        shells = {
+            "powershell-7": run_probe(("pwsh.exe", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+            "windows-powershell": (
+                run_probe(
+                    (
+                        "powershell.exe",
+                        "-NoProfile",
+                        "-NonInteractive",
+                        "-Command",
+                        "$PSVersionTable.PSVersion.ToString()",
+                    )
+                )
+                if host_matches
+                else {"available": False, "reason": "wrong-host"}
+            ),
+        }
+        package_managers = {
+            "winget": run_probe(("winget.exe", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+            "chocolatey": run_probe(("choco.exe", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+            "scoop": run_probe(("scoop", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+        }
+        backends = {
+            "cuda": {
+                "available": host_matches and "cuda" in declared_backends,
+                "verified_for_selected_tool": False,
+                "evidence": "nvidia-smi device evidence" if "cuda" in declared_backends else "no CUDA device evidence",
+            },
+            "directml": {
+                "available": host_matches and "directml" in declared_backends,
+                "verified_for_selected_tool": False,
+                "evidence": "Windows capability route; exact DirectX 12 and tool support require a later health check",
+            },
+            "cpu": {
+                "available": host_matches,
+                "verified_for_selected_tool": False,
+                "evidence": "native Windows CPU route; performance and operation support remain unverified",
+            },
+            "warp": {
+                "available": host_matches and shutil.which("dxdiag.exe") is not None,
+                "verified_for_selected_tool": False,
+                "evidence": "validation-only Windows software graphics route",
+            },
+        }
+    elif edition_id == "macos":
+        host_matches = system == "Darwin"
+        shells = {
+            "zsh": run_probe(("zsh", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+            "bash": run_probe(("bash", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+            "posix-sh": run_probe(("sh", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+        }
+        package_managers = {
+            "homebrew": run_probe(("brew", "--version")) if host_matches else {"available": False, "reason": "wrong-host"},
+            "macports": run_probe(("port", "version")) if host_matches else {"available": False, "reason": "wrong-host"},
+        }
+        mps_probe = (
+            run_probe(
+                (
+                    sys.executable,
+                    "-c",
+                    "import torch; print('available' if torch.backends.mps.is_available() else 'unavailable')",
+                ),
+                timeout=5.0,
+            )
+            if host_matches and importlib.util.find_spec("torch") is not None
+            else {"available": False}
+        )
+        mps_available = (
+            mps_probe.get("exit_code") == 0 and str(mps_probe.get("version", "")).strip() == "available"
+        )
+        coreml_available = host_matches and importlib.util.find_spec("coremltools") is not None
+        backends = {
+            "metal": {
+                "available": host_matches and "metal" in declared_backends,
+                "verified_for_selected_tool": False,
+                "evidence": "Darwin graphics capability; exact tool support requires a later health check",
+            },
+            "mps": {
+                "available": mps_available,
+                "verified_for_selected_tool": False,
+                "evidence": "active Python torch.backends.mps probe",
+            },
+            "core-ml": {
+                "available": coreml_available,
+                "verified_for_selected_tool": False,
+                "evidence": "coremltools module presence; model operation compatibility remains unverified",
+            },
+            "cpu": {
+                "available": host_matches,
+                "verified_for_selected_tool": False,
+                "evidence": "native macOS CPU route; performance and operation support remain unverified",
+            },
+        }
+    else:
+        raise StudioError(f"Unknown edition '{edition_id}'")
+    return {
+        "host_matches": host_matches,
+        "shells": shells,
+        "package_managers": package_managers,
+        "gpu_backends": backends,
+        "applications": environment.get("applications", {}),
+        "mutations_performed": False,
+    }
+
+
 def state_documents(project_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     project_file = project_root / STATE_DIR / "project.json"
     lock_file = project_root / STATE_DIR / "lock.json"
@@ -665,6 +808,134 @@ def state_documents(project_root: Path) -> tuple[dict[str, Any], dict[str, Any]]
 
 def write_action(target: str, value: Any) -> dict[str, Any]:
     return {"operation": "write-file", "target": target, "content_base64": encode_action_json(value)}
+
+
+def edition_doctor(edition_id: str, *, project_root: Path) -> dict[str, Any]:
+    descriptors = load_edition_descriptors()
+    if edition_id not in descriptors:
+        raise StudioError(
+            f"Unknown edition '{edition_id}'. Available: {', '.join(sorted(descriptors)) or 'none'}"
+        )
+    descriptor = descriptors[edition_id]
+    environment = doctor(project_root)
+    environment["edition_detection"] = edition_host_detection(edition_id, environment)
+    detected_platform = environment.get("platform") if isinstance(environment, dict) else {}
+    system = str((detected_platform or {}).get("os", platform.system()))
+    machine = str((detected_platform or {}).get("architecture", platform.machine())).lower()
+    supported_architectures = [str(item).lower() for item in descriptor.get("supported_architectures", [])]
+    target_os = str(descriptor.get("target_os", ""))
+    return {
+        "schema_version": 1,
+        "read_only": True,
+        "edition": edition_id,
+        "display_name": descriptor.get("display_name"),
+        "target_os": target_os,
+        "target_matches_host": system == target_os,
+        "architecture_supported": not supported_architectures or machine in supported_architectures,
+        "detected_environment": environment,
+        "native_capabilities": descriptor.get("native_capabilities", []),
+        "adaptation_rules": descriptor.get("adaptation_rules", []),
+        "health_checks": descriptor.get("health_checks", []),
+        "limitations": descriptor.get("limitations", []),
+        "mutation_performed": False,
+    }
+
+
+def edition_plan(edition_id: str, *, project_root: Path) -> dict[str, Any]:
+    descriptors = load_edition_descriptors()
+    if edition_id not in descriptors:
+        raise StudioError(
+            f"Unknown edition '{edition_id}'. Available: {', '.join(sorted(descriptors)) or 'none'}"
+        )
+    descriptor = descriptors[edition_id]
+    system = platform.system()
+    machine = platform.machine().lower()
+    target_os = str(descriptor.get("target_os", ""))
+    if system != target_os:
+        raise StudioError(
+            f"Edition {edition_id} targets {target_os}, but this host is {system}; "
+            "use the matching edition or inspect its documented adaptation rules without applying it"
+        )
+    supported_architectures = [str(item).lower() for item in descriptor.get("supported_architectures", [])]
+    if supported_architectures and machine not in supported_architectures:
+        raise StudioError(
+            f"Edition {edition_id} does not declare support for architecture {machine}"
+        )
+    project, lock = state_documents(project_root)
+    stamp = iso_z(utc_now())
+    descriptor_path = Path(str(descriptor["_descriptor_path"]))
+    project["updated_at"] = stamp
+    project["platform_edition"] = {
+        "id": edition_id,
+        "plugin": descriptor["plugin"],
+        "target_os": target_os,
+        "version": descriptor["version"],
+        "status": "selected",
+        "external_tools_installed": False,
+    }
+    lock["updated_at"] = stamp
+    lock["dependencies"][f"edition:{edition_id}"] = {
+        "plugin": descriptor["plugin"],
+        "version": descriptor["version"],
+        "license": descriptor.get("license", "MIT"),
+        "descriptor_sha256": file_sha256(descriptor_path),
+    }
+    actions = [
+        write_action(f"{STATE_DIR}/project.json", project),
+        write_action(f"{STATE_DIR}/lock.json", lock),
+    ]
+    environment = doctor(project_root)
+    environment["edition_detection"] = edition_host_detection(edition_id, environment)
+    return make_plan(
+        kind="edition-select",
+        project_root=project_root,
+        actions=actions,
+        licenses=[
+            {
+                "component": descriptor["plugin"],
+                "spdx": descriptor.get("license", "MIT"),
+            }
+        ],
+        permissions=list(descriptor.get("permissions", [])),
+        metadata={
+            "edition": edition_id,
+            "target_os": target_os,
+            "architecture": machine,
+            "descriptor_sha256": file_sha256(descriptor_path),
+            "adaptation_rule_ids": [
+                str(item.get("id"))
+                for item in descriptor.get("adaptation_rules", [])
+                if isinstance(item, dict) and item.get("id")
+            ],
+            "external_installation_performed": False,
+        },
+        detected_environment=environment,
+    )
+
+
+def edition_disable_plan(edition_id: str, *, project_root: Path) -> dict[str, Any]:
+    descriptors = load_edition_descriptors()
+    if edition_id not in descriptors:
+        raise StudioError(f"Unknown edition '{edition_id}'")
+    project, lock = state_documents(project_root)
+    selected = project.get("platform_edition")
+    if not isinstance(selected, dict) or selected.get("id") != edition_id:
+        raise StudioError(f"Edition '{edition_id}' is not selected")
+    project.pop("platform_edition", None)
+    lock["dependencies"].pop(f"edition:{edition_id}", None)
+    stamp = iso_z(utc_now())
+    project["updated_at"] = stamp
+    lock["updated_at"] = stamp
+    actions = [
+        write_action(f"{STATE_DIR}/project.json", project),
+        write_action(f"{STATE_DIR}/lock.json", lock),
+    ]
+    return make_plan(
+        kind="edition-disable",
+        project_root=project_root,
+        actions=actions,
+        metadata={"edition": edition_id, "external_uninstall_performed": False},
+    )
 
 
 def pack_plan(
@@ -778,7 +1049,12 @@ def pack_disable_plan(pack_id: str, *, project_root: Path) -> dict[str, Any]:
     return make_plan(kind="pack-disable", project_root=project_root, actions=actions, metadata={"pack_id": pack_id, "host_application": host})
 
 
-def rollback_plan(transaction_id: str, *, project_root: Path) -> dict[str, Any]:
+def rollback_plan(
+    transaction_id: str,
+    *,
+    project_root: Path,
+    allowed_original_kinds: set[str] | None = None,
+) -> dict[str, Any]:
     try:
         normalized_transaction_id = str(uuid.UUID(transaction_id))
     except (ValueError, AttributeError) as exc:
@@ -789,6 +1065,11 @@ def rollback_plan(transaction_id: str, *, project_root: Path) -> dict[str, Any]:
     journal = safe_json_load(journal_path)
     if not isinstance(journal, dict) or journal.get("status") != "applied":
         raise StudioError(f"Applied transaction not found: {transaction_id}")
+    original_kind = str(journal.get("kind", ""))
+    if allowed_original_kinds is not None and original_kind not in allowed_original_kinds:
+        raise StudioError(
+            f"Transaction kind {original_kind!r} cannot be rolled back through this command"
+        )
     actions: list[dict[str, Any]] = []
     for item in reversed(journal.get("actions", [])):
         target = str(item["target"])
@@ -800,7 +1081,12 @@ def rollback_plan(transaction_id: str, *, project_root: Path) -> dict[str, Any]:
         else:
             raise StudioError(f"Transaction has no rollback source for {target}")
         actions[-1]["expected_before_sha256"] = file_sha256(current)
-    plan = make_plan(kind="rollback", project_root=project_root, actions=[], metadata={"transaction_id": transaction_id})
+    plan = make_plan(
+        kind="rollback",
+        project_root=project_root,
+        actions=[],
+        metadata={"transaction_id": transaction_id, "original_kind": original_kind},
+    )
     # make_plan cannot infer the previous transaction's backups, so install the
     # validated rollback actions and recompute all derived fields.
     plan["exact_actions"] = actions
@@ -808,6 +1094,29 @@ def rollback_plan(transaction_id: str, *, project_root: Path) -> dict[str, Any]:
     plan["rollback_operations"] = [{"operation": "restore-rollback-attempt", "target": item["target"]} for item in actions]
     plan["digest"] = plan_digest(plan)
     return plan
+
+
+def validate_edition_apply_plan(plan: Mapping[str, Any]) -> None:
+    kind = str(plan.get("kind", ""))
+    if kind not in {"edition-select", "edition-disable", "rollback"}:
+        raise StudioError(f"Plan kind {kind!r} cannot be applied through edition apply")
+    metadata = plan.get("metadata")
+    if kind == "rollback" and (
+        not isinstance(metadata, Mapping)
+        or metadata.get("original_kind") not in {"edition-select", "edition-disable"}
+    ):
+        raise StudioError("Edition rollback plan does not reference an edition transaction")
+    actions = plan.get("exact_actions")
+    if not isinstance(actions, list):
+        raise StudioError("Edition plan actions must be an array")
+    allowed_targets = {
+        f"{STATE_DIR}/project.json",
+        f"{STATE_DIR}/lock.json",
+    }
+    for action in actions:
+        target = str(action.get("target", "")) if isinstance(action, Mapping) else ""
+        if target not in allowed_targets:
+            raise StudioError(f"Edition plan may not change {target or 'an unnamed target'}")
 
 
 def pack_doctor(project_root: Path) -> dict[str, Any]:
@@ -1228,6 +1537,43 @@ def validate_platform(repo_root: Path) -> list[str]:
         ref = str((descriptor.get("upstream") or {}).get("ref", ""))
         if not re.fullmatch(r"[0-9a-f]{40}|v?\d+\.\d+\.\d+(?:[-.][0-9A-Za-z.-]+)?", ref):
             errors.append(f"{descriptor_path}:unpinned-upstream-ref")
+    expected_editions = {"windows": "Windows", "macos": "Darwin"}
+    found_editions: set[str] = set()
+    for descriptor_path in sorted((repo_root / "plugins").glob("ai-game-studio-*/editions/*.json")):
+        descriptor = safe_json_load(descriptor_path, default={})
+        edition_id = str(descriptor.get("id", ""))
+        found_editions.add(edition_id)
+        for key in (
+            "id",
+            "plugin",
+            "version",
+            "license",
+            "target_os",
+            "supported_architectures",
+            "native_capabilities",
+            "adaptation_rules",
+            "permissions",
+            "health_checks",
+            "uninstall",
+            "rollback",
+            "activation",
+        ):
+            if key not in descriptor:
+                errors.append(f"{descriptor_path}:missing:{key}")
+        if descriptor.get("target_os") != expected_editions.get(edition_id):
+            errors.append(f"{descriptor_path}:edition-target-os-mismatch")
+        if descriptor.get("license") != "MIT":
+            errors.append(f"{descriptor_path}:unsupported-edition-license")
+        activation = descriptor.get("activation")
+        if not isinstance(activation, dict) or activation.get("mode") != "confirmed-transaction-only":
+            errors.append(f"{descriptor_path}:edition-confirmation-required")
+        for rule in descriptor.get("adaptation_rules", []):
+            if not isinstance(rule, dict) or rule.get("requires_confirmation") is not True:
+                errors.append(f"{descriptor_path}:unconfirmed-adaptation-rule")
+    if found_editions != set(expected_editions):
+        errors.append(
+            f"edition-set:expected-{sorted(expected_editions)}:actual-{sorted(found_editions)}"
+        )
     for launcher in (repo_root / "plugins" / "ai-game-studio" / "scripts" / "ai-game-studio.sh", repo_root / "plugins" / "ai-game-studio" / "scripts" / "ai-game-studio.ps1"):
         if not launcher.is_file():
             errors.append(f"missing-launcher:{launcher}")
@@ -1295,6 +1641,29 @@ def build_parser() -> argparse.ArgumentParser:
     add_project_argument(rollback)
     rollback.add_argument("--output")
 
+    edition = commands.add_parser(
+        "edition", help="Inspect and select a Windows or macOS compatibility edition"
+    ).add_subparsers(dest="edition_command", required=True)
+    edition_doctor_parser = edition.add_parser("doctor")
+    edition_doctor_parser.add_argument("edition_id", choices=("windows", "macos"))
+    add_project_argument(edition_doctor_parser)
+    edition_plan_parser = edition.add_parser("plan")
+    edition_plan_parser.add_argument("edition_id", choices=("windows", "macos"))
+    add_project_argument(edition_plan_parser)
+    edition_plan_parser.add_argument("--output")
+    edition_apply_parser = edition.add_parser("apply")
+    edition_apply_parser.add_argument("--plan", required=True)
+    edition_apply_parser.add_argument("--confirmed-digest", required=True)
+    add_project_argument(edition_apply_parser)
+    edition_disable_parser = edition.add_parser("disable")
+    edition_disable_parser.add_argument("edition_id", choices=("windows", "macos"))
+    add_project_argument(edition_disable_parser)
+    edition_disable_parser.add_argument("--output")
+    edition_rollback_parser = edition.add_parser("rollback")
+    edition_rollback_parser.add_argument("transaction_id")
+    add_project_argument(edition_rollback_parser)
+    edition_rollback_parser.add_argument("--output")
+
     migrate = commands.add_parser("migrate", help="Plan a migration").add_subparsers(dest="migrate_command", required=True)
     claude = migrate.add_parser("claude")
     add_project_argument(claude)
@@ -1343,6 +1712,29 @@ def main(argv: Sequence[str] | None = None) -> int:
                 maybe_write_plan(pack_disable_plan(args.pack_id, project_root=root), args.output)
             else:
                 maybe_write_plan(rollback_plan(args.transaction_id, project_root=root), args.output)
+        elif args.command == "edition":
+            root = Path(args.project)
+            if args.edition_command == "doctor":
+                emit(edition_doctor(args.edition_id, project_root=root))
+            elif args.edition_command == "plan":
+                maybe_write_plan(edition_plan(args.edition_id, project_root=root), args.output)
+            elif args.edition_command == "apply":
+                plan = safe_json_load(Path(args.plan).expanduser().resolve())
+                if not isinstance(plan, dict):
+                    raise StudioError("Plan file must contain a JSON object")
+                validate_edition_apply_plan(plan)
+                emit(apply_plan(plan, project_root=root, confirmed_digest=args.confirmed_digest))
+            elif args.edition_command == "disable":
+                maybe_write_plan(edition_disable_plan(args.edition_id, project_root=root), args.output)
+            else:
+                maybe_write_plan(
+                    rollback_plan(
+                        args.transaction_id,
+                        project_root=root,
+                        allowed_original_kinds={"edition-select", "edition-disable"},
+                    ),
+                    args.output,
+                )
         elif args.command == "migrate":
             maybe_write_plan(migrate_claude_plan(Path(args.project)), args.output)
         else:
