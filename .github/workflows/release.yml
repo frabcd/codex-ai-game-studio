@@ -17,7 +17,7 @@ permissions:
   attestations: write
 
 concurrency:
-  group: release-${{ github.ref }}-${{ inputs.version }}
+  group: release-${{ inputs.version || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -63,6 +63,16 @@ jobs:
           git rev-parse --verify "refs/tags/$REQUESTED_TAG"
           echo "tag=$REQUESTED_TAG" >> "$GITHUB_OUTPUT"
           echo "version=${REQUESTED_TAG#v}" >> "$GITHUB_OUTPUT"
+      - name: Refuse an existing release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; refusing to replace immutable assets." >&2
+            exit 1
+          fi
       - name: Validate release candidate
         run: |
           python tools/validate_repository.py
@@ -87,8 +97,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
-          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" dist/* --clobber
-          else
-            gh release create "$RELEASE_TAG" dist/* --verify-tag --generate-notes --title "Codex AI Game Studio $RELEASE_TAG"
-          fi
+          gh release create "$RELEASE_TAG" dist/* --verify-tag --generate-notes --title "Codex AI Game Studio $RELEASE_TAG"

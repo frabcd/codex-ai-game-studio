@@ -124,7 +124,7 @@ EXPECTED_HOOK_EVENTS = frozenset(
 
 PINNED_UPSTREAM_COMMIT = "984023ddac0d5e27624f2baacde6105e45de375f"
 PINNED_IMG2THREEJS_COMMIT = "9a8ecf129a58c1b557a1f03f7727f6295672cd51"
-RELEASE_VERSION = "1.1.0"
+RELEASE_VERSION = "1.1.1"
 HEX_SHA = re.compile(r"^[0-9a-f]{40}$")
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:[-+][0-9A-Za-z.-]+)?$")
 ACTION_USE = re.compile(r"^\s*-?\s*uses:\s*([^\s#]+)", re.MULTILINE)
@@ -883,6 +883,27 @@ class Validator:
                 revision = use.rsplit("@", 1)[1]
                 if not HEX_SHA.fullmatch(revision):
                     self.error("workflow-unpinned", path, f"action must use a 40-character commit SHA: {use}")
+            if path.name == "release.yml":
+                forbidden = ("gh release upload", "--clobber")
+                if any(token in text for token in forbidden):
+                    self.error(
+                        "release-mutable-assets",
+                        path,
+                        "release workflow must never replace assets for an existing tag",
+                    )
+                required = (
+                    "group: release-${{ inputs.version || github.ref_name }}",
+                    "gh release view \"$RELEASE_TAG\"",
+                    "refusing to replace immutable assets",
+                    "gh release create \"$RELEASE_TAG\"",
+                )
+                missing = [token for token in required if token not in text]
+                if missing:
+                    self.error(
+                        "release-immutability-guard",
+                        path,
+                        f"release workflow is missing immutable publication guards: {missing}",
+                    )
 
     def validate_source_safety(self) -> None:
         ignored_parts = {".git", ".official", "dist", "sources", "__pycache__"}

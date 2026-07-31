@@ -18,6 +18,16 @@ def digest(path: Path) -> str:
 
 
 class ReleaseBuilderTests(unittest.TestCase):
+    def test_release_version_must_match_checked_in_packages(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-release-version-") as temporary:
+            output = Path(temporary) / "dist"
+            with self.assertRaisesRegex(
+                ValueError,
+                "does not match checked-in package versions",
+            ):
+                build_release.build(ROOT, output, "9.9.9")
+            self.assertFalse(output.exists())
+
     def test_source_payloads_have_checkout_independent_line_endings(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ags-release-lines-") as temporary:
             root = Path(temporary)
@@ -39,8 +49,8 @@ class ReleaseBuilderTests(unittest.TestCase):
             prefix="ags-release-b-"
         ) as second:
             first_dir, second_dir = Path(first), Path(second)
-            build_release.build(ROOT, first_dir, "1.1.0")
-            build_release.build(ROOT, second_dir, "1.1.0")
+            build_release.build(ROOT, first_dir, "1.1.1")
+            build_release.build(ROOT, second_dir, "1.1.1")
             first_files = sorted(path.name for path in first_dir.iterdir())
             second_files = sorted(path.name for path in second_dir.iterdir())
             self.assertEqual(first_files, second_files)
@@ -49,10 +59,10 @@ class ReleaseBuilderTests(unittest.TestCase):
                 self.assertEqual(digest(first_dir / name), digest(second_dir / name), name)
 
             manifest = json.loads((first_dir / "release-manifest.json").read_text(encoding="utf-8"))
-            self.assertEqual("1.1.0", manifest["version"])
+            self.assertEqual("1.1.1", manifest["version"])
             self.assertEqual({"macos", "windows"}, set(manifest["editions"]))
             self.assertEqual(14, len(manifest["artifacts"]))
-            sbom = json.loads((first_dir / "codex-ai-game-studio-v1.1.0.spdx.json").read_text(encoding="utf-8"))
+            sbom = json.loads((first_dir / "codex-ai-game-studio-v1.1.1.spdx.json").read_text(encoding="utf-8"))
             self.assertEqual("SPDX-2.3", sbom["spdxVersion"])
             self.assertEqual("MIT AND Apache-2.0", sbom["packages"][0]["licenseDeclared"])
             self.assertGreater(len(sbom["files"]), 100)
@@ -60,7 +70,7 @@ class ReleaseBuilderTests(unittest.TestCase):
     def test_archives_use_safe_sorted_paths_and_fixed_timestamps(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ags-release-zip-") as temporary:
             output = Path(temporary)
-            build_release.build(ROOT, output, "1.1.0")
+            build_release.build(ROOT, output, "1.1.1")
             for archive_path in output.glob("*.zip"):
                 with zipfile.ZipFile(archive_path) as archive:
                     names = archive.namelist()
@@ -84,8 +94,8 @@ class ReleaseBuilderTests(unittest.TestCase):
             selected = build_release.release_files(ROOT, output=Path(output).resolve())
             self.assertNotIn(ignored_sentinel, selected)
             self.assertNotIn(output_sentinel, selected)
-            build_release.build(ROOT, Path(output), "1.1.0")
-            with zipfile.ZipFile(Path(output) / "codex-ai-game-studio-v1.1.0.zip") as archive:
+            build_release.build(ROOT, Path(output), "1.1.1")
+            with zipfile.ZipFile(Path(output) / "codex-ai-game-studio-v1.1.1.zip") as archive:
                 names = archive.namelist()
                 self.assertFalse(any("must-not-ship.txt" in name for name in names))
                 self.assertFalse(any("must-not-recurse.txt" in name for name in names))
@@ -93,7 +103,7 @@ class ReleaseBuilderTests(unittest.TestCase):
     def test_platform_editions_contain_only_the_matching_platform_plugin(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ags-editions-") as temporary:
             output = Path(temporary)
-            build_release.build(ROOT, output, "1.1.0")
+            build_release.build(ROOT, output, "1.1.1")
             required_img_references = {
                 "cs2_finishes.md",
                 "geometry_patterns.md",
@@ -103,8 +113,8 @@ class ReleaseBuilderTests(unittest.TestCase):
                 ("windows", "ai-game-studio-windows", "ai-game-studio-macos"),
                 ("macos", "ai-game-studio-macos", "ai-game-studio-windows"),
             ):
-                archive_path = output / f"codex-ai-game-studio-{edition}-v1.1.0.zip"
-                prefix = f"codex-ai-game-studio-{edition}-v1.1.0"
+                archive_path = output / f"codex-ai-game-studio-{edition}-v1.1.1.zip"
+                prefix = f"codex-ai-game-studio-{edition}-v1.1.1"
                 with zipfile.ZipFile(archive_path) as archive:
                     names = archive.namelist()
                     self.assertIn(f"{prefix}/README.md", names)
@@ -142,12 +152,12 @@ class ReleaseBuilderTests(unittest.TestCase):
 
             for archive_name, prefix in (
                 (
-                    "ai-game-studio-img2threejs-v1.1.0.zip",
+                    "ai-game-studio-img2threejs-v1.1.1.zip",
                     "ai-game-studio-img2threejs",
                 ),
                 (
-                    "codex-ai-game-studio-v1.1.0.zip",
-                    "codex-ai-game-studio-v1.1.0/plugins/ai-game-studio-img2threejs",
+                    "codex-ai-game-studio-v1.1.1.zip",
+                    "codex-ai-game-studio-v1.1.1/plugins/ai-game-studio-img2threejs",
                 ),
             ):
                 with zipfile.ZipFile(output / archive_name) as archive:

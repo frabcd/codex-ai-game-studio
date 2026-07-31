@@ -65,7 +65,7 @@ otherwise compare verified Windows equivalents. Never claim binary
 compatibility, and wait for my transaction digest before changing anything.
 ```
 
-[Download the Windows v1.1.0 edition](https://github.com/frabcd/codex-ai-game-studio/releases/download/v1.1.0/codex-ai-game-studio-windows-v1.1.0.zip)
+[Download the Windows v1.1.1 edition](https://github.com/frabcd/codex-ai-game-studio/releases/download/v1.1.1/codex-ai-game-studio-windows-v1.1.1.zip)
 · [Windows tutorials](docs/platforms/windows.md)
 
 ### macOS
@@ -84,8 +84,12 @@ equivalents. Disclose Rosetta and hosted fallbacks, and wait for my transaction
 digest before changing anything.
 ```
 
-[Download the macOS v1.1.0 edition](https://github.com/frabcd/codex-ai-game-studio/releases/download/v1.1.0/codex-ai-game-studio-macos-v1.1.0.zip)
+[Download the macOS v1.1.1 edition](https://github.com/frabcd/codex-ai-game-studio/releases/download/v1.1.1/codex-ai-game-studio-macos-v1.1.1.zip)
 · [macOS tutorials](docs/platforms/macos.md)
+
+Use `v1.1.1` or later for marketplace-installed platform plugins. Version
+`v1.1.0` remains published for provenance but cannot hand an independently
+cached platform descriptor to the core.
 
 The edition ZIPs are convenience marketplaces, not preinstalled engines or
 models. A platform selection writes only transaction-listed project state; any

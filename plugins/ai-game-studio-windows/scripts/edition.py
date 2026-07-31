@@ -11,18 +11,44 @@ from typing import Sequence
 
 
 ALLOWED_COMMANDS = {"doctor", "plan", "apply", "disable", "rollback"}
+EXPECTED_EDITION_ID = "windows"
+EXPECTED_PLUGIN_NAME = "ai-game-studio-windows"
+MAX_DESCRIPTOR_BYTES = 1024 * 1024
 
 
-def load_edition(plugin_root: Path) -> tuple[str, str]:
-    descriptors = sorted((plugin_root / "editions").glob("*.json"))
+def load_edition(plugin_root: Path) -> tuple[str, str, Path]:
+    root = plugin_root.resolve()
+    editions_root = (root / "editions").resolve(strict=True)
+    descriptors = sorted(path for path in editions_root.glob("*.json") if path.is_file())
     if len(descriptors) != 1:
         raise RuntimeError("The edition plugin must contain exactly one descriptor")
-    payload = json.loads(descriptors[0].read_text(encoding="utf-8"))
+    descriptor = descriptors[0].resolve(strict=True)
+    if descriptor.parent != editions_root or descriptor.name != f"{EXPECTED_EDITION_ID}.json":
+        raise RuntimeError("The edition descriptor escapes its plugin or has an unexpected name")
+    if descriptor.stat().st_size > MAX_DESCRIPTOR_BYTES:
+        raise RuntimeError("The edition descriptor is too large")
+    payload = json.loads(descriptor.read_text(encoding="utf-8"))
     edition_id = payload.get("id")
     version = payload.get("version")
-    if not isinstance(edition_id, str) or not isinstance(version, str):
-        raise RuntimeError("The edition descriptor must contain string id and version fields")
-    return edition_id, version
+    if (
+        edition_id != EXPECTED_EDITION_ID
+        or payload.get("plugin") != EXPECTED_PLUGIN_NAME
+        or not isinstance(version, str)
+    ):
+        raise RuntimeError("The edition descriptor does not match this platform plugin")
+    manifest_path = (root / ".codex-plugin" / "plugin.json").resolve(strict=True)
+    try:
+        manifest_path.relative_to(root)
+    except ValueError as exc:
+        raise RuntimeError("The edition plugin manifest escapes its plugin") from exc
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if (
+        manifest.get("name") != EXPECTED_PLUGIN_NAME
+        or manifest.get("version") != version
+        or manifest.get("license") != "MIT"
+    ):
+        raise RuntimeError("The edition plugin manifest does not match its descriptor")
+    return edition_id, version, descriptor
 
 
 def is_matching_core(candidate: Path, required_version: str) -> bool:
@@ -59,7 +85,11 @@ def find_core_cli(plugin_root: Path, required_version: str) -> Path:
     return matches[-1]
 
 
-def forwarded_arguments(edition_id: str, arguments: Sequence[str]) -> list[str]:
+def forwarded_arguments(
+    edition_id: str,
+    descriptor_path: Path,
+    arguments: Sequence[str],
+) -> list[str]:
     if not arguments or arguments[0] in {"-h", "--help"}:
         return ["edition", "--help"]
     if arguments[0] == "--version":
@@ -71,15 +101,31 @@ def forwarded_arguments(edition_id: str, arguments: Sequence[str]) -> list[str]:
         )
     rest = list(arguments[1:])
     if command in {"doctor", "plan", "disable"}:
-        return ["edition", command, edition_id, *rest]
+        if any(
+            argument == "--descriptor" or argument.startswith("--descriptor=")
+            for argument in rest
+        ):
+            raise RuntimeError("The edition descriptor is fixed by the installed platform plugin")
+        return [
+            "edition",
+            command,
+            edition_id,
+            *rest,
+            "--descriptor",
+            str(descriptor_path),
+        ]
     return ["edition", command, *rest]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     plugin_root = Path(__file__).resolve().parents[1]
-    edition_id, version = load_edition(plugin_root)
+    edition_id, version, descriptor_path = load_edition(plugin_root)
     core_cli = find_core_cli(plugin_root, version)
-    command = [sys.executable, str(core_cli), *forwarded_arguments(edition_id, argv or sys.argv[1:])]
+    command = [
+        sys.executable,
+        str(core_cli),
+        *forwarded_arguments(edition_id, descriptor_path, argv or sys.argv[1:]),
+    ]
     return subprocess.run(command, check=False).returncode
 
 

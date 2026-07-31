@@ -49,6 +49,22 @@ class RepositorySecurityTests(unittest.TestCase):
             messages = [problem.render() for problem in validator.problems]
             self.assertTrue(any("workflow-unpinned" in message for message in messages))
 
+    def test_workflow_scan_rejects_release_asset_replacement(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-release-workflow-") as temporary:
+            root = Path(temporary)
+            workflows = root / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            (workflows / "release.yml").write_text(
+                "steps:\n"
+                "  - run: gh release upload \"$RELEASE_TAG\" dist/* --clobber\n",
+                encoding="utf-8",
+            )
+            validator = Validator(root)
+            validator.validate_workflows()
+            codes = {problem.code for problem in validator.problems}
+            self.assertIn("release-mutable-assets", codes)
+            self.assertIn("release-immutability-guard", codes)
+
 
 if __name__ == "__main__":
     unittest.main()

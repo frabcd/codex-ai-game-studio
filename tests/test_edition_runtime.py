@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import sys
 import tempfile
 import unittest
@@ -41,13 +42,66 @@ class EditionRuntimeTests(unittest.TestCase):
         self.assertEqual(set(descriptors), {"windows", "macos"})
         for edition_id, descriptor in descriptors.items():
             self.assertEqual(descriptor["id"], edition_id)
-            self.assertEqual(descriptor["version"], "1.1.0")
+            self.assertEqual(descriptor["version"], "1.1.1")
             self.assertEqual(descriptor["license"], "MIT")
             self.assertEqual(descriptor["activation"]["mode"], "confirmed-transaction-only")
             self.assertTrue(descriptor["adaptation_rules"])
             for rule in descriptor["adaptation_rules"]:
                 self.assertTrue(rule["requires_confirmation"])
                 self.assertTrue(rule["limitations"])
+
+    def test_supplied_descriptor_requires_a_matching_complete_plugin(self) -> None:
+        source = REPO / "plugins" / "ai-game-studio-windows"
+        installed = self.project / "cache" / "ai-game-studio-windows" / "snapshot"
+        descriptor = installed / "editions" / "windows.json"
+        descriptor.parent.mkdir(parents=True)
+        shutil.copy2(source / "editions" / "windows.json", descriptor)
+
+        with self.assertRaisesRegex(core.StudioError, "no bounded plugin manifest"):
+            core.edition_doctor(
+                "windows",
+                project_root=self.project,
+                descriptor_path=descriptor.resolve(),
+            )
+
+        manifest = installed / ".codex-plugin" / "plugin.json"
+        manifest.parent.mkdir(parents=True)
+        shutil.copy2(source / ".codex-plugin" / "plugin.json", manifest)
+        report = core.edition_doctor(
+            "windows",
+            project_root=self.project,
+            descriptor_path=descriptor.resolve(),
+        )
+        self.assertEqual(report["edition"], "windows")
+        self.assertTrue(report["read_only"])
+        self.assertFalse((self.project / core.STATE_DIR).exists())
+        with mock.patch.object(core.platform, "system", return_value="Windows"), mock.patch.object(
+            core.platform, "machine", return_value="AMD64"
+        ):
+            plan = core.edition_plan(
+                "windows",
+                project_root=self.project,
+                descriptor_path=descriptor.resolve(),
+            )
+        self.assertEqual(plan["metadata"]["edition"], "windows")
+        self.assertEqual(
+            plan["metadata"]["descriptor_sha256"],
+            core.file_sha256(descriptor),
+        )
+        self.assertFalse((self.project / core.STATE_DIR).exists())
+
+        with self.assertRaisesRegex(core.StudioError, "must be absolute"):
+            core.edition_doctor(
+                "windows",
+                project_root=self.project,
+                descriptor_path=Path("editions/windows.json"),
+            )
+        with self.assertRaisesRegex(core.StudioError, "must be named"):
+            core.edition_doctor(
+                "macos",
+                project_root=self.project,
+                descriptor_path=descriptor.resolve(),
+            )
 
     def test_edition_doctor_is_read_only_and_exposes_adaptations(self) -> None:
         report = core.edition_doctor("windows", project_root=self.project)

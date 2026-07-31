@@ -1,6 +1,6 @@
 {
   "name": "ai-game-studio-windows",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A native-first Windows toolchain planner with deterministic cross-platform adaptations for Codex AI Game Studio.",
   "author": {
     "name": "frabcd",

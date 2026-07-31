@@ -102,6 +102,34 @@ def canonical_file_bytes(path: Path) -> bytes:
     return normalized.encode("utf-8")
 
 
+def validate_release_version(root: Path, version: str) -> None:
+    """Require archive labels to match every shipped plugin and edition version."""
+
+    versioned_paths = [
+        root / "plugins" / plugin_name / ".codex-plugin" / "plugin.json"
+        for plugin_name in PLUGIN_NAMES
+    ]
+    versioned_paths.extend(
+        root / "plugins" / f"ai-game-studio-{edition}" / "editions" / f"{edition}.json"
+        for edition in sorted(EDITION_PLUGINS)
+    )
+    mismatches: list[str] = []
+    for path in versioned_paths:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"cannot read release version from {path}: {exc}") from exc
+        actual = payload.get("version") if isinstance(payload, dict) else None
+        if actual != version:
+            relative = path.relative_to(root).as_posix()
+            mismatches.append(f"{relative}={actual!r}")
+    if mismatches:
+        raise ValueError(
+            f"release version {version!r} does not match checked-in package versions: "
+            + ", ".join(mismatches)
+        )
+
+
 def release_files(root: Path, *, output: Path | None = None) -> list[Path]:
     files: list[Path] = []
     for path in root.rglob("*"):
@@ -339,6 +367,7 @@ def build(root: Path, output: Path, version: str) -> dict[str, object]:
     output = output.resolve()
     if output == root or root in output.parents and output.name in {".git", "plugins"}:
         raise ValueError("release output must not overwrite repository inputs")
+    validate_release_version(root, version)
     output.mkdir(parents=True, exist_ok=True)
 
     full_files = release_files(root, output=output)
@@ -406,7 +435,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--output", type=Path, default=Path("dist"))
-    parser.add_argument("--version", default="1.1.0")
+    parser.add_argument("--version", default="1.1.1")
     args = parser.parse_args()
     if not re_semver(args.version):
         parser.error("--version must be a strict semantic version")

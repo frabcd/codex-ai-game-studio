@@ -2,6 +2,26 @@
 
 All notable changes are recorded here. The project follows Semantic Versioning.
 
+## [1.1.1] - 2026-07-31
+
+### Fixed
+
+- Windows and macOS edition launchers now hand their installed, read-only
+  descriptor to the matching core when Codex stores each plugin in an
+  independent marketplace cache directory. Version 1.1.0 worked in extracted
+  sibling layouts but could report `Available: none` after a public marketplace
+  install.
+- Added a real separate-cache launcher regression for both platform plugins.
+
+### Safety
+
+- The core accepts only an absolute `editions/<platform>.json` path inside a
+  matching MIT platform plugin with the exact core version, fixed identity and
+  target OS, scoped activation, and confirmation-gated adaptation rules.
+- Release archives must match every checked-in plugin and edition version.
+  Existing GitHub releases and assets are immutable; reruns fail before
+  validation, build, attestation, or upload instead of replacing files.
+
 ## [1.1.0] - 2026-07-31
 
 ### Added

@@ -87,9 +87,13 @@ services remain separate proposals.
 
 Each platform plugin ships a native launcher plus a small Python resolver. The
 resolver accepts tokenized arguments, never invokes a shell, and locates the
-matching v1.1 core either beside an extracted edition or in the same Codex
-marketplace cache. A missing or version-mismatched core fails closed instead of
-falling through to an unrelated command on `PATH`.
+exact matching patch of the core either beside an extracted edition or in the
+same Codex marketplace cache. For independent Codex plugin caches, the launcher
+hands the core its own canonical, read-only descriptor path. The core accepts it
+only after validating the containing plugin manifest, exact version, platform
+identity, activation scope, and confirmation-gated rules. It never copies the
+descriptor. A missing or version-mismatched core fails closed instead of falling
+through to an unrelated command on `PATH`.
 
 ## Platform adaptation boundary
 

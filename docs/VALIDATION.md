@@ -1,28 +1,40 @@
 # Validation evidence
 
-This page separates the current v1.1 release-candidate evidence from the
-published v1.0 historical record. Local v1.1 evidence was reproduced on Windows
-on 2026-07-31; hosted Windows, macOS, and Linux evidence will be linked after
-the candidate commit runs through CI.
+This page separates the current v1.1.1 hotfix candidate from the published
+v1.1.0 and v1.0.0 historical records. Local evidence was reproduced on Windows
+on 2026-07-31. Hosted and public-install evidence is updated only after the
+exact candidate commit runs.
 
-## v1.1 release-candidate record
+## v1.1.1 hotfix candidate record
 
 | Gate | Local evidence on 2026-07-31 | Status |
 |---|---|---|
 | Repository contract | 85 core skills, 95 bundled skills, 49 roles, 12 mapped hook behaviors, 11 rules, 40 upstream templates, 163 catalog records, two edition descriptors, and pinned img2threejs provenance | **Pass** |
-| Official plugin validator | Every marketplace plugin, including img2threejs, Windows, and macOS | **10/10 pass** |
-| Official skill validator | Core, automation, editor packs, img2threejs, Windows, and macOS skills | **95/95 pass** |
-| Runtime unit tests | Detection, transactions, rollback scope, offline routing, release archives, Pages, both edition launchers, security fixtures, and checkout-independent text normalization | **108/108 pass** |
-| Windows/macOS edition boundary | Repository and marketplace-cache launcher layouts; real host probes; OS mismatch rejection; digest-bound apply/disable/rollback; no external installation during edition selection | **Pass** |
-| img2threejs portability | Native Windows and macOS image-conversion routes, external user cache routing, and plugin-source write rejection | **Pass** |
-| img2threejs security | Public HTTPS allowlists, redirect and size limits, safe numeric outputs, preserve-existing behavior, hash-locked ImageMagick and Source2Viewer manifests, and bounded subprocesses | **Pass** |
+| Official validators | Every marketplace plugin and skill | **10/10 plugins and 95/95 skills pass** |
+| Runtime unit tests | Detection, transactions, rollback scope, offline routing, release archives, Pages, security, and real separate-cache edition launcher subprocesses | **113/113 pass locally** |
+| Installed edition boundary | Windows and macOS wrappers hand off only their canonical descriptor; core validates plugin identity, exact version, license, target OS, activation scope, and confirmation-gated rules; no copy or project-state write during doctor | **Pass** |
+| Clean local Codex installation | Installed the core, Windows edition, and img2threejs plugins through the marketplace CLI into independent `1.1.1` cache roots; discovered 85 + 1 + 1 skills; the installed Windows doctor exited 0 from an empty project with no state file, descriptor copy, or descriptor hash change; all test entries were then removed | **Pass** |
+| img2threejs portability and security | Native image conversion, external cache routing, CP1252-safe output, public HTTPS allowlists, download bounds, and hash-locked optional executables | **Pass** |
 | Documentation build | Legal/support, tutorials, img2threejs, Windows, and macOS routes plus rewritten internal links and copied assets | **43 files; zero broken internal links** |
 | Deterministic release | Two independent out-of-tree builds with identical filenames and SHA-256 values | **16/16 output files identical; 14 artifacts recorded** |
-| Extracted Windows edition installation | Add the packaged local marketplace, install core + Windows + img2threejs, run the installed native doctor, then remove all test state | **Pass; 85 + 1 + 1 skills, v1.1.0, read-only host match, clean removal** |
-| Hosted OS matrix | Windows, macOS, and Linux GitHub Actions | **Pending candidate push** |
-| Clean public installation | Marketplace install from the public v1.1 tag | **Pending candidate publication** |
+| Release immutability | Builder rejects a tag/package version mismatch; workflow serializes by requested tag and refuses an existing release before build or attestation | **Pass locally** |
+| Hosted OS matrix | Windows, macOS, and Linux GitHub Actions | **Pending hotfix push** |
+| Clean public installation | Marketplace install of core + matching platform + img2threejs from public `main` at v1.1.1 | **Pending hotfix publication** |
 
-### v1.1 extracted-edition capture
+## v1.1.0 published and affected record
+
+- Protected CI passed 109 tests on Windows, macOS, and Linux, all 15 pack jobs,
+  official validators, CodeQL, and dependency review in
+  [CI run 30603433632](https://github.com/frabcd/codex-ai-game-studio/actions/runs/30603433632).
+- [Release run 30603599328](https://github.com/frabcd/codex-ai-game-studio/actions/runs/30603599328)
+  published 16 checksummed and attested
+  [v1.1.0 assets](https://github.com/frabcd/codex-ai-game-studio/releases/tag/v1.1.0).
+- The extracted Windows edition sibling layout passed, but a clean public
+  marketplace install reproduced `Unknown edition 'windows'. Available: none`
+  with exit code 2 because Codex cached the platform and core plugins
+  independently. The failed read-only doctor created no project state.
+
+### v1.1.0 extracted-edition capture
 
 The Windows edition ZIP was expanded outside the repository and used exactly as
 a local marketplace. The test installed only the three plugins below, ran the
@@ -46,7 +58,7 @@ cleanup: complete
 python tools/validate_repository.py
 python tools/run_official_validators.py --require
 python -m unittest discover -s tests -p "test_*.py"
-python tools/build_release.py --version 1.1.0 --output dist
+python tools/build_release.py --version 1.1.1 --output dist
 ```
 
 Run the pack transaction smoke test once per pack:

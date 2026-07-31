@@ -9,6 +9,26 @@
 
 Use `/plugins` to refresh the `frabcd-ai-game-studio` marketplace and update selected plugins. Start a new task afterward so skill and hook metadata reload.
 
+## Upgrade from 1.1.0 to 1.1.1
+
+Upgrade the core and the selected platform plugin together. This patch repairs
+edition descriptor discovery when Codex installs marketplace plugins into
+separate cache directories.
+
+```text
+codex plugin marketplace upgrade frabcd-ai-game-studio
+codex plugin add ai-game-studio@frabcd-ai-game-studio
+codex plugin add ai-game-studio-windows@frabcd-ai-game-studio
+# On macOS, install ai-game-studio-macos instead.
+```
+
+Confirm that both installed plugins report version `1.1.1`, start a new Codex
+task, and run the platform launcher's read-only `doctor` command. The patch does
+not change project or lock schemas and requires no project-state migration.
+Version 1.1.0 remains usable in an extracted sibling-layout edition, but its
+platform launcher cannot resolve the descriptor from Codex's independent public
+marketplace caches.
+
 ## Upgrade from 1.0.0 to 1.1.0
 
 The 1.1 release preserves the 85-skill core and schema version 1 project files.

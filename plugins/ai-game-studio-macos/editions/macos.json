@@ -4,7 +4,7 @@
   "plugin": "ai-game-studio-macos",
   "display_name": "Codex AI Game Studio for macOS",
   "target_os": "Darwin",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "distribution": "local-codex-marketplace",
   "supported_architectures": [

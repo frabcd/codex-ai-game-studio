@@ -16,7 +16,7 @@ class MacOSEditionTests(unittest.TestCase):
             (PLUGIN / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
         )
         self.assertEqual(manifest["name"], "ai-game-studio-macos")
-        self.assertEqual(manifest["version"], "1.1.0")
+        self.assertEqual(manifest["version"], "1.1.1")
         self.assertEqual(manifest["license"], "MIT")
         self.assertLessEqual(len(manifest["interface"]["defaultPrompt"]), 128)
 
@@ -62,7 +62,7 @@ class MacOSEditionTests(unittest.TestCase):
         self.assertEqual(descriptor["id"], "macos")
         self.assertEqual(descriptor["plugin"], "ai-game-studio-macos")
         self.assertEqual(descriptor["target_os"], "Darwin")
-        self.assertEqual(descriptor["version"], "1.1.0")
+        self.assertEqual(descriptor["version"], "1.1.1")
         self.assertEqual(descriptor["license"], "MIT")
         self.assertEqual(
             set(descriptor["supported_architectures"]), {"arm64", "x86_64"}

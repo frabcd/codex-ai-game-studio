@@ -88,6 +88,8 @@ class SpecSearchCachePortabilityTests(unittest.TestCase):
         script = FORGE_ROOT / "stage1_intake" / "search_specs.py"
         with tempfile.TemporaryDirectory() as temporary:
             cache_root = Path(temporary) / "search-cache"
+            environment = os.environ.copy()
+            environment["PYTHONDONTWRITEBYTECODE"] = "1"
             result = subprocess.run(
                 [
                     sys.executable,
@@ -103,6 +105,7 @@ class SpecSearchCachePortabilityTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 encoding="utf-8",
+                env=environment,
                 check=False,
                 timeout=60,
             )

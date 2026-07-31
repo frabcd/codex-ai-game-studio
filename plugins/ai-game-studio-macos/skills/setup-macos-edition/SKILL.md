@@ -5,7 +5,9 @@ description: Inspect a macOS game project and propose one native Apple Silicon o
 
 # Set up the macOS edition
 
-Use the core standard-library Python CLI and the checked-in `macos` edition descriptor. Treat detection, planning, applying, disabling, and rollback as separate phases.
+Use the core standard-library Python CLI and the installed plugin's validated
+`macos` edition descriptor. Treat detection, planning, applying, disabling, and
+rollback as separate phases.
 
 ## Detect without changing the host
 

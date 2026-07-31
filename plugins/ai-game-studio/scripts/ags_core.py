@@ -28,13 +28,36 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 STATE_DIR = ".ai-game-studio"
 PLAN_TTL_MINUTES = 30
 MAX_SCAN_DEPTH = 5
 MAX_SCAN_FILES = 20_000
 MAX_JSON_BYTES = 16 * 1024 * 1024
 SUPPORTED_OS = {"Windows", "Darwin", "Linux"}
+EDITION_CONTRACT = {
+    "windows": {
+        "plugin": "ai-game-studio-windows",
+        "target_os": "Windows",
+    },
+    "macos": {
+        "plugin": "ai-game-studio-macos",
+        "target_os": "Darwin",
+    },
+}
+EDITION_REQUIRED_LISTS = (
+    "supported_architectures",
+    "shells",
+    "package_managers",
+    "gpu_backends",
+    "applications",
+    "native_capabilities",
+    "adaptation_rules",
+    "permissions",
+    "health_checks",
+    "uninstall",
+    "rollback",
+)
 KNOWN_CREDENTIALS = (
     "GITHUB_TOKEN",
     "GH_TOKEN",
@@ -670,6 +693,132 @@ def load_edition_descriptors() -> dict[str, dict[str, Any]]:
     return result
 
 
+def load_supplied_edition_descriptor(
+    edition_id: str,
+    descriptor_path: Path,
+) -> dict[str, Any]:
+    """Load a descriptor supplied by an independently cached edition plugin.
+
+    The descriptor remains read-only at its installed path. It is accepted only
+    from a complete, version-matched edition plugin and its declarative fields
+    are validated before they can influence a doctor report or transaction.
+    """
+
+    contract = EDITION_CONTRACT.get(edition_id)
+    if contract is None:
+        raise StudioError(f"Unknown edition '{edition_id}'")
+    if not descriptor_path.is_absolute():
+        raise StudioError("Supplied edition descriptor path must be absolute")
+    try:
+        resolved = descriptor_path.resolve(strict=True)
+    except (OSError, RuntimeError) as exc:
+        raise StudioError(f"Supplied edition descriptor is unavailable: {descriptor_path}") from exc
+    if resolved.name != f"{edition_id}.json" or resolved.parent.name != "editions":
+        raise StudioError(
+            f"Supplied {edition_id} descriptor must be named editions/{edition_id}.json"
+        )
+
+    plugin_dir = resolved.parent.parent
+    try:
+        editions_dir = (plugin_dir / "editions").resolve(strict=True)
+    except (OSError, RuntimeError) as exc:
+        raise StudioError("Supplied edition descriptor directory is unavailable") from exc
+    if resolved.parent != editions_dir:
+        raise StudioError("Supplied edition descriptor escapes its plugin editions directory")
+
+    manifest_path = plugin_dir / ".codex-plugin" / "plugin.json"
+    try:
+        resolved_manifest = manifest_path.resolve(strict=True)
+        resolved_manifest.relative_to(plugin_dir)
+    except (OSError, RuntimeError, ValueError) as exc:
+        raise StudioError("Supplied edition descriptor has no bounded plugin manifest") from exc
+    manifest = safe_json_load(resolved_manifest)
+    expected_plugin = str(contract["plugin"])
+    if not isinstance(manifest, dict):
+        raise StudioError("Supplied edition descriptor has no valid plugin manifest")
+    if (
+        manifest.get("name") != expected_plugin
+        or manifest.get("version") != VERSION
+        or manifest.get("license") != "MIT"
+    ):
+        raise StudioError(
+            f"Supplied edition plugin must be {expected_plugin} {VERSION} under the MIT license"
+        )
+
+    descriptor = safe_json_load(resolved)
+    if not isinstance(descriptor, dict):
+        raise StudioError("Supplied edition descriptor must contain a JSON object")
+    expected_fields = {
+        "id": edition_id,
+        "plugin": expected_plugin,
+        "target_os": str(contract["target_os"]),
+        "version": VERSION,
+        "license": "MIT",
+    }
+    for field, expected in expected_fields.items():
+        if descriptor.get(field) != expected:
+            raise StudioError(
+                f"Supplied edition descriptor field {field!r} must be {expected!r}"
+            )
+    for field in EDITION_REQUIRED_LISTS:
+        value = descriptor.get(field)
+        if not isinstance(value, list) or not value:
+            raise StudioError(
+                f"Supplied edition descriptor field {field!r} must be a non-empty array"
+            )
+    required_rule_fields = {
+        "id",
+        "source_constraint",
+        "preferred_native",
+        "alternatives",
+        "limitations",
+        "requires_confirmation",
+    }
+    for rule in descriptor["adaptation_rules"]:
+        if (
+            not isinstance(rule, dict)
+            or required_rule_fields - set(rule)
+            or not isinstance(rule.get("id"), str)
+            or not rule.get("id")
+            or not isinstance(rule.get("source_constraint"), str)
+            or not rule.get("source_constraint")
+            or not isinstance(rule.get("preferred_native"), str)
+            or not rule.get("preferred_native")
+            or not isinstance(rule.get("alternatives"), list)
+            or not rule.get("alternatives")
+            or rule.get("requires_confirmation") is not True
+            or not rule.get("limitations")
+        ):
+            raise StudioError(
+                "Supplied edition adaptation rules must disclose limitations and require confirmation"
+            )
+    activation = descriptor.get("activation")
+    if (
+        not isinstance(activation, dict)
+        or activation.get("mode") != "confirmed-transaction-only"
+        or activation.get("project_state") != f"{STATE_DIR}/project.json"
+        or activation.get("lock_file") != f"{STATE_DIR}/lock.json"
+    ):
+        raise StudioError("Supplied edition descriptor has an unsafe activation scope")
+
+    descriptor["_descriptor_path"] = str(resolved)
+    return descriptor
+
+
+def select_edition_descriptor(
+    edition_id: str,
+    supplied_path: Path | None = None,
+) -> dict[str, Any]:
+    if supplied_path is not None:
+        return load_supplied_edition_descriptor(edition_id, supplied_path)
+    descriptors = load_edition_descriptors()
+    if edition_id not in descriptors:
+        raise StudioError(
+            f"Unknown edition '{edition_id}'. Available: {', '.join(sorted(descriptors)) or 'none'}"
+        )
+    return descriptors[edition_id]
+
+
 def edition_host_detection(edition_id: str, environment: Mapping[str, Any]) -> dict[str, Any]:
     """Run fixed, read-only probes for the selected platform descriptor.
 
@@ -810,13 +959,13 @@ def write_action(target: str, value: Any) -> dict[str, Any]:
     return {"operation": "write-file", "target": target, "content_base64": encode_action_json(value)}
 
 
-def edition_doctor(edition_id: str, *, project_root: Path) -> dict[str, Any]:
-    descriptors = load_edition_descriptors()
-    if edition_id not in descriptors:
-        raise StudioError(
-            f"Unknown edition '{edition_id}'. Available: {', '.join(sorted(descriptors)) or 'none'}"
-        )
-    descriptor = descriptors[edition_id]
+def edition_doctor(
+    edition_id: str,
+    *,
+    project_root: Path,
+    descriptor_path: Path | None = None,
+) -> dict[str, Any]:
+    descriptor = select_edition_descriptor(edition_id, descriptor_path)
     environment = doctor(project_root)
     environment["edition_detection"] = edition_host_detection(edition_id, environment)
     detected_platform = environment.get("platform") if isinstance(environment, dict) else {}
@@ -841,13 +990,13 @@ def edition_doctor(edition_id: str, *, project_root: Path) -> dict[str, Any]:
     }
 
 
-def edition_plan(edition_id: str, *, project_root: Path) -> dict[str, Any]:
-    descriptors = load_edition_descriptors()
-    if edition_id not in descriptors:
-        raise StudioError(
-            f"Unknown edition '{edition_id}'. Available: {', '.join(sorted(descriptors)) or 'none'}"
-        )
-    descriptor = descriptors[edition_id]
+def edition_plan(
+    edition_id: str,
+    *,
+    project_root: Path,
+    descriptor_path: Path | None = None,
+) -> dict[str, Any]:
+    descriptor = select_edition_descriptor(edition_id, descriptor_path)
     system = platform.system()
     machine = platform.machine().lower()
     target_os = str(descriptor.get("target_os", ""))
@@ -913,10 +1062,13 @@ def edition_plan(edition_id: str, *, project_root: Path) -> dict[str, Any]:
     )
 
 
-def edition_disable_plan(edition_id: str, *, project_root: Path) -> dict[str, Any]:
-    descriptors = load_edition_descriptors()
-    if edition_id not in descriptors:
-        raise StudioError(f"Unknown edition '{edition_id}'")
+def edition_disable_plan(
+    edition_id: str,
+    *,
+    project_root: Path,
+    descriptor_path: Path | None = None,
+) -> dict[str, Any]:
+    select_edition_descriptor(edition_id, descriptor_path)
     project, lock = state_documents(project_root)
     selected = project.get("platform_edition")
     if not isinstance(selected, dict) or selected.get("id") != edition_id:
@@ -1647,10 +1799,20 @@ def build_parser() -> argparse.ArgumentParser:
     edition_doctor_parser = edition.add_parser("doctor")
     edition_doctor_parser.add_argument("edition_id", choices=("windows", "macos"))
     add_project_argument(edition_doctor_parser)
+    edition_doctor_parser.add_argument(
+        "--descriptor",
+        type=Path,
+        help=argparse.SUPPRESS,
+    )
     edition_plan_parser = edition.add_parser("plan")
     edition_plan_parser.add_argument("edition_id", choices=("windows", "macos"))
     add_project_argument(edition_plan_parser)
     edition_plan_parser.add_argument("--output")
+    edition_plan_parser.add_argument(
+        "--descriptor",
+        type=Path,
+        help=argparse.SUPPRESS,
+    )
     edition_apply_parser = edition.add_parser("apply")
     edition_apply_parser.add_argument("--plan", required=True)
     edition_apply_parser.add_argument("--confirmed-digest", required=True)
@@ -1659,6 +1821,11 @@ def build_parser() -> argparse.ArgumentParser:
     edition_disable_parser.add_argument("edition_id", choices=("windows", "macos"))
     add_project_argument(edition_disable_parser)
     edition_disable_parser.add_argument("--output")
+    edition_disable_parser.add_argument(
+        "--descriptor",
+        type=Path,
+        help=argparse.SUPPRESS,
+    )
     edition_rollback_parser = edition.add_parser("rollback")
     edition_rollback_parser.add_argument("transaction_id")
     add_project_argument(edition_rollback_parser)
@@ -1715,9 +1882,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         elif args.command == "edition":
             root = Path(args.project)
             if args.edition_command == "doctor":
-                emit(edition_doctor(args.edition_id, project_root=root))
+                emit(
+                    edition_doctor(
+                        args.edition_id,
+                        project_root=root,
+                        descriptor_path=args.descriptor,
+                    )
+                )
             elif args.edition_command == "plan":
-                maybe_write_plan(edition_plan(args.edition_id, project_root=root), args.output)
+                maybe_write_plan(
+                    edition_plan(
+                        args.edition_id,
+                        project_root=root,
+                        descriptor_path=args.descriptor,
+                    ),
+                    args.output,
+                )
             elif args.edition_command == "apply":
                 plan = safe_json_load(Path(args.plan).expanduser().resolve())
                 if not isinstance(plan, dict):
@@ -1725,7 +1905,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 validate_edition_apply_plan(plan)
                 emit(apply_plan(plan, project_root=root, confirmed_digest=args.confirmed_digest))
             elif args.edition_command == "disable":
-                maybe_write_plan(edition_disable_plan(args.edition_id, project_root=root), args.output)
+                maybe_write_plan(
+                    edition_disable_plan(
+                        args.edition_id,
+                        project_root=root,
+                        descriptor_path=args.descriptor,
+                    ),
+                    args.output,
+                )
             else:
                 maybe_write_plan(
                     rollback_plan(

@@ -27,8 +27,12 @@ The workflow always uses this sequence:
 General approval is not digest confirmation. Preview-only requests stop after the proposal. Disabling or rolling back is a new transaction with a new digest.
 
 Resolve `<windows-plugin-root>` to the installed
-`ai-game-studio-windows` plugin. Its launcher finds only a matching v1.1 core
-beside the extracted edition or in the same Codex marketplace cache:
+`ai-game-studio-windows` plugin. Its launcher finds only the exact matching
+core patch beside the extracted edition or in the same Codex marketplace cache.
+When Codex caches the plugins independently, the launcher supplies its
+canonical descriptor path; the core validates the containing plugin identity,
+version, license, target OS, activation scope, and confirmation rules before
+reading it in place:
 
 ```text
 & "<windows-plugin-root>\scripts\ai-game-studio-windows.ps1" doctor --project <root>

@@ -27,8 +27,11 @@ The workflow has five separate phases:
 The edition recognizes Darwin on `arm64` and `x86_64`, zsh/POSIX shells, Homebrew and MacPorts, Metal/MPS/Core ML/CPU, and Unity, Godot, Unreal, Blender, Aseprite, Pixelorama, and Tiled. Detection checks presence and metadata; it does not launch applications, update package managers, or read credential values.
 
 Resolve `<macos-plugin-root>` to the installed `ai-game-studio-macos` plugin.
-Its native launcher finds only a matching v1.1 core beside the extracted
-edition or in the same Codex marketplace cache:
+Its native launcher finds only the exact matching core patch beside the
+extracted edition or in the same Codex marketplace cache. When Codex caches the
+plugins independently, the launcher supplies its canonical descriptor path;
+the core validates the containing plugin identity, version, license, target OS,
+activation scope, and confirmation rules before reading it in place:
 
 ```text
 "<macos-plugin-root>/scripts/ai-game-studio-macos.sh" doctor --project <root>

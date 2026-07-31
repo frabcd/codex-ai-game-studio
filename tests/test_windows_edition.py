@@ -16,7 +16,7 @@ class WindowsEditionTests(unittest.TestCase):
             (PLUGIN / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
         )
         self.assertEqual(manifest["name"], "ai-game-studio-windows")
-        self.assertEqual(manifest["version"], "1.1.0")
+        self.assertEqual(manifest["version"], "1.1.1")
         self.assertEqual(manifest["license"], "MIT")
         self.assertLessEqual(len(manifest["interface"]["defaultPrompt"]), 128)
 
@@ -64,7 +64,7 @@ class WindowsEditionTests(unittest.TestCase):
         self.assertEqual(descriptor["id"], "windows")
         self.assertEqual(descriptor["plugin"], "ai-game-studio-windows")
         self.assertEqual(descriptor["target_os"], "Windows")
-        self.assertEqual(descriptor["version"], "1.1.0")
+        self.assertEqual(descriptor["version"], "1.1.1")
         self.assertEqual(descriptor["license"], "MIT")
         self.assertEqual(
             set(descriptor["supported_architectures"]), {"amd64", "arm64"}
