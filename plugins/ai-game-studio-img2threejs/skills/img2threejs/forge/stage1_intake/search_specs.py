@@ -146,8 +146,23 @@ def _index_payload(result: IndexLoadResult) -> OutputIndex:
     }
 
 
+def _configure_console_streams() -> None:
+    """Keep human and diagnostic output writable on legacy console encodings."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if not callable(reconfigure):
+            continue
+        try:
+            reconfigure(errors="backslashreplace")
+        except (OSError, ValueError):
+            # Redirected and embedded streams may not support reconfiguration.
+            continue
+
+
 def _print_json(payload: SuccessPayload | dict[str, JsonValue]) -> None:
-    print(json.dumps(payload, ensure_ascii=False, separators=(",", ":")))
+    # Machine output must survive legacy Windows console encodings such as
+    # cp1252. JSON consumers recover the original Unicode after parsing.
+    print(json.dumps(payload, ensure_ascii=True, separators=(",", ":")))
 
 
 def _print_human(payload: SuccessPayload) -> None:
@@ -185,6 +200,7 @@ def _emit_error(context: ErrorContext, failure: CliFailure) -> int:
 
 
 def main(argv: Sequence[str]) -> int:
+    _configure_console_streams()
     json_requested = "--json" in argv
     try:
         options = _parse_options(argv)

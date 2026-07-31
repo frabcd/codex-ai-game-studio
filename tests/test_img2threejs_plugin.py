@@ -46,6 +46,7 @@ def write_test_png(path: Path, width: int = 512, height: int = 512) -> None:
 def run_python(script: Path, *arguments: object, cwd: Path, timeout: int = 30) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
     environment["PYTHONIOENCODING"] = "utf-8"
+    environment["PYTHONDONTWRITEBYTECODE"] = "1"
     return subprocess.run(
         [sys.executable, str(script), *(str(argument) for argument in arguments)],
         cwd=cwd,
@@ -158,6 +159,46 @@ class Img2ThreeJsPluginTests(unittest.TestCase):
             self.assertEqual(512, payload["height"])
             self.assertEqual("pass", payload["technicalSuitability"])
 
+    def test_search_output_is_safe_under_a_cp1252_console(self) -> None:
+        query = "độ nhám"
+        for json_output in (False, True):
+            with self.subTest(json_output=json_output):
+                with tempfile.TemporaryDirectory(
+                    prefix="ags-img2threejs-cp1252-"
+                ) as temporary:
+                    work = Path(temporary)
+                    environment = os.environ.copy()
+                    environment["PYTHONIOENCODING"] = "cp1252:strict"
+                    environment["PYTHONDONTWRITEBYTECODE"] = "1"
+                    arguments = [
+                        sys.executable,
+                        str(SKILL / "forge" / "stage1_intake" / "search_specs.py"),
+                        query,
+                        "--collection",
+                        "core_3d",
+                        "--cache-root",
+                        str(work / "cache"),
+                    ]
+                    if json_output:
+                        arguments.append("--json")
+                    completed = subprocess.run(
+                        arguments,
+                        cwd=work,
+                        env=environment,
+                        capture_output=True,
+                        text=True,
+                        encoding="cp1252",
+                        timeout=30,
+                        check=False,
+                    )
+                    self.assertEqual(0, completed.returncode, completed.stderr)
+                    if json_output:
+                        self.assertTrue(completed.stdout.isascii())
+                        self.assertEqual(query, json.loads(completed.stdout)["query"])
+                    else:
+                        self.assertIn("Query:", completed.stdout)
+                        self.assertIn("\\u0111", completed.stdout)
+
     def test_local_search_spec_generation_and_next_router_smoke(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ags-img2threejs-pipeline-") as temporary:
             work = Path(temporary)
@@ -203,7 +244,10 @@ class Img2ThreeJsPluginTests(unittest.TestCase):
             self.assertEqual(0, routed.returncode, routed.stderr)
             self.assertIn("current pass:", routed.stdout)
             self.assertIn(str(sys.executable), routed.stdout)
-            self.assertIn(str(copied_skill / "forge" / "stage3_build" / "orchestrate_passes.py"), routed.stdout)
+            expected_orchestrator = (
+                copied_skill / "forge" / "stage3_build" / "orchestrate_passes.py"
+            ).resolve()
+            self.assertIn(str(expected_orchestrator), routed.stdout)
             self.assertTrue((copied_skill / ".cache").is_dir())
             self.assertFalse((SKILL / ".cache").exists())
 
