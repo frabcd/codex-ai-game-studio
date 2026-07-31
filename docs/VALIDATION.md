@@ -1,13 +1,13 @@
 # Validation evidence
 
-This page separates the current v1.1.1 hotfix candidate from the published
-v1.1.0 and v1.0.0 historical records. Local evidence was reproduced on Windows
-on 2026-07-31. Hosted and public-install evidence is updated only after the
-exact candidate commit runs.
+This page separates the published v1.1.1 hotfix from the affected v1.1.0 and
+the v1.0.0 historical record. Local, hosted, release, and pinned public-install
+evidence was reproduced on 2026-07-31 for commit
+`a0352273f034e26c0e9510cd203c4a778d30e2f3`.
 
-## v1.1.1 hotfix candidate record
+## v1.1.1 published hotfix record
 
-| Gate | Local evidence on 2026-07-31 | Status |
+| Gate | Evidence on 2026-07-31 | Status |
 |---|---|---|
 | Repository contract | 85 core skills, 95 bundled skills, 49 roles, 12 mapped hook behaviors, 11 rules, 40 upstream templates, 163 catalog records, two edition descriptors, and pinned img2threejs provenance | **Pass** |
 | Official validators | Every marketplace plugin and skill | **10/10 plugins and 95/95 skills pass** |
@@ -15,11 +15,12 @@ exact candidate commit runs.
 | Installed edition boundary | Windows and macOS wrappers hand off only their canonical descriptor; core validates plugin identity, exact version, license, target OS, activation scope, and confirmation-gated rules; no copy or project-state write during doctor | **Pass** |
 | Clean local Codex installation | Installed the core, Windows edition, and img2threejs plugins through the marketplace CLI into independent `1.1.1` cache roots; discovered 85 + 1 + 1 skills; the installed Windows doctor exited 0 from an empty project with no state file, descriptor copy, or descriptor hash change; all test entries were then removed | **Pass** |
 | img2threejs portability and security | Native image conversion, external cache routing, CP1252-safe output, public HTTPS allowlists, download bounds, and hash-locked optional executables | **Pass** |
-| Documentation build | Legal/support, tutorials, img2threejs, Windows, and macOS routes plus rewritten internal links and copied assets | **43 files; zero broken internal links** |
+| Documentation build | Legal/support, tutorials, img2threejs, Windows, and macOS routes plus rewritten internal links and copied assets | **43 files; zero broken internal links; deployed in [Pages run 30605463271](https://github.com/frabcd/codex-ai-game-studio/actions/runs/30605463271)** |
 | Deterministic release | Two independent out-of-tree builds with identical filenames and SHA-256 values | **16/16 output files identical; 14 artifacts recorded** |
-| Release immutability | Builder rejects a tag/package version mismatch; workflow serializes by requested tag and refuses an existing release before build or attestation | **Pass locally** |
-| Hosted OS matrix | Windows, macOS, and Linux GitHub Actions | **Pending hotfix push** |
-| Clean public installation | Marketplace install of core + matching platform + img2threejs from public `main` at v1.1.1 | **Pending hotfix publication** |
+| Release immutability and provenance | Builder rejects a tag/package version mismatch; workflow serializes by tag and refuses an existing release before build or attestation | **[Release run 30605498884](https://github.com/frabcd/codex-ai-game-studio/actions/runs/30605498884) published [v1.1.1](https://github.com/frabcd/codex-ai-game-studio/releases/tag/v1.1.1); 16 public assets, 15/15 checksum entries, and 16/16 GitHub attestations verified** |
+| Hosted OS matrix | Windows, macOS, and Linux validation, all 15 pack jobs, official validators, and CodeQL | **Pass in [CI run 30605463303](https://github.com/frabcd/codex-ai-game-studio/actions/runs/30605463303) and [CodeQL run 30605463288](https://github.com/frabcd/codex-ai-game-studio/actions/runs/30605463288)** |
+| Clean public installation | Added the public marketplace pinned to `v1.1.1`; snapshot HEAD matched the dereferenced tag; installed core + Windows + img2threejs at 1.1.1; discovered 85 + 1 + 1 skills; cached files matched the tag; no 1.1.0 cache remained; installed doctor exited 0 read-only with no state or descriptor change | **Pass; marketplace, plugins, and cache entries removed afterward** |
+| Fresh-task skill loading | A new ephemeral read-only Codex task explicitly loaded `$ai-game-studio:start`, `$ai-game-studio-windows:setup-windows-edition`, and `$ai-game-studio-img2threejs:img2threejs` | **Pass; exact marker `AI_GAME_STUDIO_V111_SKILLS_LOADED`, no project state created** |
 
 ## v1.1.0 published and affected record
 
