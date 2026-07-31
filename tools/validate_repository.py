@@ -720,11 +720,37 @@ class Validator:
             "forge/stage2_spec/validate_sculpt_spec.py",
             "forge/stage4_review/divine_eye.py",
             "grimoire/intake/validation_rubric.md",
+            "grimoire/build/cs2_finishes.md",
             "grimoire/build/geometry_patterns.md",
+            "grimoire/build/threejs_texture_reference.md",
         ):
             path = skill_root / relative
             if not path.is_file():
                 self.error("img2threejs-resource", path, "required vendored runtime resource is missing")
+            elif (self.root / ".git").exists():
+                relative_path = path.relative_to(self.root).as_posix()
+                try:
+                    tracked = subprocess.run(
+                        ["git", "ls-files", "--error-unmatch", "--", relative_path],
+                        cwd=self.root,
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                        timeout=10,
+                    )
+                except (OSError, subprocess.SubprocessError) as error:
+                    self.error(
+                        "img2threejs-tracking",
+                        path,
+                        f"could not inspect Git tracking state: {error}",
+                    )
+                else:
+                    if tracked.returncode != 0:
+                        self.error(
+                            "img2threejs-tracking",
+                            path,
+                            "required vendored runtime resource must be tracked by Git",
+                        )
         hardened_sources = {
             "forge/_shared/image_decode.py": (
                 (

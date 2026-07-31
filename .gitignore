@@ -10,6 +10,8 @@ venv/
 # Build and release outputs
 dist/
 build/
+!plugins/ai-game-studio-img2threejs/skills/img2threejs/grimoire/build/
+!plugins/ai-game-studio-img2threejs/skills/img2threejs/grimoire/build/*.md
 *.zip
 *.tar.gz
 *.spdx.json.tmp
