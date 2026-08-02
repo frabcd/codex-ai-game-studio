@@ -65,6 +65,97 @@ class RepositorySecurityTests(unittest.TestCase):
             self.assertIn("release-mutable-assets", codes)
             self.assertIn("release-immutability-guard", codes)
 
+    def test_workflow_scan_rejects_privileged_pr_triggers(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-privileged-pr-") as temporary:
+            root = Path(temporary)
+            workflows = root / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            (workflows / "target.yml").write_text("on:\n  pull_request_target:\n", encoding="utf-8")
+            (workflows / "handoff.yml").write_text("on:\n  workflow_run:\n", encoding="utf-8")
+            validator = Validator(root)
+            validator.validate_workflows()
+            codes = {problem.code for problem in validator.problems}
+            self.assertIn("workflow-privileged-pr", codes)
+            self.assertIn("workflow-privileged-handoff", codes)
+
+    def test_workflow_scan_rejects_unsafe_fork_permissions_and_runner(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-fork-workflow-") as temporary:
+            root = Path(temporary)
+            workflows = root / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            (workflows / "unsafe.yml").write_text(
+                "on:\n"
+                "  pull_request:\n"
+                "permissions:\n"
+                "  contents: write\n"
+                "jobs:\n"
+                "  unsafe:\n"
+                "    runs-on: [self-hosted, linux]\n"
+                "    steps:\n"
+                "      - run: echo '${{ secrets.PRIVATE_TOKEN }}'\n",
+                encoding="utf-8",
+            )
+            validator = Validator(root)
+            validator.validate_workflows()
+            codes = {problem.code for problem in validator.problems}
+            self.assertIn("workflow-pr-secret", codes)
+            self.assertIn("workflow-pr-self-hosted", codes)
+            self.assertIn("workflow-pr-write", codes)
+
+    def test_workflow_scan_requires_checkout_credentials_to_be_disabled(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-checkout-workflow-") as temporary:
+            root = Path(temporary)
+            workflows = root / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            (workflows / "checkout.yml").write_text(
+                "on:\n"
+                "  pull_request:\n"
+                "permissions:\n"
+                "  contents: read\n"
+                "jobs:\n"
+                "  validate:\n"
+                "    runs-on: ubuntu-latest\n"
+                "    steps:\n"
+                "      - name: Checkout\n"
+                "        uses: actions/checkout@" + "1" * 40 + "\n",
+                encoding="utf-8",
+            )
+            validator = Validator(root)
+            validator.validate_workflows()
+            codes = {problem.code for problem in validator.problems}
+            self.assertIn("workflow-checkout-credentials", codes)
+
+    def test_workflow_scan_allows_read_only_pr_and_codeql_permission(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-safe-pr-workflow-") as temporary:
+            root = Path(temporary)
+            workflows = root / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            (workflows / "codeql.yml").write_text(
+                "on:\n"
+                "  pull_request:\n"
+                "permissions:\n"
+                "  contents: read\n"
+                "  security-events: write\n"
+                "jobs:\n"
+                "  analyze:\n"
+                "    runs-on: ubuntu-latest\n"
+                "    steps:\n"
+                "      - name: Checkout\n"
+                "        uses: actions/checkout@" + "1" * 40 + "\n"
+                "        with:\n"
+                "          persist-credentials: false\n",
+                encoding="utf-8",
+            )
+            validator = Validator(root)
+            validator.validate_workflows()
+            blocked = {
+                "workflow-pr-secret",
+                "workflow-pr-self-hosted",
+                "workflow-pr-write",
+                "workflow-checkout-credentials",
+            }
+            self.assertFalse(blocked & {problem.code for problem in validator.problems})
+
 
 if __name__ == "__main__":
     unittest.main()

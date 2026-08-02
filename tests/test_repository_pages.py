@@ -1,13 +1,21 @@
 from __future__ import annotations
 
 import html
+import json
 from pathlib import Path
 import re
 import tempfile
 import unittest
 from urllib.parse import urlsplit
+import xml.etree.ElementTree as ET
 
-from tools.build_pages import build, markdown_to_html, split_frontmatter
+from tools.build_pages import (
+    SITE_DESCRIPTION,
+    SITE_URL,
+    build,
+    markdown_to_html,
+    split_frontmatter,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +52,8 @@ class PagesBuilderTests(unittest.TestCase):
                 "platforms/windows/index.html",
                 "platforms/macos/index.html",
                 "assets/site.css",
+                "sitemap.xml",
+                "robots.txt",
                 ".nojekyll",
             ):
                 self.assertIn(expected, relative)
@@ -63,6 +73,96 @@ class PagesBuilderTests(unittest.TestCase):
                 'href="/codex-ai-game-studio/packs/img2threejs/"',
                 pack_index,
             )
+
+    def test_pages_include_canonical_social_and_structured_metadata(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-pages-metadata-") as temporary:
+            output_root = Path(temporary).resolve()
+            build(ROOT, output_root)
+            home = (output_root / "index.html").read_text(encoding="utf-8")
+            tutorial = (output_root / "tutorials" / "index.html").read_text(encoding="utf-8")
+
+            self.assertIn(f'<link rel="canonical" href="{SITE_URL}/">', home)
+            self.assertIn(
+                f'<link rel="canonical" href="{SITE_URL}/tutorials/">',
+                tutorial,
+            )
+            self.assertIn(f'<meta property="og:url" content="{SITE_URL}/">', home)
+            self.assertIn(
+                f'<meta property="og:image" content="{SITE_URL}/assets/branding/hero.png">',
+                home,
+            )
+            self.assertIn('<meta name="twitter:card" content="summary_large_image">', home)
+            self.assertIn(
+                '<link rel="icon" type="image/png" '
+                'href="/codex-ai-game-studio/assets/branding/icon.png">',
+                home,
+            )
+            self.assertIn(f'<meta name="description" content="{SITE_DESCRIPTION}">', home)
+
+            match = re.search(
+                r'<script type="application/ld\+json">(.+)</script>',
+                tutorial,
+            )
+            self.assertIsNotNone(match)
+            metadata = json.loads(match.group(1))
+            self.assertEqual(metadata["@type"], "SoftwareSourceCode")
+            self.assertEqual(
+                metadata["codeRepository"],
+                "https://github.com/frabcd/codex-ai-game-studio",
+            )
+            self.assertEqual(metadata["mainEntityOfPage"], f"{SITE_URL}/tutorials/")
+
+    def test_sitemap_and_robots_cover_generated_routes_deterministically(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ags-pages-discovery-") as temporary:
+            output_root = Path(temporary).resolve()
+            written = build(ROOT, output_root)
+            generated_pages = sorted(
+                path.relative_to(output_root).as_posix()
+                for path in written
+                if path.name == "index.html"
+            )
+            expected_urls = [
+                f"{SITE_URL}/"
+                if relative == "index.html"
+                else f"{SITE_URL}/{relative.removesuffix('index.html')}"
+                for relative in generated_pages
+            ]
+
+            sitemap_path = output_root / "sitemap.xml"
+            root = ET.fromstring(sitemap_path.read_text(encoding="utf-8"))
+            namespace = {"sitemap": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+            actual_urls = [
+                element.text
+                for element in root.findall("sitemap:url/sitemap:loc", namespace)
+            ]
+            self.assertEqual(sorted(expected_urls), actual_urls)
+            self.assertEqual(len(actual_urls), len(set(actual_urls)))
+
+            self.assertEqual(
+                "User-agent: *\n"
+                "Allow: /codex-ai-game-studio/\n"
+                f"Sitemap: {SITE_URL}/sitemap.xml\n",
+                (output_root / "robots.txt").read_text(encoding="utf-8"),
+            )
+
+    def test_build_content_is_deterministic(self) -> None:
+        with (
+            tempfile.TemporaryDirectory(prefix="ags-pages-first-") as first,
+            tempfile.TemporaryDirectory(prefix="ags-pages-second-") as second,
+        ):
+            first_root = Path(first).resolve()
+            second_root = Path(second).resolve()
+            build(ROOT, first_root)
+            build(ROOT, second_root)
+
+            def contents(root: Path) -> dict[str, bytes]:
+                return {
+                    path.relative_to(root).as_posix(): path.read_bytes()
+                    for path in sorted(root.rglob("*"))
+                    if path.is_file()
+                }
+
+            self.assertEqual(contents(first_root), contents(second_root))
 
     def test_every_generated_internal_link_resolves(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ags-pages-crawl-") as temporary:

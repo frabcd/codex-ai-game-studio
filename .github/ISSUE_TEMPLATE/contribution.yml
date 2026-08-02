@@ -1,0 +1,58 @@
+name: Contribution proposal
+description: Propose a larger or security-sensitive contribution before investing substantial work.
+title: "[Contribution]: "
+labels: [triage, needs-verification]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Small fixes and claimed good-first-issues can go directly to a pull request. Use this form for new integrations, executable automation, catalog batches, security-sensitive changes, or work whose scope needs agreement first.
+  - type: input
+    id: outcome
+    attributes:
+      label: User outcome
+      description: What concrete game-development outcome will this contribution improve?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed scope and paths
+      description: List the files or surfaces you expect to change and what will remain out of scope.
+    validations:
+      required: true
+  - type: dropdown
+    id: origin
+    attributes:
+      label: Origin
+      options:
+        - Original work
+        - Adapted third-party work
+        - AI-assisted work
+        - Mixed origin
+    validations:
+      required: true
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Sources, immutable revisions, and licenses
+      description: List canonical URLs, full commit pins, licenses, transformations, and separate model/data/output terms. Write not applicable only for fully original work with no external assets.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation and rollback plan
+      description: Describe tests, quality evidence, platform coverage, permissions, backups, and rollback where relevant.
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Contributor checks
+      options:
+        - label: I read CONTRIBUTING.md, the DCO, and the Code of Conduct.
+          required: true
+        - label: I will not include credentials, private prompts, proprietary assets, or unconsented identity or voice material.
+          required: true
+        - label: I understand that maintainer agreement on scope does not guarantee merge; the pull request must still pass verification and review.
+          required: true

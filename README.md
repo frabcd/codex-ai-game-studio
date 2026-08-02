@@ -3,18 +3,26 @@
 ![Codex AI Game Studio: Plan. Generate. Validate. Ship.](assets/branding/hero.png)
 
 [![CI](https://github.com/frabcd/codex-ai-game-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/frabcd/codex-ai-game-studio/actions/workflows/ci.yml)
-[![Catalog](https://img.shields.io/badge/catalog-163%20verified%20repositories-08C7F7)](plugins/ai-game-studio/catalog/catalog.json)
+[![GitHub stars](https://img.shields.io/github/stars/frabcd/codex-ai-game-studio?style=flat&logo=github&label=stars)](https://github.com/frabcd/codex-ai-game-studio/stargazers)
+[![Catalog](https://img.shields.io/badge/catalog-163%20curated%20repository%20records-08C7F7)](plugins/ai-game-studio/catalog/catalog.json)
 [![Skills](https://img.shields.io/badge/bundled%20Codex%20skills-95-7C5CFC)](plugins)
 [![Platforms](https://img.shields.io/badge/editions-Windows%20%7C%20macOS-08C7F7)](#choose-your-edition)
 [![License: MIT](https://img.shields.io/badge/core%20license-MIT-FFB347)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/frabcd/codex-ai-game-studio)](https://github.com/frabcd/codex-ai-game-studio/releases)
 
-An installable, safety-first game-production system for Codex: **85 core
-skills, 95 bundled skills, 49 studio roles, 163 verified repositories, five
-editor MCP packs, and dedicated Windows and macOS editions**. It plans games,
-finds compatible AI tools, reconstructs reference images as quality-gated
-procedural Three.js models, generates and validates assets, automates supported
-engines, and keeps every setup reversible.
+Turn a game idea—or an existing Unity, Godot, Unreal, or browser project—into a
+**reversible, quality-gated Codex production workflow**. Codex AI Game Studio
+plans games, finds compatible AI tools, reconstructs reference images as
+procedural Three.js models, generates and validates assets, and automates
+supported editors without silently installing tools or replacing source work.
+
+Under the hood: **85 core skills, 95 bundled skills, 49 studio roles, 163
+curated repository records, five editor MCP packs, and dedicated Windows and
+macOS editions**.
+
+[Install in 60 seconds](#install) · [See a real quality gate](#see-a-quality-gate) · [Copy a production prompt](#what-should-i-say) · [Contribute in 10 minutes](CONTRIBUTING.md#first-contribution-in-10-minutes)
+
+If it earns a place in your workflow, [star the repository](https://github.com/frabcd/codex-ai-game-studio) so another game developer can find it. If something is missing, choose a scoped [`good first issue`](https://github.com/frabcd/codex-ai-game-studio/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22) and improve it with us.
 
 ## Install
 
@@ -30,9 +38,12 @@ steps, and wait for my confirmation before changing anything.
 ```
 
 ```text
-codex plugin marketplace add frabcd/codex-ai-game-studio --ref main
+codex plugin marketplace add frabcd/codex-ai-game-studio --ref v1.1.1
 codex plugin add ai-game-studio@frabcd-ai-game-studio
 ```
+
+The command above pins the latest stable release. Contributors who intentionally
+want the development snapshot can use `--ref main` instead.
 
 [Install the core plugin in Codex](codex://plugins/install/ai-game-studio?marketplace=frabcd-ai-game-studio)
 
@@ -110,6 +121,19 @@ separate confirmed proposal.
 
 No catalog entry is automatically cloned, no model weights are silently downloaded, and no existing source asset is replaced without human approval.
 
+## See a quality gate
+
+This deterministic sprite fixture keeps the source pixels unchanged while the
+workflow detects baseline drift, loop seams, and inconsistent padding, produces
+a corrected candidate, and records human approval.
+
+![Deterministic sprite QA fixture showing a failed source and corrected candidate](assets/examples/sprite-before-after.png)
+
+[Inspect all representative QA fixtures](docs/EXAMPLES.md) or read the
+[current validation report](docs/VALIDATION.md). Production workflows apply the
+same evidence-first pattern to 3D topology, PBR materials, animation, audio,
+navigation, performance, visual regression, and playability.
+
 ## Four ways to invoke it
 
 | Surface | Use | Meaning |
@@ -133,7 +157,7 @@ See the official [Codex plugin guide](https://learn.chatgpt.com/docs/plugins) an
 - **Native platform editions:** Windows and macOS planners detect the real host
   and convert incompatible workflows through tested source adaptations or
   disclosed capability equivalents.
-- **Tool routing:** 163 curated GitHub repositories classified by capability, platform, runtime, GPU, licenses, permissions, risk, and maturity—usable offline.
+- **Tool routing:** 163 curated GitHub repository records classified by capability, platform, runtime, GPU, licenses, permissions, risk, and maturity—usable offline.
 - **Editor automation:** opt-in packs for Unity, Godot, Unreal, Blender, and pixel-art workflows, with one MCP server allowed per host application.
 - **Quality evidence:** technical checks, multi-view visual review, temporal consistency, performance budgets, playability smoke tests, provenance, and before/after artifacts.
 - **Codex-native parity:** 73 attributed workflows, 49 agent TOMLs, 12 mapped hook behaviors, 11 scoped rules, and 40 actual upstream templates from the pinned Claude Code Game Studios baseline, plus 12 new generative-game skills.
@@ -260,8 +284,6 @@ Specialized checks cover alpha and sprite baselines; mesh topology, normals, UVs
 
 See the [deterministic before/after and representative QA fixtures](docs/EXAMPLES.md) for inspectable evidence covering sprites, meshes, rigs, animation, audio, scenes, visual regression, and gameplay smoke tests.
 
-![Local release-candidate validation summary](assets/examples/validation-summary.svg)
-
 ## Offline catalog and live refresh
 
 The checked-in catalog is the final fallback and contains all 163 repositories from the verified source snapshot. Stable curation is separate from volatile stars, releases, archive state, and activity. Search order is:
@@ -323,7 +345,12 @@ recorded in [NOTICE.md](NOTICE.md) and
 
 ## Contributing and roadmap
 
-Issues, pull requests, and Discussions are welcome. Catalog changes require a canonical repository, verification evidence, separate license findings, platform claims, permission review, and a pin. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the catalog guide.
+Issues, pull requests, and Discussions are welcome. Start with the
+[10-minute contributor path](CONTRIBUTING.md#first-contribution-in-10-minutes),
+browse [`good first issue`](https://github.com/frabcd/codex-ai-game-studio/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22), and read the
+[contributor verification policy](docs/CONTRIBUTOR_VERIFICATION.md). Catalog
+changes require a canonical repository, primary-source evidence, separate
+license findings, platform claims, permission review, and an immutable pin.
 
 If this saves your team a production detour, starring the repository helps other game developers find the maintained catalog. Useful contributions matter more: add a verified integration, improve a recipe gate, or attach a reproducible QA fixture.
 
