@@ -2,6 +2,50 @@
 
 Thanks for helping make AI-assisted game development safer and more reproducible. Contributions are welcome as issues, Discussions, documentation, catalog records, recipes, tests, or code.
 
+## Can I contribute?
+
+Yes. The project verifies the proposed change rather than using account age,
+followers, employer, or private identity as a trust score. External contributors
+work through forks and pull requests; only a maintainer can merge. Read the
+[contributor verification policy](docs/CONTRIBUTOR_VERIFICATION.md) for the exact
+automated, provenance, and human-review gates.
+
+## First contribution in 10 minutes
+
+1. Choose an open [`good first issue`](https://github.com/frabcd/codex-ai-game-studio/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22) or a [`help wanted`](https://github.com/frabcd/codex-ai-game-studio/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22help%20wanted%22) task. Comment before starting so two people do not duplicate work.
+2. Fork the repository, clone your fork, and create a focused branch from `main`.
+3. Make the smallest complete change that satisfies the issue's acceptance checks.
+4. Run `python tools/validate_repository.py` and the focused test named in the issue. The full standard-library suite usually completes without installing project dependencies.
+5. Commit with a DCO sign-off: `git commit -s -m "docs: describe the change"`.
+6. Open a pull request, complete the provenance section, and link the issue with `Closes #NUMBER`.
+
+Python 3.11 or newer and Git are sufficient for repository validation. Plugin or
+skill changes additionally need the pinned official validators used by CI.
+Large integrations or security-sensitive changes should start with the
+[contribution proposal form](https://github.com/frabcd/codex-ai-game-studio/issues/new?template=contribution.yml).
+
+## Certification, licensing, and AI assistance
+
+Every non-bot commit must certify the [Developer Certificate of Origin 1.1](DCO)
+with a `Signed-off-by` line:
+
+```text
+git commit -s -m "catalog: verify an engine adapter"
+```
+
+To repair the latest local commit, run `git commit --amend --no-edit --signoff`
+and then `git push --force-with-lease`. A sign-off certifies the right to submit;
+it does not transfer your copyright. Contributions remain under the license that
+applies to their destination: MIT for original project surfaces, Apache-2.0 for
+the retained img2threejs snapshot, or another license explicitly identified in
+the file.
+
+AI-assisted work is welcome when the contributor reviews it personally and
+accepts responsibility for the result. Disclose the tool or model when known and
+list relevant source material, licenses, immutable revisions, and transformations.
+Never submit private prompts, secret values, proprietary project content, or
+identity/voice material without the required rights and consent.
+
 ## Before opening a pull request
 
 1. Search existing issues and Discussions.

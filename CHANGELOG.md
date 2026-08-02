@@ -2,6 +2,21 @@
 
 All notable changes are recorded here. The project follows Semantic Versioning.
 
+## [Unreleased]
+
+### Added
+
+- DCO 1.1 certification, AI-assistance provenance fields, a contribution
+  proposal form, and a documented contributor verification path.
+- A focused README outcome, stable-install default, dynamic star badge, real
+  sprite QA evidence, and a 10-minute newcomer route.
+
+### Security
+
+- Repository validation now rejects privileged pull-request triggers, secrets
+  or broad write permissions in ordinary PR workflows, self-hosted fork jobs,
+  and checkout credentials that are not explicitly disabled.
+
 ## [1.1.1] - 2026-07-31
 
 ### Fixed

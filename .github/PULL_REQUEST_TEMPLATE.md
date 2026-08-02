@@ -10,6 +10,22 @@ Describe the user-visible result and the exact surfaces changed.
 - [ ] Windows, macOS, and Linux impact considered
 - [ ] Before/after screenshots or artifact evidence attached when visual output changed
 
+## Contributor certification and provenance
+
+- [ ] Every non-bot commit has my DCO 1.1 `Signed-off-by` line
+- [ ] I have the right to submit this contribution under the license that applies to the changed files
+- [ ] I personally reviewed any AI-assisted output and accept responsibility for its correctness, licensing, and safety
+- [ ] Third-party sources, immutable refs, licenses, destinations, and transformations are listed below or are not applicable
+- [ ] `NOTICE.md`, `UPSTREAM.json`, or the applicable provenance ledger was updated when required
+
+Origin: original / adapted / AI-assisted / mixed
+
+Tools used:
+
+Third-party sources and immutable refs:
+
+License and commercial-use findings:
+
 ## Safety and provenance
 
 - [ ] Detection remains read-only and every mutation begins with a plan

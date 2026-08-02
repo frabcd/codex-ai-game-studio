@@ -871,6 +871,72 @@ class Validator:
             self.error("workflow-set", workflow_root, f"missing workflows {sorted(expected-names)}")
         for path in workflow_files:
             text = path.read_text(encoding="utf-8")
+            if re.search(r"\bpull_request_target\b", text):
+                self.error(
+                    "workflow-privileged-pr",
+                    path,
+                    "pull_request_target is forbidden; use a read-only pull_request workflow",
+                )
+            if re.search(r"\bworkflow_run\b", text):
+                self.error(
+                    "workflow-privileged-handoff",
+                    path,
+                    "workflow_run handoffs are forbidden because fork artifacts and code are untrusted",
+                )
+
+            pull_request_workflow = bool(
+                re.search(r"(?m)^\s*pull_request\s*:", text)
+                or re.search(r"(?m)^\s*on\s*:\s*\[[^\]]*\bpull_request\b", text)
+                or re.search(r"(?m)^\s*on\s*:\s*\{[^}]*\bpull_request\s*:", text)
+            )
+            if pull_request_workflow:
+                if re.search(r"\$\{\{\s*secrets\.", text):
+                    self.error(
+                        "workflow-pr-secret",
+                        path,
+                        "ordinary pull-request workflows must not reference repository secrets",
+                    )
+                if re.search(r"(?im)^\s*runs-on\s*:\s*(?:\[[^\]]*)?\bself-hosted\b", text):
+                    self.error(
+                        "workflow-pr-self-hosted",
+                        path,
+                        "fork pull requests must run only on isolated GitHub-hosted runners",
+                    )
+                if re.search(r"(?im)^\s*permissions\s*:\s*write-all\s*$", text):
+                    self.error(
+                        "workflow-pr-write",
+                        path,
+                        "pull-request workflows must use explicit read-only permissions",
+                    )
+                for permission in re.findall(r"(?m)^\s*([A-Za-z0-9_-]+)\s*:\s*write\s*(?:#.*)?$", text):
+                    if path.name == "codeql.yml" and permission == "security-events":
+                        continue
+                    self.error(
+                        "workflow-pr-write",
+                        path,
+                        f"pull-request workflow requests {permission}: write",
+                    )
+
+            lines = text.splitlines()
+            for line_number, line in enumerate(lines):
+                if not re.search(r"\buses:\s*actions/checkout@", line):
+                    continue
+                uses_indent = len(line) - len(line.lstrip())
+                step_indent = max(0, uses_indent - (0 if line.lstrip().startswith("- uses:") else 2))
+                checkout_block: list[str] = []
+                for following in lines[line_number + 1 :]:
+                    stripped = following.lstrip()
+                    following_indent = len(following) - len(stripped)
+                    if stripped.startswith("- ") and following_indent <= step_indent:
+                        break
+                    checkout_block.append(following)
+                if not any(re.search(r"^\s*persist-credentials\s*:\s*false\s*(?:#.*)?$", item) for item in checkout_block):
+                    self.error(
+                        "workflow-checkout-credentials",
+                        path,
+                        "every actions/checkout step must set persist-credentials: false",
+                    )
+
             for use in ACTION_USE.findall(text):
                 if use.startswith("./"):
                     resolved = safe_resolve(self.root, use)

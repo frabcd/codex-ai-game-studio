@@ -5,14 +5,25 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 from pathlib import Path
 import re
 import shutil
 from urllib.parse import quote
+from xml.sax.saxutils import escape as xml_escape
 
 
 SITE_BASE = "/codex-ai-game-studio"
+SITE_ORIGIN = "https://frabcd.github.io"
+SITE_URL = f"{SITE_ORIGIN}{SITE_BASE}"
+SITE_NAME = "Codex AI Game Studio"
+SITE_DESCRIPTION = (
+    "A Codex-native AI game development studio with skills, curated tool routing, "
+    "reversible automation, and production quality gates."
+)
 GITHUB_SOURCE = "https://github.com/frabcd/codex-ai-game-studio"
+SOCIAL_IMAGE_URL = f"{SITE_URL}/assets/branding/hero.png"
+FAVICON_PATH = f"{SITE_BASE}/assets/branding/icon.png"
 IMAGE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 LINK = re.compile(r"(?<!!)\[([^\]]+)\]\(([^)]+)\)")
 IMAGE_LINK = re.compile(r"\[(!\[[^\]]*\]\([^)]+\))\]\(([^)]+)\)")
@@ -206,15 +217,66 @@ def markdown_to_html(source: str) -> str:
     return "\n".join(output)
 
 
-def page(title: str, body: str) -> str:
+def canonical_url(route: str) -> str:
+    """Return the public trailing-slash URL for a generated route."""
+
+    normalized = route.strip("/")
+    return f"{SITE_URL}/{normalized}/" if normalized else f"{SITE_URL}/"
+
+
+def structured_data(canonical: str) -> str:
+    """Return deterministic JSON-LD describing the repository behind the site."""
+
+    payload = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": SITE_NAME,
+        "description": SITE_DESCRIPTION,
+        "url": f"{SITE_URL}/",
+        "mainEntityOfPage": canonical,
+        "codeRepository": GITHUB_SOURCE,
+        "license": f"{GITHUB_SOURCE}/blob/main/LICENSE",
+        "image": SOCIAL_IMAGE_URL,
+        "programmingLanguage": ["Python", "PowerShell", "Shell"],
+        "runtimePlatform": ["Codex CLI", "Codex desktop"],
+        "author": {
+            "@type": "Person",
+            "name": "frabcd",
+            "url": "https://github.com/frabcd",
+        },
+    }
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
+
+def page(title: str, body: str, route: str = "") -> str:
+    canonical = canonical_url(route)
+    document_title = SITE_NAME if title == SITE_NAME else f"{title} · {SITE_NAME}"
+    escaped_title = html.escape(document_title, quote=True)
+    escaped_description = html.escape(SITE_DESCRIPTION, quote=True)
+    escaped_canonical = html.escape(canonical, quote=True)
+    escaped_image = html.escape(SOCIAL_IMAGE_URL, quote=True)
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Codex AI Game Studio documentation">
-  <title>{html.escape(title)} · Codex AI Game Studio</title>
-  <link rel="stylesheet" href="/codex-ai-game-studio/assets/site.css">
+  <meta name="description" content="{escaped_description}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{SITE_NAME}">
+  <meta property="og:title" content="{escaped_title}">
+  <meta property="og:description" content="{escaped_description}">
+  <meta property="og:url" content="{escaped_canonical}">
+  <meta property="og:image" content="{escaped_image}">
+  <meta property="og:image:alt" content="Codex AI Game Studio workflow overview">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{escaped_title}">
+  <meta name="twitter:description" content="{escaped_description}">
+  <meta name="twitter:image" content="{escaped_image}">
+  <link rel="canonical" href="{escaped_canonical}">
+  <link rel="icon" type="image/png" href="{FAVICON_PATH}">
+  <link rel="stylesheet" href="{SITE_BASE}/assets/site.css">
+  <script type="application/ld+json">{structured_data(canonical)}</script>
+  <title>{escaped_title}</title>
 </head>
 <body>
   <header><a class="brand" href="/codex-ai-game-studio/">Codex AI Game Studio</a>
@@ -253,7 +315,34 @@ def write_page(
     target = output / route / "index.html" if route else output / "index.html"
     target.parent.mkdir(parents=True, exist_ok=True)
     title = metadata.get("title") or title_from(body, source_path.stem)
-    target.write_text(page(title, markdown_to_html(body)), encoding="utf-8", newline="\n")
+    target.write_text(page(title, markdown_to_html(body), route), encoding="utf-8", newline="\n")
+
+
+def write_discovery_files(output: Path, routes: list[str]) -> list[Path]:
+    """Write deterministic files used by search engines and other crawlers."""
+
+    sitemap = output / "sitemap.xml"
+    locations = "\n".join(
+        f"  <url><loc>{xml_escape(canonical_url(route))}</loc></url>"
+        for route in sorted(routes)
+    )
+    sitemap.write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{locations}\n"
+        "</urlset>\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    robots = output / "robots.txt"
+    robots.write_text(
+        "User-agent: *\n"
+        f"Allow: {SITE_BASE}/\n"
+        f"Sitemap: {SITE_URL}/sitemap.xml\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    return [sitemap, robots]
 
 
 def build(root: Path, output: Path) -> list[Path]:
@@ -312,6 +401,8 @@ def build(root: Path, output: Path) -> list[Path]:
     for route, source in pages:
         write_page(output, route, source, root=root, routes=routes)
         written.append(output / route / "index.html")
+
+    written.extend(write_discovery_files(output, [route for route, _ in pages]))
 
     assets = output / "assets"
     assets.mkdir(parents=True, exist_ok=True)
