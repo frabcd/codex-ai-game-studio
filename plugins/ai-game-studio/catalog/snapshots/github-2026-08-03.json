@@ -1,0 +1,1312 @@
+{
+  "$schema": "https://frabcd.github.io/codex-ai-game-studio/schemas/catalog-snapshot.schema.json",
+  "records": [
+    {
+      "archived": false,
+      "id": "0x0funky-agent-sprite-forge",
+      "last_activity": "2026-07-12T19:00:42Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 3593
+    },
+    {
+      "archived": false,
+      "id": "3dtopia-3dtopia-xl",
+      "last_activity": "2025-07-14T01:54:53Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1043
+    },
+    {
+      "archived": false,
+      "id": "3dtopia-lgm",
+      "last_activity": "2024-08-20T16:27:45Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2102
+    },
+    {
+      "archived": false,
+      "id": "a16z-infra-ai-town",
+      "last_activity": "2026-06-12T21:44:10Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 10245
+    },
+    {
+      "archived": false,
+      "id": "adriankhl-godot-llm",
+      "last_activity": "2024-06-23T15:55:22Z",
+      "latest_release": "v1.0",
+      "retrieval": "github-api",
+      "stars": 250
+    },
+    {
+      "archived": false,
+      "id": "ahujasid-blender-mcp",
+      "last_activity": "2026-07-29T11:02:26Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 25354
+    },
+    {
+      "archived": false,
+      "id": "aiuniai-unique3d",
+      "last_activity": "2025-07-17T21:29:05Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 3576
+    },
+    {
+      "archived": false,
+      "id": "akikurisu-next-gen-dialogue",
+      "last_activity": "2026-03-28T03:26:33Z",
+      "latest_release": "v2.2.2",
+      "retrieval": "github-api",
+      "stars": 118
+    },
+    {
+      "archived": false,
+      "id": "amidos2006-gym-pcgrl",
+      "last_activity": "2024-12-13T14:10:02Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 132
+    },
+    {
+      "archived": false,
+      "id": "amtarr-comfyui-texturealchemy",
+      "last_activity": "2026-04-22T07:46:47Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 55
+    },
+    {
+      "archived": false,
+      "id": "anil-matcha-awesome-ai-game-generation",
+      "last_activity": "2026-07-29T05:50:25Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 40
+    },
+    {
+      "archived": false,
+      "id": "anklebreaker-studio-unity-mcp-plugin",
+      "last_activity": "2026-07-27T12:21:38Z",
+      "latest_release": "v2.39.5",
+      "retrieval": "github-api",
+      "stars": 193
+    },
+    {
+      "archived": false,
+      "id": "anklebreaker-studio-unity-mcp-server",
+      "last_activity": "2026-07-27T12:22:07Z",
+      "latest_release": "v2.35.6",
+      "retrieval": "github-api",
+      "stars": 359
+    },
+    {
+      "archived": false,
+      "id": "aseprite-aseprite",
+      "last_activity": "2026-07-30T13:11:30Z",
+      "latest_release": "v1.3.18.1",
+      "retrieval": "github-api",
+      "stars": 38476
+    },
+    {
+      "archived": false,
+      "id": "ashawkey-intex",
+      "last_activity": "2024-03-19T08:30:25Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 218
+    },
+    {
+      "archived": false,
+      "id": "ashawkey-stable-dreamfusion",
+      "last_activity": "2023-12-10T23:17:27Z",
+      "latest_release": "0.2.0",
+      "retrieval": "github-api",
+      "stars": 8850
+    },
+    {
+      "archived": false,
+      "id": "assimp-assimp",
+      "last_activity": "2026-08-02T15:31:57Z",
+      "latest_release": "v6.0.5",
+      "retrieval": "github-api",
+      "stars": 13107
+    },
+    {
+      "archived": false,
+      "id": "automatic1111-stable-diffusion-webui",
+      "last_activity": "2026-03-02T07:00:53Z",
+      "latest_release": "v1.10.1",
+      "retrieval": "github-api",
+      "stars": 164358
+    },
+    {
+      "archived": false,
+      "id": "aws-solutions-library-samples-guidance-for-dynamic-game-npc-dialogue-on-aws",
+      "last_activity": "2026-07-28T12:45:07Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 7
+    },
+    {
+      "archived": false,
+      "id": "baai-agents-cradle",
+      "last_activity": "2024-11-07T04:58:20Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2560
+    },
+    {
+      "archived": false,
+      "id": "balrog-ai-balrog",
+      "last_activity": "2026-04-09T10:40:53Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 262
+    },
+    {
+      "archived": false,
+      "id": "blendi-remade-sprite-sheet-creator",
+      "last_activity": "2026-07-01T21:25:20Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1597
+    },
+    {
+      "archived": false,
+      "id": "buaacyw-meshanything",
+      "last_activity": "2025-04-28T16:37:20Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2295
+    },
+    {
+      "archived": false,
+      "id": "buaacyw-meshanythingv2",
+      "last_activity": "2025-04-28T16:36:51Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1007
+    },
+    {
+      "archived": false,
+      "id": "carson-katri-dream-textures",
+      "last_activity": "2024-08-26T02:23:11Z",
+      "latest_release": "0.4.1",
+      "retrieval": "github-api",
+      "stars": 8193
+    },
+    {
+      "archived": false,
+      "id": "chaofengc-awesome-image-quality-assessment",
+      "last_activity": "2026-08-02T10:48:23Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1539
+    },
+    {
+      "archived": false,
+      "id": "chaofengc-iqa-pytorch",
+      "last_activity": "2026-07-08T10:48:34Z",
+      "latest_release": "v0.1.16",
+      "retrieval": "github-api",
+      "stars": 3351
+    },
+    {
+      "archived": false,
+      "id": "charmed-ai-tilemapgen",
+      "last_activity": "2023-07-01T00:33:37Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 106
+    },
+    {
+      "archived": false,
+      "id": "chasemetoyer-gameplay-vision-llm",
+      "last_activity": "2025-12-17T21:42:45Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 14
+    },
+    {
+      "archived": false,
+      "id": "codedpro-agentic-game-factory",
+      "last_activity": "2026-07-30T15:29:05Z",
+      "latest_release": "v5.0",
+      "retrieval": "github-api",
+      "stars": 1
+    },
+    {
+      "archived": false,
+      "id": "coding-solo-godot-mcp",
+      "last_activity": "2026-04-16T23:37:00Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 5027
+    },
+    {
+      "archived": false,
+      "id": "comfy-org-comfyui",
+      "last_activity": "2026-08-03T05:26:19Z",
+      "latest_release": "v0.30.0",
+      "retrieval": "github-api",
+      "stars": 123299
+    },
+    {
+      "archived": false,
+      "id": "coplaydev-unity-mcp",
+      "last_activity": "2026-08-02T21:35:16Z",
+      "latest_release": "v10.1.2",
+      "retrieval": "github-api",
+      "stars": 13091
+    },
+    {
+      "archived": false,
+      "id": "coqui-ai-tts",
+      "last_activity": "2024-08-16T12:07:14Z",
+      "latest_release": "v0.22.0",
+      "retrieval": "github-api",
+      "stars": 45852
+    },
+    {
+      "archived": false,
+      "id": "danielgatis-rembg",
+      "last_activity": "2026-07-18T12:50:01Z",
+      "latest_release": "v2.0.77",
+      "retrieval": "github-api",
+      "stars": 24117
+    },
+    {
+      "archived": false,
+      "id": "declare-lab-tango",
+      "last_activity": "2025-07-29T02:13:29Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1239
+    },
+    {
+      "archived": false,
+      "id": "dinghuanghao-openword",
+      "last_activity": "2026-03-27T13:05:09Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 39
+    },
+    {
+      "archived": false,
+      "id": "donchitos-claude-code-game-studios",
+      "last_activity": "2026-05-21T23:33:07Z",
+      "latest_release": "v1.0.0",
+      "retrieval": "github-api",
+      "stars": 23553
+    },
+    {
+      "archived": false,
+      "id": "dreamgaussian-dreamgaussian",
+      "last_activity": "2024-01-02T04:12:09Z",
+      "latest_release": "0.1.0",
+      "retrieval": "github-api",
+      "stars": 4350
+    },
+    {
+      "archived": false,
+      "id": "dweam-team-world-arcade",
+      "last_activity": "2025-02-20T00:06:31Z",
+      "latest_release": "v0.0.19",
+      "retrieval": "github-api",
+      "stars": 134
+    },
+    {
+      "archived": false,
+      "id": "ece1786-2023-animyth",
+      "last_activity": "2023-12-12T15:40:32Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 11
+    },
+    {
+      "archived": false,
+      "id": "edbeeching-godot-rl-agents",
+      "last_activity": "2026-07-10T20:19:17Z",
+      "latest_release": "v0.8.2",
+      "retrieval": "github-api",
+      "stars": 1550
+    },
+    {
+      "archived": false,
+      "id": "eloialonso-diamond",
+      "last_activity": "2024-12-06T16:45:28Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2085
+    },
+    {
+      "archived": false,
+      "id": "enigmalabsai-multiverse",
+      "last_activity": "2025-09-11T16:25:17Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 296
+    },
+    {
+      "archived": false,
+      "id": "envy-ai-ai-rpg",
+      "last_activity": "2026-08-02T19:08:50Z",
+      "latest_release": "1.0-beta3",
+      "retrieval": "github-api",
+      "stars": 145
+    },
+    {
+      "archived": false,
+      "id": "ericguo5513-momask-codes",
+      "last_activity": "2024-09-13T19:09:40Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1303
+    },
+    {
+      "archived": false,
+      "id": "etched-ai-open-oasis",
+      "last_activity": "2024-11-08T23:28:40Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2111
+    },
+    {
+      "archived": false,
+      "id": "eyamans-texel-studio",
+      "last_activity": "2026-07-02T11:57:12Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 150
+    },
+    {
+      "archived": false,
+      "id": "facebookresearch-actionmesh",
+      "last_activity": "2026-05-28T21:10:09Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 401
+    },
+    {
+      "archived": false,
+      "id": "facebookresearch-ai4animationpy",
+      "last_activity": "2026-07-26T16:09:30Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2058
+    },
+    {
+      "archived": false,
+      "id": "facebookresearch-audiocraft",
+      "last_activity": "2026-03-03T21:50:32Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 23532
+    },
+    {
+      "archived": false,
+      "id": "facebookresearch-segment-anything",
+      "last_activity": "2024-09-18T17:46:55Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 54637
+    },
+    {
+      "archived": false,
+      "id": "fanghua-yu-supir",
+      "last_activity": "2025-05-12T09:49:11Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 5636
+    },
+    {
+      "archived": false,
+      "id": "farama-foundation-vizdoom",
+      "last_activity": "2026-08-03T00:21:15Z",
+      "latest_release": "1.3.0",
+      "retrieval": "github-api",
+      "stars": 2054
+    },
+    {
+      "archived": false,
+      "id": "fennaraofficial-fennara-godot-ai",
+      "last_activity": "2026-08-02T08:57:31Z",
+      "latest_release": "v0.4.2",
+      "retrieval": "github-api",
+      "stars": 244
+    },
+    {
+      "archived": false,
+      "id": "gabotechs-musicgpt",
+      "last_activity": "2025-02-09T10:06:29Z",
+      "latest_release": "v0.3.28",
+      "retrieval": "github-api",
+      "stars": 1435
+    },
+    {
+      "archived": false,
+      "id": "gair-nlp-agencybench",
+      "last_activity": "2026-01-23T04:36:10Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 90
+    },
+    {
+      "archived": false,
+      "id": "galbanese09-spritebrew",
+      "last_activity": "2026-07-28T01:02:03Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 41
+    },
+    {
+      "archived": false,
+      "id": "gamedev-skills-awesome-gamedev-agent-skills",
+      "last_activity": "2026-07-25T10:39:47Z",
+      "latest_release": "v1.1.0",
+      "retrieval": "github-api",
+      "stars": 398
+    },
+    {
+      "archived": false,
+      "id": "gamegen-x-gamegen-x",
+      "last_activity": "2025-05-22T12:40:54Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 341
+    },
+    {
+      "archived": false,
+      "id": "garris-backstopjs",
+      "last_activity": "2024-09-07T22:39:52Z",
+      "latest_release": "v3.8.8",
+      "retrieval": "github-api",
+      "stars": 7164
+    },
+    {
+      "archived": false,
+      "id": "genorca-unreal-mcp",
+      "last_activity": "2026-07-07T00:52:56Z",
+      "latest_release": "v2.2.0",
+      "retrieval": "github-api",
+      "stars": 132
+    },
+    {
+      "archived": false,
+      "id": "google-draco",
+      "last_activity": "2026-07-01T20:31:57Z",
+      "latest_release": "1.5.7",
+      "retrieval": "github-api",
+      "stars": 7430
+    },
+    {
+      "archived": false,
+      "id": "graphdeco-inria-gaussian-splatting",
+      "last_activity": "2025-10-17T14:28:15Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 22855
+    },
+    {
+      "archived": false,
+      "id": "haoheliu-audioldm2",
+      "last_activity": "2024-09-29T15:05:21Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2639
+    },
+    {
+      "archived": false,
+      "id": "horizonrobotics-embodiedgen",
+      "last_activity": "2026-07-17T08:05:52Z",
+      "latest_release": "v2.0.0",
+      "retrieval": "github-api",
+      "stars": 595
+    },
+    {
+      "archived": false,
+      "id": "hzwer-practical-rife",
+      "last_activity": "2025-11-20T03:55:42Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 983
+    },
+    {
+      "archived": true,
+      "id": "idealo-image-quality-assessment",
+      "last_activity": "2024-07-12T19:16:31Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2244
+    },
+    {
+      "archived": false,
+      "id": "instantx-research-instantid",
+      "last_activity": "2024-07-18T04:12:48Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 11979
+    },
+    {
+      "archived": false,
+      "id": "ivanmurzak-godot-mcp",
+      "last_activity": "2026-07-28T23:12:33Z",
+      "latest_release": "v0.20.1",
+      "retrieval": "github-api",
+      "stars": 199
+    },
+    {
+      "archived": false,
+      "id": "ivanmurzak-unity-mcp",
+      "last_activity": "2026-07-28T23:14:33Z",
+      "latest_release": "0.86.3",
+      "retrieval": "github-api",
+      "stars": 3788
+    },
+    {
+      "archived": false,
+      "id": "ivanmurzak-unreal-mcp",
+      "last_activity": "2026-07-28T23:12:45Z",
+      "latest_release": "v0.13.1",
+      "retrieval": "github-api",
+      "stars": 19
+    },
+    {
+      "archived": false,
+      "id": "jarrentwu1031-animateanymesh",
+      "last_activity": "2026-06-05T07:44:47Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 316
+    },
+    {
+      "archived": false,
+      "id": "jingyunliang-swinir",
+      "last_activity": "2024-05-14T07:05:48Z",
+      "latest_release": "v0.0",
+      "retrieval": "github-api",
+      "stars": 5558
+    },
+    {
+      "archived": false,
+      "id": "kaist-ami-paint-it",
+      "last_activity": "2025-08-01T08:47:18Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 230
+    },
+    {
+      "archived": false,
+      "id": "khronosgroup-gltf-validator",
+      "last_activity": "2025-12-30T10:44:16Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 455
+    },
+    {
+      "archived": false,
+      "id": "khronosgroup-ktx-software",
+      "last_activity": "2026-07-30T04:36:40Z",
+      "latest_release": "v4.4.2",
+      "retrieval": "github-api",
+      "stars": 1326
+    },
+    {
+      "archived": false,
+      "id": "klingairesearch-gamefactory",
+      "last_activity": "2025-03-22T13:42:44Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 495
+    },
+    {
+      "archived": false,
+      "id": "kovenyu-wonderworld",
+      "last_activity": "2025-04-14T04:52:47Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 740
+    },
+    {
+      "archived": false,
+      "id": "laion-ai-aesthetic-predictor",
+      "last_activity": "2022-08-15T13:21:41Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 728
+    },
+    {
+      "archived": false,
+      "id": "leigest519-opengame",
+      "last_activity": "2026-04-22T04:50:54Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2771
+    },
+    {
+      "archived": false,
+      "id": "lllyasviel-controlnet",
+      "last_activity": "2024-02-25T09:49:39Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 34033
+    },
+    {
+      "archived": false,
+      "id": "lllyasviel-ic-light",
+      "last_activity": "2025-02-20T15:52:35Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 8482
+    },
+    {
+      "archived": false,
+      "id": "llm-lab-org-generative-ai-for-character-animation-survey",
+      "last_activity": "2025-05-13T15:36:10Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 74
+    },
+    {
+      "archived": false,
+      "id": "lmgame-org-gamingagent",
+      "last_activity": "2025-11-16T20:16:05Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 958
+    },
+    {
+      "archived": false,
+      "id": "mapeditor-tiled",
+      "last_activity": "2026-07-29T08:58:46Z",
+      "latest_release": "v1.12.2",
+      "retrieval": "github-api",
+      "stars": 12787
+    },
+    {
+      "archived": false,
+      "id": "matrix-agent-awesome-agentic-world-modeling",
+      "last_activity": "2026-06-27T10:02:05Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 292
+    },
+    {
+      "archived": false,
+      "id": "mesh2motion-mesh2motion-app",
+      "last_activity": "2026-08-02T13:06:33Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 3053
+    },
+    {
+      "archived": false,
+      "id": "microsoft-mineworld",
+      "last_activity": "2026-05-08T15:04:42Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 486
+    },
+    {
+      "archived": false,
+      "id": "microsoft-playwright",
+      "last_activity": "2026-07-31T21:39:29Z",
+      "latest_release": "v1.62.1",
+      "retrieval": "github-api",
+      "stars": 93870
+    },
+    {
+      "archived": false,
+      "id": "microsoft-textworld",
+      "last_activity": "2026-01-30T19:15:32Z",
+      "latest_release": "1.7.0",
+      "retrieval": "github-api",
+      "stars": 1433
+    },
+    {
+      "archived": false,
+      "id": "microsoft-trellis",
+      "last_activity": "2026-06-26T07:27:56Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 13375
+    },
+    {
+      "archived": false,
+      "id": "minll-skyrimnet-gameplugin",
+      "last_activity": "2026-08-02T15:28:23Z",
+      "latest_release": "vbeta22.1-rc1",
+      "retrieval": "github-api",
+      "stars": 279
+    },
+    {
+      "archived": false,
+      "id": "mrforexample-comfyui-3d-pack",
+      "last_activity": "2025-12-29T08:06:02Z",
+      "latest_release": "v0.1.6",
+      "retrieval": "github-api",
+      "stars": 3825
+    },
+    {
+      "archived": false,
+      "id": "myshell-ai-openvoice",
+      "last_activity": "2025-04-19T16:00:00Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 37073
+    },
+    {
+      "archived": false,
+      "id": "natfii-unrealclaude",
+      "last_activity": "2026-06-26T16:50:20Z",
+      "latest_release": "v1.5.1",
+      "retrieval": "github-api",
+      "stars": 875
+    },
+    {
+      "archived": false,
+      "id": "nerfstudio-project-nerfstudio",
+      "last_activity": "2025-07-29T02:30:55Z",
+      "latest_release": "v1.1.5",
+      "retrieval": "github-api",
+      "stars": 11872
+    },
+    {
+      "archived": false,
+      "id": "nv-tlabs-llama-mesh",
+      "last_activity": "2025-03-28T07:00:47Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1165
+    },
+    {
+      "archived": false,
+      "id": "open-mmlab-mmpose",
+      "last_activity": "2025-08-04T07:30:50Z",
+      "latest_release": "v1.3.2",
+      "retrieval": "github-api",
+      "stars": 7794
+    },
+    {
+      "archived": false,
+      "id": "openai-plugins",
+      "last_activity": "2026-07-14T17:41:06Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 4888
+    },
+    {
+      "archived": false,
+      "id": "openai-point-e",
+      "last_activity": "2024-07-04T19:05:34Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 6891
+    },
+    {
+      "archived": false,
+      "id": "openai-procgen",
+      "last_activity": "2026-03-27T02:52:42Z",
+      "latest_release": "0.10.7",
+      "retrieval": "github-api",
+      "stars": 1179
+    },
+    {
+      "archived": false,
+      "id": "openai-shap-e",
+      "last_activity": "2024-06-22T19:19:14Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 12264
+    },
+    {
+      "archived": false,
+      "id": "openmotionlab-motiongpt",
+      "last_activity": "2025-07-01T18:22:15Z",
+      "latest_release": "MotionGPT-V1.0",
+      "retrieval": "github-api",
+      "stars": 1949
+    },
+    {
+      "archived": false,
+      "id": "orama-interactive-pixelorama",
+      "last_activity": "2026-08-02T21:32:01Z",
+      "latest_release": "v1.2",
+      "retrieval": "github-api",
+      "stars": 10038
+    },
+    {
+      "archived": false,
+      "id": "pasta-devs-marinara-engine",
+      "last_activity": "2026-08-03T06:17:54Z",
+      "latest_release": "v2.4.0",
+      "retrieval": "github-api",
+      "stars": 545
+    },
+    {
+      "archived": false,
+      "id": "princeton-vl-infinigen",
+      "last_activity": "2026-07-09T00:02:57Z",
+      "latest_release": "v2.0.0a1",
+      "retrieval": "github-api",
+      "stars": 7161
+    },
+    {
+      "archived": false,
+      "id": "q-future-q-align",
+      "last_activity": "2026-06-24T06:17:02Z",
+      "latest_release": "v1.1.0-happy-finetune-transformers-4.36.1",
+      "retrieval": "github-api",
+      "stars": 614
+    },
+    {
+      "archived": false,
+      "id": "roblox-cube",
+      "last_activity": "2026-05-28T03:37:24Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1217
+    },
+    {
+      "archived": false,
+      "id": "rvc-project-retrieval-based-voice-conversion-webui",
+      "last_activity": "2026-07-23T14:48:37Z",
+      "latest_release": "2.3.260718",
+      "retrieval": "github-api",
+      "stars": 36963
+    },
+    {
+      "archived": false,
+      "id": "sakalond-stablegen",
+      "last_activity": "2026-07-07T02:32:47Z",
+      "latest_release": "v0.3.1",
+      "retrieval": "github-api",
+      "stars": 861
+    },
+    {
+      "archived": false,
+      "id": "schrum2-mariodiffusion",
+      "last_activity": "2026-07-28T16:17:32Z",
+      "latest_release": "1.0.0-arXiv-july2025",
+      "retrieval": "github-api",
+      "stars": 4
+    },
+    {
+      "archived": false,
+      "id": "sczhou-codeformer",
+      "last_activity": "2025-11-18T12:03:30Z",
+      "latest_release": "v0.1.0",
+      "retrieval": "github-api",
+      "stars": 18089
+    },
+    {
+      "archived": false,
+      "id": "seed3d-puppeteer",
+      "last_activity": "2025-09-19T07:04:25Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 413
+    },
+    {
+      "archived": false,
+      "id": "sensengao-oneworld",
+      "last_activity": "2026-07-24T16:57:00Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 58
+    },
+    {
+      "archived": false,
+      "id": "shyamsn97-mario-gpt",
+      "last_activity": "2024-07-22T14:09:16Z",
+      "latest_release": "0.1.3",
+      "retrieval": "github-api",
+      "stars": 1148
+    },
+    {
+      "archived": false,
+      "id": "simoninithomas-awesome-ai-tools-for-game-dev",
+      "last_activity": "2024-11-19T18:22:07Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1021
+    },
+    {
+      "archived": false,
+      "id": "skyworkai-matrix-3d",
+      "last_activity": "2025-11-25T10:42:48Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 775
+    },
+    {
+      "archived": false,
+      "id": "skyworkai-matrix-game",
+      "last_activity": "2026-03-30T06:32:00Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2282
+    },
+    {
+      "archived": false,
+      "id": "stability-ai-stable-fast-3d",
+      "last_activity": "2025-01-22T14:55:42Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1769
+    },
+    {
+      "archived": false,
+      "id": "stepfun-ai-step1x-3d",
+      "last_activity": "2025-09-08T22:32:12Z",
+      "latest_release": "v.1.0.1",
+      "retrieval": "github-api",
+      "stars": 881
+    },
+    {
+      "archived": false,
+      "id": "sudo-ai-3d-zero123plus",
+      "last_activity": "2024-02-23T18:17:53Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2090
+    },
+    {
+      "archived": false,
+      "id": "summerengine-summer-engine-agent",
+      "last_activity": "2026-07-31T10:45:08Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 41
+    },
+    {
+      "archived": false,
+      "id": "tencent-hunyuan-hunyuan3d-2",
+      "last_activity": "2025-10-28T09:58:12Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 14414
+    },
+    {
+      "archived": false,
+      "id": "tencent-hunyuan-hunyuan3d-2-1",
+      "last_activity": "2025-10-17T10:10:07Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 3787
+    },
+    {
+      "archived": false,
+      "id": "tencent-hunyuan-hunyuanvideo-foley",
+      "last_activity": "2025-09-28T17:48:49Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1057
+    },
+    {
+      "archived": false,
+      "id": "tencent-hunyuan-hunyuanworld-1-0",
+      "last_activity": "2026-04-15T17:27:25Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2897
+    },
+    {
+      "archived": false,
+      "id": "tencent-hunyuan-hy-world-2-0",
+      "last_activity": "2026-05-27T07:25:04Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2465
+    },
+    {
+      "archived": false,
+      "id": "tencent-hunyuan-hy-worldplay",
+      "last_activity": "2026-06-10T07:10:23Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1567
+    },
+    {
+      "archived": false,
+      "id": "tencent-playcoder",
+      "last_activity": "2026-04-22T01:57:55Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 43
+    },
+    {
+      "archived": false,
+      "id": "tencentarc-gfpgan",
+      "last_activity": "2024-07-26T18:44:02Z",
+      "latest_release": "v1.3.8",
+      "retrieval": "github-api",
+      "stars": 37646
+    },
+    {
+      "archived": false,
+      "id": "tencentarc-instantmesh",
+      "last_activity": "2025-01-03T09:09:13Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 4484
+    },
+    {
+      "archived": false,
+      "id": "tencentarc-photomaker",
+      "last_activity": "2024-10-31T09:35:15Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 10099
+    },
+    {
+      "archived": false,
+      "id": "tencentarc-pixal3d",
+      "last_activity": "2026-06-23T10:10:27Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2064
+    },
+    {
+      "archived": false,
+      "id": "thedivergentai-gd-agentic-skills",
+      "last_activity": "2026-07-28T07:24:15Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 449
+    },
+    {
+      "archived": false,
+      "id": "thegrayeminence-material-manager",
+      "last_activity": "2024-03-14T00:02:33Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 10
+    },
+    {
+      "archived": false,
+      "id": "threestudio-project-threestudio",
+      "last_activity": "2024-12-16T06:11:15Z",
+      "latest_release": "v0.1.0",
+      "retrieval": "github-api",
+      "stars": 7039
+    },
+    {
+      "archived": false,
+      "id": "thu-lyj-lab-t3bench",
+      "last_activity": "2023-10-24T07:05:13Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1099
+    },
+    {
+      "archived": false,
+      "id": "tomyud1-godot-mcp",
+      "last_activity": "2026-04-21T08:20:18Z",
+      "latest_release": "v0.5.0",
+      "retrieval": "github-api",
+      "stars": 401
+    },
+    {
+      "archived": false,
+      "id": "tothebeginning-pulid",
+      "last_activity": "2025-07-31T18:08:38Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 3546
+    },
+    {
+      "archived": false,
+      "id": "undreamai-llmunity",
+      "last_activity": "2026-04-29T09:23:09Z",
+      "latest_release": "v3.0.3",
+      "retrieval": "github-api",
+      "stars": 1683
+    },
+    {
+      "archived": false,
+      "id": "unity-technologies-ml-agents",
+      "last_activity": "2026-07-29T17:14:52Z",
+      "latest_release": "release_23_tag",
+      "retrieval": "github-api",
+      "stars": 19600
+    },
+    {
+      "archived": false,
+      "id": "vast-ai-research-anigen",
+      "last_activity": "2026-07-15T20:48:41Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 469
+    },
+    {
+      "archived": false,
+      "id": "vast-ai-research-seqtex",
+      "last_activity": "2025-12-12T07:25:34Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 46
+    },
+    {
+      "archived": false,
+      "id": "vast-ai-research-triposg",
+      "last_activity": "2025-04-18T06:58:52Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1736
+    },
+    {
+      "archived": false,
+      "id": "vast-ai-research-triposr",
+      "last_activity": "2026-06-04T07:11:09Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 6805
+    },
+    {
+      "archived": false,
+      "id": "vast-ai-research-unirig",
+      "last_activity": "2026-06-04T07:15:34Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1689
+    },
+    {
+      "archived": false,
+      "id": "willibrandon-pixel-mcp",
+      "last_activity": "2025-10-18T23:29:14Z",
+      "latest_release": "v0.5.0",
+      "retrieval": "github-api",
+      "stars": 108
+    },
+    {
+      "archived": false,
+      "id": "worldwonderer-novel-to-game",
+      "last_activity": "2026-08-02T16:35:25Z",
+      "latest_release": "v0.1.0",
+      "retrieval": "github-api",
+      "stars": 537
+    },
+    {
+      "archived": false,
+      "id": "xandergos-terrain-diffusion",
+      "last_activity": "2026-07-21T16:18:46Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1283
+    },
+    {
+      "archived": false,
+      "id": "xianfei-sysmocap",
+      "last_activity": "2026-06-10T19:53:10Z",
+      "latest_release": "v0.8.0",
+      "retrieval": "github-api",
+      "stars": 3171
+    },
+    {
+      "archived": false,
+      "id": "xinntao-real-esrgan",
+      "last_activity": "2024-08-06T13:15:18Z",
+      "latest_release": "v0.3.0",
+      "retrieval": "github-api",
+      "stars": 36360
+    },
+    {
+      "archived": false,
+      "id": "xpixelgroup-depictqa",
+      "last_activity": "2026-05-21T06:23:05Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 230
+    },
+    {
+      "archived": false,
+      "id": "xpixelgroup-hat",
+      "last_activity": "2024-06-02T11:55:42Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1579
+    },
+    {
+      "archived": false,
+      "id": "xxlong0-wonder3d",
+      "last_activity": "2025-03-14T07:09:19Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 5415
+    },
+    {
+      "archived": false,
+      "id": "yuan-manx-ai-game-devtools",
+      "last_activity": "2026-07-21T09:21:18Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1289
+    },
+    {
+      "archived": false,
+      "id": "yuan-manx-sparklabs",
+      "last_activity": "2026-08-02T07:31:04Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 12
+    },
+    {
+      "archived": false,
+      "id": "yuvalkirstain-pickscore",
+      "last_activity": "2024-12-21T19:53:15Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 601
+    },
+    {
+      "archived": false,
+      "id": "yyeboah-awesome-text-to-3d",
+      "last_activity": "2026-08-01T06:57:35Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 597
+    },
+    {
+      "archived": false,
+      "id": "zai-org-imagereward",
+      "last_activity": "2025-10-29T13:40:51Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 1697
+    },
+    {
+      "archived": false,
+      "id": "zeux-meshoptimizer",
+      "last_activity": "2026-07-30T17:26:33Z",
+      "latest_release": "v1.2",
+      "retrieval": "github-api",
+      "stars": 8178
+    },
+    {
+      "archived": false,
+      "id": "ziyang-xie-worldgen",
+      "last_activity": "2026-04-12T01:08:44Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 2044
+    },
+    {
+      "archived": false,
+      "id": "zzzyuqing-dreammat",
+      "last_activity": "2024-09-03T10:30:03Z",
+      "latest_release": null,
+      "retrieval": "github-api",
+      "stars": 397
+    }
+  ],
+  "schema_version": "1.0.0",
+  "snapshot_date": "2026-08-03",
+  "source": "GitHub REST API metadata; review before merge. This is not a license grant or install authorization."
+}
