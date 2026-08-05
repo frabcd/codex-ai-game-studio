@@ -335,25 +335,42 @@ hand/face requirements, scale, loop continuity, and engine import. Create slow-
 motion and contact overlays before asking me to approve production replacement.
 ```
 
+For an animation-cued procedural VFX pass:
+
+```text
+$ai-game-studio:rig-animation Compose project-local Three.js combat VFX for
+this rights-cleared rig and licensed clips. Use [style guide], [effect
+breakdown], [palette], and [performance budget]. Prefer deterministic runtime
+noise, procedural geometry, palette-driven GLSL, and layered additive meshes
+without required post-processing. Size and aim cues from rig and weapon
+measurements. Plan first, preserve sources, and validate shader compilation,
+cue timing, readability, draw calls, and frame budget.
+```
+
 ### What Codex inspects
 
 - Mesh topology, symmetry, transforms, existing skeleton/avatar, motion license, target-engine humanoid rules, Blender/DCC availability, and runtime bone budgets.
+- For VFX work: the effect breakdown, art/style guide, palette rules, renderer and Three.js version, existing shader or particle infrastructure, rig and weapon measurements, cue timeline, camera framing, and draw-call/frame budgets.
 
 ### What it asks
 
 - Humanoid versus custom rig, root-motion policy, IK requirements, target frame rate, required clips, additive layers, and facial/hand detail.
+- For VFX work: required effect families and variants, deterministic seed policy, palette accessibility, cue ownership, no-post-processing preference versus an existing pipeline, target devices, and acceptable degradation tiers.
 
 ### What it proposes
 
 - Auto-rig/manual/hosted options compared by license, privacy, quality, cost, hardware, and limitations; one selected route with cleanup and validation.
+- A VFX specification and one project-local route that can combine computed noise textures, procedural mesh or tube shapes, shared shader chunks, palette reskinning, additive glow geometry, and rig-measured animation cues. These are design options, not mandatory claims about an existing runtime; Codex must adapt them to the inspected project and budget.
 
 ### What it may change after confirmation
 
 - Candidate rigged scene, exported skeleton/animation files, retarget maps, engine import metadata, and preview/tests. The original mesh and motions remain untouched.
+- When confirmed, isolated TypeScript/GLSL VFX candidates, procedural geometry helpers, palette and cue data, preview scenes, and validation fixtures. No referenced social video or unlicensed third-party media is copied into the project.
 
 ### Expected artifacts and rollback
 
 - Skeleton map, weight heatmaps, deformation poses, root trajectory, foot-slide metrics, loop seam report, preview video/contact sheet, provenance, and engine animation-controller smoke test.
+- For VFX work: effect/style specification, VFX sheet, deterministic parameters, palette definitions, rig/weapon measurement record, animation cue map, shader-compile evidence, representative timing frames, draw-call/frame-budget evidence, and fallback behavior without post-processing.
 - Rollback removes candidates or restores the backed-up production rig/controller.
 
 ## 11. Generated environments and procedural levels

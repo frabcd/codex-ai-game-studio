@@ -41,7 +41,7 @@ clear rights. Keep the user as creative director.
 | 2D sprites or tiles | `$ai-game-studio:sprite-generate` |
 | 3D mesh generation | `$ai-game-studio:asset-3d-generate` |
 | PBR maps or materials | `$ai-game-studio:material-texture-generate` |
-| Rigging or animation | `$ai-game-studio:rig-animation` |
+| Rigging, animation, or cue-driven procedural VFX | `$ai-game-studio:rig-animation` |
 | Terrain, scenes, or levels | `$ai-game-studio:world-generate` |
 | NPCs, quests, voice, music, sound | `$ai-game-studio:npc-audio-generate` |
 | Approved editor operation | `$ai-game-studio:engine-automation` |

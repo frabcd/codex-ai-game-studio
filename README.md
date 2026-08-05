@@ -4,9 +4,9 @@
 
 [![CI](https://github.com/frabcd/codex-ai-game-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/frabcd/codex-ai-game-studio/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/frabcd/codex-ai-game-studio?style=flat&logo=github&label=stars)](https://github.com/frabcd/codex-ai-game-studio/stargazers)
-[![Catalog](https://img.shields.io/badge/catalog-163%20curated%20repository%20records-08C7F7)](plugins/ai-game-studio/catalog/catalog.json)
+[![Catalog](https://img.shields.io/badge/catalog-163%20curated%20repository%20records-00B6E6)](plugins/ai-game-studio/catalog/catalog.json)
 [![Skills](https://img.shields.io/badge/bundled%20Codex%20skills-95-7C5CFC)](plugins)
-[![Platforms](https://img.shields.io/badge/editions-Windows%20%7C%20macOS-08C7F7)](#choose-your-edition)
+[![Platforms](https://img.shields.io/badge/editions-Windows%20%7C%20macOS-00B6E6)](#choose-your-edition)
 [![License: MIT](https://img.shields.io/badge/core%20license-MIT-FFB347)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/frabcd/codex-ai-game-studio)](https://github.com/frabcd/codex-ai-game-studio/releases)
 
@@ -15,12 +15,15 @@ Turn a game idea—or an existing Unity, Godot, Unreal, or browser project—int
 plans games, finds compatible AI tools, reconstructs reference images as
 procedural Three.js models, generates and validates assets, and automates
 supported editors without silently installing tools or replacing source work.
+It can also plan and quality-gate local, cue-driven procedural Three.js combat
+VFX without requiring an additional paid VFX API, hosted backend, particle
+engine, or bloom pass. Codex access and optional third-party services are separate.
 
 Under the hood: **85 core skills, 95 bundled skills, 49 studio roles, 163
 curated repository records, five editor MCP packs, and dedicated Windows and
 macOS editions**.
 
-[Install in 60 seconds](#install) · [See a real quality gate](#see-a-quality-gate) · [Copy a production prompt](#what-should-i-say) · [Contribute in 10 minutes](CONTRIBUTING.md#first-contribution-in-10-minutes)
+[Install in 60 seconds](#install) · [Build procedural VFX](#procedural-vfx-composer) · [See a real quality gate](#see-a-quality-gate) · [Copy a production prompt](#what-should-i-say) · [Contribute in 10 minutes](CONTRIBUTING.md#first-contribution-in-10-minutes)
 
 If it earns a place in your workflow, [star the repository](https://github.com/frabcd/codex-ai-game-studio) so another game developer can find it. If something is missing, choose a scoped [`good first issue`](https://github.com/frabcd/codex-ai-game-studio/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22) and improve it with us.
 
@@ -121,6 +124,50 @@ separate confirmed proposal.
 
 No catalog entry is automatically cloned, no model weights are silently downloaded, and no existing source asset is replaced without human approval.
 
+## Procedural VFX composer
+
+The existing `rig-animation` skill now has an optional procedural Three.js VFX
+route. It turns a style guide, effect brief, rig measurements, weapon sockets,
+animation clips, and a frame budget into a deterministic implementation plan
+and a validated `vfx-project.json`. Codex then generates the runtime and local
+composer inside the target project's existing Three.js stack only after the
+user confirms the exact candidate paths and plan digest.
+
+![Original procedural VFX composer interface blueprint](assets/examples/procedural-vfx-composer.svg)
+
+```text
+$ai-game-studio:rig-animation Build a local procedural Three.js combat VFX kit
+for this rig and these animation clips. Use runtime DataTexture noise, reusable
+geometry, palette-driven GLSL, layered additive glow, parallel-transport trails,
+and rig-scaled animation cues. Include a local effect browser, viewport,
+inspector, timeline, JSON import/export, deterministic captures, and performance
+evidence. Use no hosted service, additional paid VFX API, paid asset,
+post-processing pass, or particle middleware. Preserve the source and wait for
+my digest before writing.
+```
+
+The workflow contract covers:
+
+- seeded integer-hash noise, FBM, domain warping, and radial cracks packed into
+  runtime `THREE.DataTexture` channels;
+- ten bounded procedural shape families plus preallocated straight, wobbly,
+  jagged, and split tubes using parallel-transport frames;
+- a fixed, non-injectable library of 29 shader blocks for erosion, flat colour
+  bands, ink contours, heat gradients, and layered geometry glow;
+- eight five-role palettes (`core`, `body`, `edge`, `ink`, `ash`) that reskin
+  effects through uniforms without generating shader variants;
+- once-per-crossing cue playback, including loop-wrap and seek-safe preview,
+  sized and aimed from actual rig and weapon-tip measurements; and
+- schema, deterministic-noise, finite-geometry, shader-compile, cue-timing,
+  socket-alignment, memory-reuse, draw-call, p95 frame-time, accessibility,
+  provenance, and visual-regression gates.
+
+The checked-in [example specification](plugins/ai-game-studio/skills/rig-animation/assets/procedural-vfx-composer/vfx-project.example.json)
+contains no remote URLs or licensed media and can be validated offline with the
+[standard-library validator](plugins/ai-game-studio/skills/rig-animation/scripts/validate_vfx_spec.py).
+The interface above is an original workflow blueprint, not copied media or a
+claim that the repository bundles a finished game engine.
+
 ## See a quality gate
 
 This deterministic sprite fixture keeps the source pixels unchanged while the
@@ -150,7 +197,7 @@ See the official [Codex plugin guide](https://learn.chatgpt.com/docs/plugins) an
 ## What makes this a game studio
 
 - **Full production workflow:** concept, GDD, architecture, backlog, prototype, vertical slice, content, QA, launch, live operations, and retrospectives.
-- **Generative asset pipelines:** 2D sprites and tiles, image/text-to-3D, PBR materials, rigs, animation, worlds, dialogue, voices, music, and sound effects.
+- **Generative asset pipelines:** 2D sprites and tiles, image/text-to-3D, PBR materials, rigs, animation, cue-driven procedural Three.js VFX, worlds, dialogue, voices, music, and sound effects.
 - **Reference-to-code 3D:** the pinned img2threejs forge turns suitable object
   or character references into procedural Three.js with strict spec,
   multi-angle, material, structure, and bounded-correction gates.
@@ -201,7 +248,7 @@ Use plain outcomes. The router will select the specialist workflow.
 | Image to procedural Three.js | `$ai-game-studio-img2threejs:img2threejs Reconstruct this reference as an animation-ready procedural Three.js model. Run suitability and strict spec gates first, preserve evidence, render multiple views, and stop if the image cannot support the requested fidelity.` |
 | Windows toolchain | `$ai-game-studio-windows:setup-windows-edition Inspect native Windows, architecture, editors, MCPs, and GPU routes. Adapt incompatible tools without claiming binary compatibility, propose one reversible setup, and wait for my digest.` |
 | macOS toolchain | `$ai-game-studio-macos:setup-macos-edition Inspect this Mac, architecture, editors, MCPs, and Metal/MPS/Core ML routes. Adapt incompatible tools, disclose Rosetta limits, propose one reversible setup, and wait for my digest.` |
-| Rig and animation | `$ai-game-studio:rig-animation Rig this character, retarget the supplied motions, and report weight errors, root motion, foot sliding, and loop continuity before export.` |
+| Rig, animation, and VFX | `$ai-game-studio:rig-animation Rig this character, retarget the supplied motions, bind local procedural Three.js effects to measured weapon-tip cues, and report deformation, cue, shader, visual, and frame-budget evidence before export.` |
 | World generation | `$ai-game-studio:world-generate Build a deterministic greybox for this level brief, prove spawn reachability and navigation, then propose the art pass.` |
 | NPC and audio | `$ai-game-studio:npc-audio-generate Create the dialogue, quest logic, consent-safe voices, music, and SFX plan for this encounter; separate local and hosted options.` |
 | Visual QA | `$ai-game-studio:visual-qa Compare the current build with its references from multiple views, classify material versus camera differences, and save regression evidence.` |

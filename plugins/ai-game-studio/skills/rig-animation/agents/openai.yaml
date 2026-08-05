@@ -1,6 +1,6 @@
 interface:
   display_name: "Rig Animation"
-  short_description: "Rig and validate character animation"
-  default_prompt: "Use $ai-game-studio:rig-animation to rig or retarget this character and verify deformation, contacts, and loops."
+  short_description: "Rig, animate, and compose procedural VFX"
+  default_prompt: "Use $ai-game-studio:rig-animation to rig or retarget this character, build cue-driven procedural VFX and its composer, and verify deformation, shaders, timing, palettes, and runtime budgets."
 policy:
   allow_implicit_invocation: true

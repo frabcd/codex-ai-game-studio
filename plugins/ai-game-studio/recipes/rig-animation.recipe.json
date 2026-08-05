@@ -2,52 +2,82 @@
   "$schema": "https://frabcd.github.io/codex-ai-game-studio/schemas/recipe.schema.json",
   "schema_version": "1.0.0",
   "id": "rig-animation",
-  "title": "Rig, retarget, and validate animation",
-  "description": "A reversible, evidence-producing workflow for rig, retarget, and validate animation.",
+  "title": "Rig, animate, compose, and validate procedural VFX",
+  "description": "A reversible, evidence-producing workflow for rig, animate, compose, and validate procedural vfx.",
   "inputs": [
-    "source_mesh",
-    "target_skeleton",
-    "motion_brief",
-    "engine_import_target"
+    "source_mesh_or_effect_anchor",
+    "target_skeleton_and_runtime",
+    "motion_and_cue_brief",
+    "vfx_style_guide",
+    "runtime_budget"
   ],
   "ordered_stages": [
     {
       "order": 1,
       "id": "prepare",
-      "action": "Validate neutral pose, transforms, topology, scale, and skeleton requirements."
+      "action": "Inspect the rig, animation controller, renderer, dependencies, tests, target runtime, and budgets read-only; validate neutral pose, transforms, topology, scale, and skeleton requirements."
     },
     {
       "order": 2,
-      "id": "rig",
-      "action": "Create a candidate skeleton and skin weights on a copy."
+      "id": "specify",
+      "action": "For the VFX route, read the bundled procedural VFX composer reference completely, define the effect taxonomy, style guide, named five-color palettes, parameter schema, animation-cue contract, editor interface, and acceptance captures, then validate vfx-project.json before presenting the exact digest-confirmed implementation plan."
     },
     {
       "order": 3,
-      "id": "retarget",
-      "action": "Map bones, root motion, contacts, and animation curves."
+      "id": "rig",
+      "action": "After confirmation, create a candidate skeleton and skin weights on a copy, then map bones, root motion, contacts, sockets, weapon-tip measurements, and animation curves."
     },
     {
       "order": 4,
-      "id": "inspect",
-      "action": "Review deformations, foot sliding, penetration, loop continuity, and joint limits."
+      "id": "generate",
+      "action": "Generate seeded runtime DataTextures for integer-hash value noise, FBM, domain warping, and radial cracks; build procedural effect meshes and degenerate-safe parallel-transport tubes for trails, beams, and bolts."
     },
     {
       "order": 5,
+      "id": "shade",
+      "action": "Compose shared GLSL noise, shape, and edge chunks into eroded, banded, inked, and heat-gradient effects using palette-driven layered additive geometry without required post-processing or particle middleware."
+    },
+    {
+      "order": 6,
+      "id": "compose",
+      "action": "Build an animation and VFX composer with effect library and VFX sheet, preview viewport, transport, scrubbing, timeline, cue tracks, inspector, palette controls, deterministic import/export, and undo/redo."
+    },
+    {
+      "order": 7,
+      "id": "cue",
+      "action": "Fire effects from typed animation cues, sizing from rig and weapon measurements and aiming at authored impact targets with deterministic play, loop, seek, repeat, and dropped-frame behavior."
+    },
+    {
+      "order": 8,
+      "id": "inspect",
+      "action": "Review deformation, foot sliding, penetration, loops, shader compilation, tube stability, palette readability, transparent sorting, cue timing, state round trips, resource disposal, and runtime budgets."
+    },
+    {
+      "order": 9,
       "id": "import",
-      "action": "Test clips in engine with representative state transitions."
+      "action": "Test clips, effects, composer state, and representative transitions in the target engine or browser runtime and capture reproducible multi-view temporal evidence."
     }
   ],
   "required_capabilities": [
     "rigging",
     "animation",
-    "engine-control"
+    "procedural-generation",
+    "engine-control",
+    "visual-qa"
   ],
   "expected_artifacts": [
     "rig-map.json",
     "rigged-source.fbx",
     "clips/",
+    "vfx-style-guide.md",
+    "vfx-project.json",
+    "vfx-palettes.json",
+    "vfx-cues.json",
+    "procedural-vfx/",
+    "composer-state.json",
+    "vfx-sheet/",
     "deformation-review/",
-    "animation-report.json"
+    "animation-vfx-report.json"
   ],
   "quality_gates": [
     {
@@ -87,18 +117,34 @@
     },
     {
       "id": "specific-1",
-      "description": "Weights and deformations pass extreme-pose review.",
+      "description": "Weights and deformations pass extreme-pose review; root motion, contacts, foot sliding, loop continuity, and state transitions pass.",
       "human_required": false
     },
     {
       "id": "specific-2",
-      "description": "Root motion, contacts, foot sliding, loop continuity, and state transitions pass.",
+      "description": "Runtime texture and geometry generation is deterministic from recorded seeds and parameters, parallel-transport tubes stay finite on degenerate paths, and shaders compile without NaNs.",
+      "human_required": false
+    },
+    {
+      "id": "specific-3",
+      "description": "Named core, body, edge, ink, and ash palettes preserve readable bands; layered transparency, sorting, disposal, overdraw, draw calls, memory, and frame time pass explicit budgets.",
+      "human_required": false
+    },
+    {
+      "id": "specific-4",
+      "description": "Animation cues remain stable during play, loop, seek, repeat, dropped frames, and transitions; reach and aim derive from recorded rig and weapon measurements.",
+      "human_required": false
+    },
+    {
+      "id": "specific-5",
+      "description": "Composer state round-trips deterministically, undo and redo release resources, and editor previews match runtime parameters, timing, and captures.",
       "human_required": false
     }
   ],
   "fallbacks": [
-    "Use a known compatible skeleton and manual weight cleanup.",
-    "Keep source motion and retarget only verified clips."
+    "Use a known compatible skeleton and manual weight cleanup while keeping source motion and only verified clips.",
+    "Use a smaller CPU-generated texture field, reduced procedural geometry subdivisions, and a compact shared shader set before adding middleware.",
+    "Reduce effect layers, tube segments, debris, concurrent instances, and update frequency before changing animation-critical cue timing."
   ],
   "provenance_outputs": [
     "source-input-hashes.json",
