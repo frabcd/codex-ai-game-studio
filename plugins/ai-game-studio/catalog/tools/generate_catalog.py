@@ -151,19 +151,33 @@ RECIPE_DEFINITIONS: list[dict[str, Any]] = [
     },
     {
         "id": "rig-animation",
-        "title": "Rig, retarget, and validate animation",
-        "inputs": ["source_mesh", "target_skeleton", "motion_brief", "engine_import_target"],
-        "capabilities": ["rigging", "animation", "engine-control"],
+        "title": "Rig, animate, compose, and validate procedural VFX",
+        "inputs": ["source_mesh_or_effect_anchor", "target_skeleton_and_runtime", "motion_and_cue_brief", "vfx_style_guide", "runtime_budget"],
+        "capabilities": ["rigging", "animation", "procedural-generation", "engine-control", "visual-qa"],
         "stages": [
-            ("prepare", "Validate neutral pose, transforms, topology, scale, and skeleton requirements."),
-            ("rig", "Create a candidate skeleton and skin weights on a copy."),
-            ("retarget", "Map bones, root motion, contacts, and animation curves."),
-            ("inspect", "Review deformations, foot sliding, penetration, loop continuity, and joint limits."),
-            ("import", "Test clips in engine with representative state transitions."),
+            ("prepare", "Inspect the rig, animation controller, renderer, dependencies, tests, target runtime, and budgets read-only; validate neutral pose, transforms, topology, scale, and skeleton requirements."),
+            ("specify", "For the VFX route, read the bundled procedural VFX composer reference completely, define the effect taxonomy, style guide, named five-color palettes, parameter schema, animation-cue contract, editor interface, and acceptance captures, then validate vfx-project.json before presenting the exact digest-confirmed implementation plan."),
+            ("rig", "After confirmation, create a candidate skeleton and skin weights on a copy, then map bones, root motion, contacts, sockets, weapon-tip measurements, and animation curves."),
+            ("generate", "Generate seeded runtime DataTextures for integer-hash value noise, FBM, domain warping, and radial cracks; build procedural effect meshes and degenerate-safe parallel-transport tubes for trails, beams, and bolts."),
+            ("shade", "Compose shared GLSL noise, shape, and edge chunks into eroded, banded, inked, and heat-gradient effects using palette-driven layered additive geometry without required post-processing or particle middleware."),
+            ("compose", "Build an animation and VFX composer with effect library and VFX sheet, preview viewport, transport, scrubbing, timeline, cue tracks, inspector, palette controls, deterministic import/export, and undo/redo."),
+            ("cue", "Fire effects from typed animation cues, sizing from rig and weapon measurements and aiming at authored impact targets with deterministic play, loop, seek, repeat, and dropped-frame behavior."),
+            ("inspect", "Review deformation, foot sliding, penetration, loops, shader compilation, tube stability, palette readability, transparent sorting, cue timing, state round trips, resource disposal, and runtime budgets."),
+            ("import", "Test clips, effects, composer state, and representative transitions in the target engine or browser runtime and capture reproducible multi-view temporal evidence."),
         ],
-        "artifacts": ["rig-map.json", "rigged-source.fbx", "clips/", "deformation-review/", "animation-report.json"],
-        "specific_gates": ["Weights and deformations pass extreme-pose review.", "Root motion, contacts, foot sliding, loop continuity, and state transitions pass."],
-        "fallbacks": ["Use a known compatible skeleton and manual weight cleanup.", "Keep source motion and retarget only verified clips."],
+        "artifacts": ["rig-map.json", "rigged-source.fbx", "clips/", "vfx-style-guide.md", "vfx-project.json", "vfx-palettes.json", "vfx-cues.json", "procedural-vfx/", "composer-state.json", "vfx-sheet/", "deformation-review/", "animation-vfx-report.json"],
+        "specific_gates": [
+            "Weights and deformations pass extreme-pose review; root motion, contacts, foot sliding, loop continuity, and state transitions pass.",
+            "Runtime texture and geometry generation is deterministic from recorded seeds and parameters, parallel-transport tubes stay finite on degenerate paths, and shaders compile without NaNs.",
+            "Named core, body, edge, ink, and ash palettes preserve readable bands; layered transparency, sorting, disposal, overdraw, draw calls, memory, and frame time pass explicit budgets.",
+            "Animation cues remain stable during play, loop, seek, repeat, dropped frames, and transitions; reach and aim derive from recorded rig and weapon measurements.",
+            "Composer state round-trips deterministically, undo and redo release resources, and editor previews match runtime parameters, timing, and captures.",
+        ],
+        "fallbacks": [
+            "Use a known compatible skeleton and manual weight cleanup while keeping source motion and only verified clips.",
+            "Use a smaller CPU-generated texture field, reduced procedural geometry subdivisions, and a compact shared shader set before adding middleware.",
+            "Reduce effect layers, tube segments, debris, concurrent instances, and update frequency before changing animation-critical cue timing.",
+        ],
     },
     {
         "id": "world-generation",
@@ -276,7 +290,7 @@ COMMON_GATES = [
 
 def dump(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
 
 
 def canonical_parts(url: str) -> tuple[str, str, str | None]:

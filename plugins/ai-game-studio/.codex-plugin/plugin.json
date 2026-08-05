@@ -14,33 +14,31 @@
     "generative-ai",
     "codex",
     "agent-skills",
-    "visual-qa"
+    "visual-qa",
+    "procedural-vfx",
+    "threejs"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Codex AI Game Studio",
-    "shortDescription": "Plan, generate, validate, and ship games safely.",
-    "longDescription": "Routes game design, asset generation, engine workflows, playtesting, provenance, and quality gates through 85 Codex-native skills and an offline catalog of 163 curated repositories. Detection is read-only and every external or mutating setup starts with a reviewable plan.",
+    "shortDescription": "Build games with quality gates",
+    "longDescription": "Routes game design, asset generation, procedural VFX planning, rig-aware animation cues, engine workflows, playtesting, provenance, and quality gates through 85 Codex-native skills and an offline catalog of 163 curated repositories. Detection is read-only and every external or mutating setup starts with a reviewable plan.",
     "developerName": "frabcd",
     "category": "Developer Tools",
     "capabilities": [
       "85 Codex-native game-development skills",
       "163-repository offline generative-tool catalog",
       "Cross-platform toolchain planning",
+      "Procedural VFX planning, animation cues, and quality gates",
       "Asset, visual, performance, and playability quality gates"
     ],
     "websiteURL": "https://frabcd.github.io/codex-ai-game-studio/",
     "privacyPolicyURL": "https://frabcd.github.io/codex-ai-game-studio/privacy/",
     "termsOfServiceURL": "https://frabcd.github.io/codex-ai-game-studio/terms/",
-    "brandColor": "#08C7F7",
+    "brandColor": "#00B6E6",
     "composerIcon": "./assets/icon.png",
     "logo": "./assets/icon.png",
     "logoDark": "./assets/icon.png",
-    "screenshots": [
-      "./assets/hero.png",
-      "./assets/sprite-qa.png",
-      "./assets/validation-summary.png"
-    ],
-    "defaultPrompt": "Use $ai-game-studio:start to inspect this game project read-only, identify the best workflow, and propose the next safe step."
+    "defaultPrompt": "Use $ai-game-studio:start to inspect this game and its procedural VFX needs, then propose the next safe, quality-gated step."
   }
 }

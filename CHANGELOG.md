@@ -10,6 +10,13 @@ All notable changes are recorded here. The project follows Semantic Versioning.
   proposal form, and a documented contributor verification path.
 - A focused README outcome, stable-install default, dynamic star badge, real
   sprite QA evidence, and a 10-minute newcomer route.
+- Public-facing procedural VFX composition guidance across the core manifest,
+  rig-and-animation tutorial, prompt cookbook, publisher review cases, and
+  provenance notice. The guidance uses style specifications, rig or weapon
+  measurements, animation cues, project-local TypeScript/GLSL candidates, and
+  explicit rights, visual, and performance gates without bundling third-party
+  media or requiring an additional paid VFX API or hosted backend. Codex access
+  and optional third-party services remain separate.
 
 ### Security
 

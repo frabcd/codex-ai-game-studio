@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Procedural VFX composer workflow interface</title>
+  <desc id="desc">An original dark interface blueprint with an effect browser, Three.js viewport, palette and erosion controls, and an animation cue timeline.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07101f"/>
+      <stop offset="0.58" stop-color="#0a0d19"/>
+      <stop offset="1" stop-color="#130c1f"/>
+    </linearGradient>
+    <linearGradient id="ember" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff2ae"/>
+      <stop offset="0.32" stop-color="#ffc94a"/>
+      <stop offset="0.72" stop-color="#ff6238"/>
+      <stop offset="1" stop-color="#8b183d"/>
+    </linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8be9ff"/>
+      <stop offset="0.48" stop-color="#8d7bff"/>
+      <stop offset="1" stop-color="#ff55c8"/>
+    </linearGradient>
+    <radialGradient id="floor" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffbe4a" stop-opacity="0.23"/>
+      <stop offset="0.55" stop-color="#ff6238" stop-opacity="0.07"/>
+      <stop offset="1" stop-color="#ff6238" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#21314d" stroke-width="1" opacity="0.32"/>
+    </pattern>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <style>
+      .ui { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      .label { fill: #8796b3; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; }
+      .body { fill: #d8e1f2; font-size: 12px; }
+      .muted { fill: #71809c; font-size: 10px; }
+      .panel { fill: #0d1423; stroke: #23314b; stroke-width: 1; }
+      .hairline { stroke: #273653; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="640" rx="18" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1278" height="638" rx="17" fill="none" stroke="#2d3a57"/>
+
+  <g class="ui">
+    <!-- Header and workflow tabs -->
+    <rect x="18" y="16" width="1244" height="42" rx="10" fill="#0d1423" stroke="#263552"/>
+    <rect x="32" y="28" width="16" height="16" rx="4" fill="url(#violet)"/>
+    <text x="58" y="41" fill="#eef4ff" font-size="13" font-weight="750">CODEX VFX LAB</text>
+    <text x="183" y="41" class="muted">LOCAL / DETERMINISTIC</text>
+    <g font-size="11" font-weight="700" letter-spacing="1">
+      <text x="450" y="41" fill="#71809c">RIG</text>
+      <text x="510" y="41" fill="#71809c">ANIM</text>
+      <rect x="569" y="22" width="60" height="30" rx="7" fill="#2a2144" stroke="#7f6cff"/>
+      <text x="587" y="41" fill="#dcd6ff">VFX</text>
+      <text x="662" y="41" fill="#71809c">COMPOSE</text>
+      <text x="758" y="41" fill="#71809c">PLAY</text>
+    </g>
+    <rect x="1091" y="26" width="75" height="22" rx="6" fill="#15243a" stroke="#345071"/>
+    <circle cx="1107" cy="37" r="3.5" fill="#57d6a0"/>
+    <text x="1117" y="41" class="muted" fill="#9fb0ca">60 FPS</text>
+    <rect x="1176" y="26" width="70" height="22" rx="6" fill="#8168ff"/>
+    <text x="1193" y="41" fill="#fff" font-size="10" font-weight="800">CAPTURE</text>
+
+    <!-- Effect browser -->
+    <rect class="panel" x="18" y="68" width="212" height="394" rx="10"/>
+    <text x="34" y="91" class="label">EFFECT BROWSER</text>
+    <rect x="34" y="104" width="180" height="28" rx="6" fill="#101c30" stroke="#2a3a59"/>
+    <circle cx="48" cy="118" r="5" fill="none" stroke="#7888a5"/>
+    <path d="m52 122 5 5" stroke="#7888a5"/>
+    <text x="64" y="122" class="muted">Search presets</text>
+    <g class="body">
+      <rect x="28" y="145" width="190" height="42" rx="7" fill="#25203a" stroke="#725cff"/>
+      <path d="M42 170q15-22 31-4" fill="none" stroke="url(#ember)" stroke-width="5" stroke-linecap="round"/>
+      <text x="84" y="164" fill="#f2efff" font-weight="700">Ember slash</text>
+      <text x="84" y="178" class="muted">crescent · 0.46 s</text>
+      <rect x="28" y="195" width="190" height="42" rx="7" fill="#111b2d"/>
+      <circle cx="56" cy="216" r="11" fill="none" stroke="#58d9ff" stroke-width="3"/>
+      <path d="m44 216 24 0m-12-12v24" stroke="#58d9ff" opacity="0.6"/>
+      <text x="84" y="214" font-weight="700">Arcane impact</text>
+      <text x="84" y="228" class="muted">star · flare ring</text>
+      <rect x="28" y="245" width="190" height="42" rx="7" fill="#111b2d"/>
+      <path d="m44 270 10-16 7 10 8-7" fill="none" stroke="#ff814a" stroke-width="3"/>
+      <text x="84" y="264" font-weight="700">Ground rupture</text>
+      <text x="84" y="278" class="muted">crack field · rubble</text>
+      <rect x="28" y="295" width="190" height="42" rx="7" fill="#111b2d"/>
+      <path d="M42 322c8-22 20 13 30-14" fill="none" stroke="#a08cff" stroke-width="4"/>
+      <text x="84" y="314" font-weight="700">Wobbly bolt</text>
+      <text x="84" y="328" class="muted">transport tube</text>
+    </g>
+    <text x="34" y="365" class="label">STYLE BRIEF</text>
+    <rect x="34" y="378" width="180" height="58" rx="6" fill="#0a111f" stroke="#273653"/>
+    <text x="45" y="398" class="muted">flat bands · ink contour</text>
+    <text x="45" y="414" class="muted">eroded silhouette · no bloom</text>
+    <text x="45" y="430" fill="#9a8bff" font-size="10">seed 0x5EEDC0DE</text>
+
+    <!-- Main Three.js viewport -->
+    <rect class="panel" x="240" y="68" width="716" height="394" rx="10"/>
+    <rect x="248" y="76" width="700" height="378" rx="7" fill="#090f1a"/>
+    <rect x="248" y="76" width="700" height="378" rx="7" fill="url(#grid)"/>
+    <text x="264" y="98" class="label">VIEWPORT / EFFECT SHEET</text>
+    <rect x="817" y="86" width="113" height="22" rx="6" fill="#0f1a2c" stroke="#2b3d5c"/>
+    <text x="832" y="101" class="muted">3/4 VIEW · 1×</text>
+    <ellipse cx="603" cy="402" rx="238" ry="60" fill="url(#floor)"/>
+    <path d="M400 408c45-24 102-30 160-12s123 14 194-15c39-16 72-12 103 2" fill="none" stroke="#33405c" opacity="0.7"/>
+
+    <!-- procedural mannequin -->
+    <g stroke="#29344c" stroke-width="3" stroke-linejoin="round">
+      <circle cx="596" cy="171" r="25" fill="#b4bfd1"/>
+      <path d="M574 200 541 269l31 72h50l30-72-32-69Z" fill="#8793a8"/>
+      <path d="m550 220-72 53 18 23 73-40" fill="#9da9bd"/>
+      <path d="m637 221 61 51-17 24-66-42" fill="#9da9bd"/>
+      <path d="m578 339-31 63 24 9 41-62" fill="#8c98ad"/>
+      <path d="m615 340 46 57-21 16-52-57" fill="#8c98ad"/>
+      <path d="m674 277 26-13 15 31-25 14Z" fill="#616e84"/>
+    </g>
+    <!-- weapon and cue sockets -->
+    <path d="m489 284-66-84" stroke="#d6dfef" stroke-width="7" stroke-linecap="round"/>
+    <path d="m467 272 35-27" stroke="#66738a" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="489" cy="284" r="6" fill="#65e2ff"/>
+    <circle cx="423" cy="200" r="6" fill="#ffcf57"/>
+    <path d="M489 284 423 200" stroke="#68dffc" stroke-width="1" stroke-dasharray="5 5"/>
+
+    <!-- original procedural VFX -->
+    <g fill="none" stroke-linecap="round" filter="url(#glow)">
+      <path d="M389 180C480 102 704 105 829 225" stroke="#ff5a38" stroke-width="18" opacity="0.16"/>
+      <path d="M396 180C500 114 700 126 816 228" stroke="url(#ember)" stroke-width="8"/>
+      <path d="M411 187C511 134 685 145 796 228" stroke="#fff1a5" stroke-width="2.5"/>
+    </g>
+    <path d="M404 193c73-46 151-58 229-38" fill="none" stroke="#271123" stroke-width="3" stroke-dasharray="15 8"/>
+    <g fill="#ffbf43" filter="url(#soft)">
+      <path d="m385 224 11-5-3 13Z"/>
+      <path d="m434 154 9-12 4 14Z"/>
+      <path d="m763 180 13-3-8 11Z"/>
+      <circle cx="837" cy="243" r="4"/>
+    </g>
+    <g fill="none" stroke-linejoin="round">
+      <ellipse cx="603" cy="400" rx="127" ry="31" stroke="#ff6b35" stroke-width="6" opacity="0.75"/>
+      <ellipse cx="603" cy="400" rx="91" ry="21" stroke="#ffd35c" stroke-width="2"/>
+      <path d="m487 398 28-9 19 14 32-22 24 15 25-25 22 24 33-14 19 17 30-8" stroke="#ffb33c" stroke-width="3"/>
+    </g>
+    <g fill="#db5c35" stroke="#341627" stroke-width="2">
+      <path d="m489 385 13-22 13 23Z"/>
+      <path d="m681 386 15-25 10 30Z"/>
+      <path d="m621 389 8-16 13 18Z"/>
+    </g>
+    <rect x="264" y="420" width="181" height="22" rx="5" fill="#0d1728" stroke="#2b3d5c"/>
+    <circle cx="278" cy="431" r="3" fill="#55d89e"/>
+    <text x="289" y="435" class="muted">4 layers · 8 calls · +1.3 ms p95</text>
+
+    <!-- Inspector -->
+    <rect class="panel" x="966" y="68" width="296" height="394" rx="10"/>
+    <text x="982" y="91" class="label">PALETTE + MATERIAL</text>
+    <text x="982" y="116" class="body" font-weight="700">Ember / five-band</text>
+    <g transform="translate(982 128)">
+      <rect width="49" height="22" rx="4" fill="#fff2ae"/>
+      <rect x="53" width="49" height="22" rx="4" fill="#ffc94a"/>
+      <rect x="106" width="49" height="22" rx="4" fill="#ff6238"/>
+      <rect x="159" width="49" height="22" rx="4" fill="#5d1834"/>
+      <rect x="212" width="49" height="22" rx="4" fill="#312333"/>
+      <g class="muted" text-anchor="middle">
+        <text x="24" y="37">CORE</text><text x="77" y="37">BODY</text><text x="130" y="37">EDGE</text><text x="183" y="37">INK</text><text x="236" y="37">ASH</text>
+      </g>
+    </g>
+    <line x1="982" y1="179" x2="1246" y2="179" class="hairline"/>
+    <text x="982" y="202" class="label">EROSION</text>
+    <text x="1226" y="202" class="muted" text-anchor="end">0.64</text>
+    <rect x="982" y="213" width="264" height="5" rx="2.5" fill="#26344f"/>
+    <rect x="982" y="213" width="169" height="5" rx="2.5" fill="url(#violet)"/>
+    <circle cx="1151" cy="215.5" r="6" fill="#dcd6ff" stroke="#7d6eff"/>
+    <text x="982" y="248" class="label">NOISE FIELD</text>
+    <g class="body">
+      <text x="982" y="273">Integer hash</text><text x="1232" y="273" text-anchor="end" fill="#58d9a2">ON</text>
+      <text x="982" y="297">FBM octaves</text><text x="1232" y="297" text-anchor="end">4</text>
+      <text x="982" y="321">Domain warp</text><text x="1232" y="321" text-anchor="end">0.38</text>
+      <text x="982" y="345">Radial cracks</text><text x="1232" y="345" text-anchor="end" fill="#58d9a2">ON</text>
+    </g>
+    <line x1="982" y1="362" x2="1246" y2="362" class="hairline"/>
+    <text x="982" y="386" class="label">PATH TUBE</text>
+    <rect x="982" y="398" width="264" height="29" rx="6" fill="#111c2f" stroke="#2a3c5b"/>
+    <text x="995" y="417" class="body">parallel transport</text>
+    <text x="1233" y="417" class="muted" text-anchor="end">wobbly ▾</text>
+    <circle cx="988" cy="445" r="3" fill="#55d89e"/>
+    <text x="998" y="448" class="muted">shader compile: 29 / 29 blocks</text>
+
+    <!-- Timeline / cue composer -->
+    <rect class="panel" x="18" y="472" width="1244" height="150" rx="10"/>
+    <text x="34" y="495" class="label">ANIMATION CUES / SWORD_COMBO_01</text>
+    <g transform="translate(34 506)">
+      <circle cx="9" cy="9" r="9" fill="#6f5cf1"/><path d="m7 5 6 4-6 4Z" fill="#fff"/>
+      <rect x="29" y="7" width="214" height="4" rx="2" fill="#2a3b59"/><rect x="29" y="7" width="96" height="4" rx="2" fill="#8b76ff"/>
+      <text x="255" y="13" class="muted">00:00.46 / 00:01.20</text>
+    </g>
+    <g transform="translate(34 540)">
+      <text x="0" y="14" class="muted">WEAPON.TIP</text>
+      <rect x="103" y="0" width="1102" height="24" rx="5" fill="#0a111f" stroke="#243450"/>
+      <path d="M103 12h1102" stroke="#253653"/>
+      <g stroke="#263957"><path d="M287 0v24"/><path d="M471 0v24"/><path d="M655 0v24"/><path d="M839 0v24"/><path d="M1023 0v24"/></g>
+      <rect x="381" y="4" width="137" height="16" rx="4" fill="#6d2f3d" stroke="#ff7047"/>
+      <text x="449" y="15" fill="#ffe4ca" font-size="9" text-anchor="middle">EMBER SLASH</text>
+      <path d="M449-9V27" stroke="#ffc94a" stroke-width="2"/>
+      <circle cx="449" cy="-9" r="4" fill="#ffc94a"/>
+    </g>
+    <g transform="translate(34 574)">
+      <text x="0" y="14" class="muted">ROOT / GROUND</text>
+      <rect x="103" y="0" width="1102" height="24" rx="5" fill="#0a111f" stroke="#243450"/>
+      <path d="M103 12h1102" stroke="#253653"/>
+      <rect x="581" y="4" width="169" height="16" rx="4" fill="#40244e" stroke="#9a6eff"/>
+      <text x="665" y="15" fill="#e9d8ff" font-size="9" text-anchor="middle">GROUND RUPTURE</text>
+      <circle cx="665" cy="12" r="3" fill="#c69aff"/>
+    </g>
+    <text x="1055" y="609" class="muted">rig-scaled · once per crossing · seek-safe</text>
+  </g>
+</svg>

@@ -1,0 +1,933 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Procedural Three.js VFX project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "threeRevision",
+    "unitsPerMeter",
+    "seed",
+    "style",
+    "registries",
+    "rendering",
+    "palettes",
+    "effects",
+    "cueTracks",
+    "rig",
+    "budgets",
+    "editor",
+    "capture"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "threeRevision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^(?:r[0-9]{2,4}|[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?)$"
+    },
+    "unitsPerMeter": {
+      "type": "number",
+      "minimum": 0.001,
+      "maximum": 10000
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "style": {
+      "$ref": "#/$defs/style"
+    },
+    "registries": {
+      "$ref": "#/$defs/registries"
+    },
+    "rendering": {
+      "$ref": "#/$defs/rendering"
+    },
+    "palettes": {
+      "type": "object",
+      "minProperties": 8,
+      "maxProperties": 8,
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/palette"
+      }
+    },
+    "effects": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/effect"
+      }
+    },
+    "cueTracks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/cueTrack"
+      }
+    },
+    "rig": {
+      "$ref": "#/$defs/rig"
+    },
+    "budgets": {
+      "$ref": "#/$defs/globalBudgets"
+    },
+    "editor": {
+      "$ref": "#/$defs/editor"
+    },
+    "capture": {
+      "$ref": "#/$defs/capture"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "nodeName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.:+-]+$"
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "number",
+        "minimum": -10000,
+        "maximum": 10000
+      }
+    },
+    "parameterValue": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number",
+          "minimum": -10000,
+          "maximum": 10000
+        }
+      ]
+    },
+    "parameters": {
+      "type": "object",
+      "maxProperties": 32,
+      "propertyNames": {
+        "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/parameterValue"
+      }
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "silhouette",
+        "banding",
+        "erosion",
+        "contour",
+        "heat",
+        "glow",
+        "forbiddenFeatures"
+      ],
+      "properties": {
+        "silhouette": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "banding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "steps",
+            "softness"
+          ],
+          "properties": {
+            "steps": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 8
+            },
+            "softness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            }
+          }
+        },
+        "erosion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "strength",
+            "scale"
+          ],
+          "properties": {
+            "strength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "scale": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 64
+            }
+          }
+        },
+        "contour": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width"
+          ],
+          "properties": {
+            "width": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            }
+          }
+        },
+        "heat": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bias"
+          ],
+          "properties": {
+            "bias": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "glow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "layers",
+            "intensity"
+          ],
+          "properties": {
+            "layers": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4
+            }
+          }
+        },
+        "forbiddenFeatures": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        }
+      }
+    },
+    "registries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "geometryGenerators",
+        "transportTube",
+        "shaderBlocks"
+      ],
+      "properties": {
+        "geometryGenerators": {
+          "const": [
+            "triangle",
+            "crescent",
+            "flare-ring",
+            "ground-disc",
+            "star",
+            "shard",
+            "rubble",
+            "puff",
+            "flame-shell",
+            "flame-tongue"
+          ]
+        },
+        "transportTube": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frameMethod",
+            "modes",
+            "maxPathSamples",
+            "radialSegments",
+            "preallocated",
+            "dynamicDraw"
+          ],
+          "properties": {
+            "frameMethod": {
+              "const": "double-reflection"
+            },
+            "modes": {
+              "const": [
+                "straight",
+                "wobbly",
+                "jagged",
+                "split"
+              ]
+            },
+            "maxPathSamples": {
+              "type": "integer",
+              "minimum": 4,
+              "maximum": 256
+            },
+            "radialSegments": {
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 32
+            },
+            "preallocated": {
+              "const": true
+            },
+            "dynamicDraw": {
+              "const": true
+            }
+          }
+        },
+        "shaderBlocks": {
+          "const": [
+            "precision",
+            "constants",
+            "safe-math",
+            "hash11",
+            "hash22",
+            "value-noise-2d",
+            "fbm-2d",
+            "domain-warp-2d",
+            "radial-cracks",
+            "shape-sdf",
+            "palette-bands",
+            "erosion",
+            "ink-contour",
+            "heat-gradient",
+            "uv-polar",
+            "billboard",
+            "radial-expand",
+            "trail-frame",
+            "lifetime-deform",
+            "slash",
+            "flare-ring",
+            "ground-disc",
+            "starburst",
+            "shard",
+            "rubble",
+            "puff",
+            "flame-shell",
+            "flame-tongue",
+            "tube-energy"
+          ]
+        }
+      }
+    },
+    "rendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "postprocessing",
+        "particleEngine",
+        "layeredAdditiveGlow",
+        "meshPooling",
+        "sparks",
+        "debris",
+        "additiveDepthWrite",
+        "computedTextureChannels"
+      ],
+      "properties": {
+        "postprocessing": {
+          "const": false
+        },
+        "particleEngine": {
+          "const": false
+        },
+        "layeredAdditiveGlow": {
+          "const": true
+        },
+        "meshPooling": {
+          "const": true
+        },
+        "sparks": {
+          "const": "instanced-mesh"
+        },
+        "debris": {
+          "const": "instanced-mesh"
+        },
+        "additiveDepthWrite": {
+          "const": false
+        },
+        "computedTextureChannels": {
+          "const": [
+            "value-noise",
+            "fbm",
+            "domain-warp",
+            "radial-cracks"
+          ]
+        }
+      }
+    },
+    "palette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "core",
+        "body",
+        "edge",
+        "ink",
+        "ash"
+      ],
+      "properties": {
+        "core": {
+          "$ref": "#/$defs/color"
+        },
+        "body": {
+          "$ref": "#/$defs/color"
+        },
+        "edge": {
+          "$ref": "#/$defs/color"
+        },
+        "ink": {
+          "$ref": "#/$defs/color"
+        },
+        "ash": {
+          "$ref": "#/$defs/color"
+        }
+      }
+    },
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "geometry",
+        "shader",
+        "blend",
+        "parameters"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "geometry": {
+          "enum": [
+            "triangle",
+            "crescent",
+            "flare-ring",
+            "ground-disc",
+            "star",
+            "shard",
+            "rubble",
+            "puff",
+            "flame-shell",
+            "flame-tongue",
+            "transport-tube"
+          ]
+        },
+        "shader": {
+          "enum": [
+            "slash",
+            "flare-ring",
+            "ground-disc",
+            "starburst",
+            "shard",
+            "rubble",
+            "puff",
+            "flame-shell",
+            "flame-tongue",
+            "tube-energy"
+          ]
+        },
+        "blend": {
+          "enum": [
+            "normal",
+            "additive"
+          ]
+        },
+        "parameters": {
+          "$ref": "#/$defs/parameters"
+        }
+      }
+    },
+    "effectBudgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxVertices",
+        "maxDrawCalls"
+      ],
+      "properties": {
+        "maxVertices": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 1000000
+        },
+        "maxDrawCalls": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "preset",
+        "duration",
+        "palette",
+        "seedOffset",
+        "layers",
+        "parameters",
+        "budgets"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "preset": {
+          "enum": [
+            "slash-trail",
+            "impact-burst",
+            "ground-rupture",
+            "beam-bolt",
+            "fire-burst"
+          ]
+        },
+        "duration": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 10
+        },
+        "palette": {
+          "$ref": "#/$defs/identifier"
+        },
+        "seedOffset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "layers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/layer"
+          }
+        },
+        "parameters": {
+          "$ref": "#/$defs/parameters"
+        },
+        "budgets": {
+          "$ref": "#/$defs/effectBudgets"
+        }
+      }
+    },
+    "cue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "effectId",
+        "socket",
+        "aimMode",
+        "scaleMetric",
+        "multiplier",
+        "previewPolicy"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "normalizedTime": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "normalizedWindow": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "effectId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "socket": {
+          "$ref": "#/$defs/identifier"
+        },
+        "aimMode": {
+          "enum": [
+            "tip-velocity",
+            "target",
+            "character-forward"
+          ]
+        },
+        "scaleMetric": {
+          "enum": [
+            "weapon-length",
+            "rig-height",
+            "bone-distance",
+            "fixed"
+          ]
+        },
+        "multiplier": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "previewPolicy": {
+          "enum": [
+            "scrub-no-gameplay-fire",
+            "scrub-preview-window"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "normalizedTime"
+          ],
+          "not": {
+            "required": [
+              "normalizedWindow"
+            ]
+          }
+        },
+        {
+          "required": [
+            "normalizedWindow"
+          ],
+          "not": {
+            "required": [
+              "normalizedTime"
+            ]
+          }
+        }
+      ]
+    },
+    "cueTrack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clip",
+        "sourceFps",
+        "cues"
+      ],
+      "properties": {
+        "clip": {
+          "$ref": "#/$defs/nodeName"
+        },
+        "sourceFps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 240
+        },
+        "cues": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/cue"
+          }
+        }
+      }
+    },
+    "rig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boneMap",
+        "weaponBaseSocket",
+        "weaponTipSocket",
+        "forwardAxis",
+        "upAxis"
+      ],
+      "properties": {
+        "boneMap": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 128,
+          "propertyNames": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/nodeName"
+          }
+        },
+        "weaponBaseSocket": {
+          "$ref": "#/$defs/identifier"
+        },
+        "weaponTipSocket": {
+          "$ref": "#/$defs/identifier"
+        },
+        "forwardAxis": {
+          "enum": [
+            "+x",
+            "-x",
+            "+y",
+            "-y",
+            "+z",
+            "-z"
+          ]
+        },
+        "upAxis": {
+          "enum": [
+            "+x",
+            "-x",
+            "+y",
+            "-y",
+            "+z",
+            "-z"
+          ]
+        }
+      }
+    },
+    "globalBudgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxActiveEffects",
+        "maxLayersPerEffect",
+        "maxVertices",
+        "maxDrawCalls",
+        "maxTextures",
+        "maxShaderPrograms",
+        "frameTimeDeltaMs"
+      ],
+      "properties": {
+        "maxActiveEffects": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "maxLayersPerEffect": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "maxVertices": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 1000000
+        },
+        "maxDrawCalls": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "maxTextures": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "maxShaderPrograms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "frameTimeDeltaMs": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 50
+        }
+      }
+    },
+    "editor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "localOnly",
+        "panels",
+        "history",
+        "projectIo",
+        "deterministicCapture",
+        "accessibility",
+        "network",
+        "telemetry"
+      ],
+      "properties": {
+        "localOnly": {
+          "const": true
+        },
+        "panels": {
+          "const": [
+            "viewport",
+            "effect-sheet",
+            "effect-browser",
+            "transport",
+            "cue-timeline",
+            "inspector",
+            "shader-log",
+            "metrics"
+          ]
+        },
+        "history": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "undo",
+            "redo"
+          ],
+          "properties": {
+            "undo": {
+              "const": true
+            },
+            "redo": {
+              "const": true
+            }
+          }
+        },
+        "projectIo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "jsonImport",
+            "jsonExport"
+          ],
+          "properties": {
+            "jsonImport": {
+              "const": true
+            },
+            "jsonExport": {
+              "const": true
+            }
+          }
+        },
+        "deterministicCapture": {
+          "const": true
+        },
+        "accessibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "keyboard",
+            "reducedMotion",
+            "pausable"
+          ],
+          "properties": {
+            "keyboard": {
+              "const": true
+            },
+            "reducedMotion": {
+              "const": true
+            },
+            "pausable": {
+              "const": true
+            }
+          }
+        },
+        "network": {
+          "const": false
+        },
+        "telemetry": {
+          "const": false
+        }
+      }
+    },
+    "capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolution",
+        "devicePixelRatio",
+        "camera",
+        "backgrounds",
+        "sampleTimes"
+      ],
+      "properties": {
+        "resolution": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 64,
+            "maximum": 8192
+          }
+        },
+        "devicePixelRatio": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 4
+        },
+        "camera": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "position",
+            "target"
+          ],
+          "properties": {
+            "position": {
+              "$ref": "#/$defs/vector3"
+            },
+            "target": {
+              "$ref": "#/$defs/vector3"
+            }
+          }
+        },
+        "backgrounds": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "dark",
+              "light",
+              "checker"
+            ]
+          }
+        },
+        "sampleTimes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -47,6 +47,22 @@ license remains in the plugin and skill distribution.
 
 Catalog entries are factual metadata and links. Listed repositories, source code, model weights, datasets, documentation, trademarks, and outputs remain the property of their respective owners and are governed by their own licenses and terms. Inclusion is not endorsement.
 
+## Procedural VFX workflow inspiration
+
+The procedural VFX workflow guidance was informed by a user-supplied textual
+summary of [Sven (@Nevsved)'s public X post](https://x.com/Nevsved/status/2084408177689317738).
+The repository does not include or redistribute that post's video, its character
+mesh, animation clips, audio, source code, or other third-party media. General
+techniques described in the summary—runtime noise, procedural geometry,
+palette-driven shader layers, additive mesh effects, and rig-aware animation
+cues—were treated as functional research requirements and expressed as original,
+engine-neutral workflow guidance.
+
+Users must provide rights-cleared references, meshes, rigs, animation clips, and
+audio. Third-party assets and services, including any Meshy or Adobe Mixamo
+inputs selected by a user, remain governed by their respective owners' current
+licenses and terms.
+
 ## Other references
 
 Existing Codex ports and OpenAI's browser-focused Game Studio plugin informed compatibility research only; their source files were not copied into this project. Optional MCP servers are referenced by pinned metadata and remain external dependencies unless a user explicitly approves their installation.
@@ -54,3 +70,8 @@ Existing Codex ports and OpenAI's browser-focused Game Studio plugin informed co
 ## Generated artwork
 
 The project hero and icon were generated for this repository with OpenAI image generation on 2026-07-30 from original project-specific prompts. They depict generic game-production concepts and intentionally contain no third-party logos or copyrighted game characters.
+
+The procedural VFX composer SVG and its 1280 x 640 social-preview PNG were
+created from scratch for this repository on 2026-08-04 with original vector
+shapes and interface copy. They do not contain frames, characters, artwork, or
+other media from the referenced X or YouTube research.

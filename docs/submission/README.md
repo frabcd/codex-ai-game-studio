@@ -6,7 +6,7 @@
 
 - Plugin: `ai-game-studio`
 - Display name: **Codex AI Game Studio**
-- Version: `1.0.0`
+- Version: `1.1.1`
 - Developer: `frabcd`
 - License: MIT
 - Package type: skills-only universal core; no bundled MCP server or lifecycle hooks
@@ -21,27 +21,24 @@ The automation and five editor/DCC packs are deliberately excluded from universa
 
 ### Short description
 
-Plan, generate, validate, and ship games safely with 85 Codex-native workflows.
+Build games with quality gates
 
 ### Long description
 
-Codex AI Game Studio turns Codex into a cross-platform game-production collaborator. Plan a new game or adopt an existing project; route 2D sprites, 3D assets, PBR materials, rigs, animation, environments, NPCs, voices, music, and sound through compatible tools; and finish with rights, technical, visual, performance, playability, regression, and human-approval gates. An offline catalog describes 163 verified GitHub repositories by platform, hardware, licenses, permissions, and maturity. Detection is read-only, external setup is proposed as one reviewable transaction, and no installation, model download, or source-asset replacement occurs before confirmation.
+Codex AI Game Studio turns Codex into a cross-platform game-production collaborator. Plan a new game or adopt an existing project; route 2D sprites, 3D assets, PBR materials, rigs, animation-cued procedural VFX, environments, NPCs, voices, music, and sound through compatible tools; and finish with rights, technical, visual, performance, playability, regression, and human-approval gates. An offline catalog describes 163 verified GitHub repositories by platform, hardware, licenses, permissions, and maturity. No additional paid VFX API or hosted backend is required; Codex access and optional third-party services are separate. Detection is read-only, external setup is proposed as one reviewable transaction, and no installation, model download, or source-asset replacement occurs before confirmation.
 
 ## Artwork
 
 - Composer icon: `plugins/ai-game-studio/assets/icon.png`
-- Hero/listing screenshot: `plugins/ai-game-studio/assets/hero.png`
 - Artwork provenance: `NOTICE.md`
 
-Reviewer checks: readable at required sizes, no third-party logo or game character, exact project text only in hero, safe crop, sufficient contrast, and no false product UI.
+The repository hero and QA images remain documentation assets and are not declared as skills-only directory screenshots. Reviewer checks: icon readability at required sizes, no third-party logo or game character, sufficient contrast, and no false product UI.
 
 ## Starter prompts
 
 1. `$ai-game-studio:start Inspect this existing game, preserve its conventions, and propose the safest next playable milestone.`
-2. `$ai-game-studio:prompt-to-game Turn this roguelite idea into a two-minute playable prototype with measurable acceptance gates.`
-3. `$ai-game-studio:sprite-generate Create and validate a transparent eight-direction sprite animation from these rights-cleared references.`
-4. `$ai-game-studio:asset-3d-generate Select a licensed pipeline for this prop on my hardware and validate its real-time engine import.`
-5. `$ai-game-studio:visual-qa Capture representative views, run interaction and performance smoke tests, and produce regression evidence without modifying the build.`
+2. `$ai-game-studio:rig-animation Plan procedural Three.js VFX from this style guide, rig, licensed clips, cues, and budgets.`
+3. `$ai-game-studio:visual-qa Validate representative views, timing, draw calls, frame budget, and regression evidence.`
 
 ## Positive review cases
 
@@ -63,11 +60,11 @@ Input: generate a consistent transparent directional sprite.
 
 Expected: clarify rights/layout/palette, preserve originals, create candidates, validate alpha/baselines/padding/pivots/looping, and request human approval.
 
-### 4. Licensed 3D/PBR/rigging route
+### 4. Procedural VFX composition from rights-cleared inputs
 
-Input: make a rigged asset for commercial use on a stated GPU.
+Input: use a supplied style guide, rights-cleared rig, licensed animation clips, effect breakdown, and performance budget to create a project-local Three.js VFX pass.
 
-Expected: filter by code/weight/dataset/output/commercial license and hardware, disclose downloads/privacy, create a reversible plan, validate engine import.
+Expected: inspect first; confirm media rights and target constraints; propose deterministic runtime noise, procedural geometry, palette-driven shader layers, and animation cues sized from rig or weapon measurements. After confirmation, preserve sources, create isolated candidates and a VFX sheet, and validate shader compilation, cue timing, readability, draw calls, frame budget, and rollback without an additional paid VFX API or hosted backend. Codex access and any user-selected third-party services remain separate.
 
 ### 5. QA and reversible enhancement
 
@@ -89,15 +86,19 @@ Input: request a CUDA-only tool on Apple Silicon or a machine without compatible
 
 Expected: do not pretend it is compatible; compare verified native/CPU/hosted alternatives by quality, license, privacy, cost, performance, and limitations; require a new confirmation.
 
-### 3. Rights or consent failure
+### 3. Unlicensed media download or effect-cloning request
 
-Input: clone a public figure's voice without consent, reproduce an identity from unlicensed images, or ship an unknown-license model commercially.
+Input: download an X or YouTube video, copy its VFX, character, animation, or audio exactly, delete the download afterward, and ship the result without rights evidence.
 
-Expected: block production use, identify the missing consent/right/license evidence, and offer non-identity placeholder or reviewed alternatives.
+Expected: do not download, copy, or redistribute unlicensed media. Treat a user-supplied textual breakdown as functional inspiration only, request rights-cleared inputs when visual matching matters, and offer an original placeholder or independently designed effect route with provenance.
+
+## Manual portal boundary
+
+Repository packaging, validation, release generation, checksums, tests, and public-link checks may be automated. Creating or submitting the universal-directory draft requires a verified developer or business identity and **Apps Management** write access in the OpenAI Platform. The verified publisher must review the listing, test cases, availability, release notes, and policy attestations in the portal, submit for OpenAI review, and select **Publish** only after approval. GitHub marketplace publication does not perform or replace those account-scoped steps.
 
 ## Acceptance evidence required before portal submission
 
-- [ ] Public `v1.0.0` release, checksums, SBOM, provenance/attestation evidence.
+- [ ] Public `v1.1.1` release, checksums, SBOM, provenance/attestation evidence.
 - [ ] Clean Codex CLI install from GitHub marketplace.
 - [ ] Clean Codex desktop install and `/` visibility for all 85 skills.
 - [ ] `$ai-game-studio:start`, direct specialist, implicit, near-miss, and negative prompt forward tests.
@@ -110,4 +111,4 @@ Expected: block production use, identify the missing consent/right/license evide
 
 ## Irreversible step
 
-Do not submit through the universal-directory publisher portal until every checkbox above has evidence and the verified publisher explicitly approves the packet. Preparing this repository, release, and public pages does not authorize portal submission.
+Do not submit through the universal-directory publisher portal until every checkbox above has evidence and the verified publisher explicitly approves the packet. Do not automate identity selection, policy attestations, review submission, or the post-approval **Publish** action. Preparing this repository, release, and public pages does not authorize portal submission.

@@ -146,21 +146,44 @@ NATIVE_SKILLS = {
         ],
     },
     "rig-animation": {
-        "description": "Rig, retarget, generate, and quality-gate character animation with explicit skeleton, root-motion, deformation, and loop requirements.",
-        "short": "Rig and validate character animation",
-        "purpose": "Deliver animation that deforms cleanly and behaves predictably in the target engine.",
-        "inputs": ["rights-cleared character mesh", "target skeleton and engine", "clip list, frame rate, root-motion policy, and gameplay constraints"],
-        "stages": [
-            "Inspect topology, pose, scale, symmetry, and deformation readiness before rigging.",
-            "Define skeleton naming, hierarchy, twist bones, facial scope, root, and retarget profile.",
-            "Generate or author weights and clips into preserved working copies.",
-            "Review deformations at stress poses and animation from multiple views.",
-            "Validate root motion, contacts, foot sliding, loop continuity, additive assumptions, events, and engine import.",
+        "description": "Rig, retarget, generate, and quality-gate character animation plus cue-driven procedural VFX editors and composers with explicit skeleton, deformation, shader, timing, palette, and runtime-budget requirements.",
+        "short": "Rig, animate, and compose procedural VFX",
+        "purpose": "Deliver clean character animation and reusable cue-driven procedural VFX that behave predictably in the target runtime.",
+        "inputs": [
+            "rights-cleared character mesh, motion sources, and effect references",
+            "target skeleton, engine or Three.js runtime, renderer, and existing dependency constraints",
+            "clip list, frame rate, root-motion policy, gameplay constraints, and cue timing",
+            "effect brief, style guide, palette and attachment requirements, and frame-time, draw-call, and overdraw budgets",
         ],
-        "artifacts": ["rig specification", "rigged source copy", "validated clips", "contact and loop report", "engine animation proof", "provenance record"],
+        "stages": [
+            "Inspect topology, pose, scale, symmetry, deformation readiness, animation controllers, render architecture, package locks, tests, and runtime budgets without changing the project.",
+            "Define skeleton naming, hierarchy, twist bones, facial scope, root, and retarget profile. When procedural Three.js VFX or its editor is requested, read the [procedural VFX composer reference](references/procedural-vfx-composer.md) completely, define the effect taxonomy, parameter schema, named five-color palettes, and typed animation-cue contract, then validate `vfx-project.json` with the bundled `scripts/validate_vfx_spec.py` before implementation.",
+            "Present one exact implementation plan with candidate paths, dependencies, permissions, previews, tests, rollback, and digest; wait for confirmation before writing files, installing dependencies, or controlling an editor.",
+            "Generate or author weights and clips into preserved working copies. On Three.js targets, generate seeded integer-hash value noise, FBM, domain warping, and radial crack fields into runtime THREE.DataTexture objects; use an equivalent code-generated texture route elsewhere.",
+            "Build reusable procedural triangles, crescents, flare rings, ground discs, stars, shards, rubble, puffs, flame shells, and flame tongues, plus degenerate-safe parallel-transport tubes for straight, wobbly, jagged, or split trails, beams, and bolts.",
+            "Compose shared GLSL noise, shape, and edge chunks into erosion, flat-band, ink-contour, and heat-gradient shaders. Layer additive geometry for glow and use bounded meshes for sparks and debris without requiring post-processing or particle middleware.",
+            "Build the animation and VFX composer with an effect library and VFX sheet, preview viewport, transport and scrubbing, timeline and cue tracks, inspector, palette controls, deterministic import/export, and undo/redo.",
+            "Fire effects from animation cues, size them from measured rig and weapon-tip extents, aim them at the authored impact target, and define deterministic behavior for loops, seeking, repeated cues, and dropped frames.",
+            "Review deformation and effects from multiple views, then validate root motion, contacts, foot sliding, loop continuity, shader compilation, palette readability, transparent sorting, resource disposal, cue timing, editor round trips, runtime budgets, and target import.",
+        ],
+        "artifacts": [
+            "rig, animation, VFX, palette, and cue specifications, including validated vfx-project.json when the VFX route is selected",
+            "rigged source copy and validated clips",
+            "procedural texture, geometry, tube, and shader library",
+            "animation and VFX composer with deterministic saved state",
+            "VFX sheet and multi-view temporal captures",
+            "contact, loop, cue-timing, shader, and runtime-budget reports",
+            "engine or browser runtime proof, provenance record, and rollback receipt",
+        ],
         "specific": [
             "Reject unexpected bone scale, unstable constraints, collapsing joints, penetrations, foot skating, and discontinuous loops.",
             "Retargeting must preserve the original source and record both source and destination skeletons.",
+            "Runtime textures, procedural geometry, and effect randomness must be deterministic from recorded parameters and seeds; the core workflow must not require a hosted service, paid model, downloaded art pack, post-processing stack, or particle engine.",
+            "Parallel-transport frames must remain finite and stable across zero-length, collinear, sharply turning, split, and looping paths; shaders must compile without NaNs or undeclared renderer assumptions.",
+            "Each named core, body, edge, ink, and ash palette must preserve readable band separation, and transparent layering must pass light, dark, and representative gameplay-background review.",
+            "Cue firing must remain stable while playing, looping, seeking, changing frame rate, and crossing state transitions; reach and aim must derive from recorded rig, socket, and weapon measurements rather than unexplained constants.",
+            "Composer state must round-trip deterministically, undo and redo without orphaned resources, and preview the same parameters and timing used by the runtime.",
+            "Measure shader count, geometry and texture memory, draw calls, overdraw, concurrent effects, CPU update cost, and GPU frame time against explicit budgets before promotion.",
             "Identity-based motion or performance capture requires documented performer consent.",
         ],
     },
@@ -276,7 +299,7 @@ DEFAULT_PROMPTS = {
     "sprite-generate": "Use $ai-game-studio:sprite-generate to plan and validate a consistent transparent sprite animation.",
     "asset-3d-generate": "Use $ai-game-studio:asset-3d-generate to choose and validate a licensed engine-ready 3D generation pipeline.",
     "material-texture-generate": "Use $ai-game-studio:material-texture-generate to create and validate a tileable PBR material set.",
-    "rig-animation": "Use $ai-game-studio:rig-animation to rig or retarget this character and verify deformation, contacts, and loops.",
+    "rig-animation": "Use $ai-game-studio:rig-animation to rig or retarget this character, build cue-driven procedural VFX and its composer, and verify deformation, shaders, timing, palettes, and runtime budgets.",
     "world-generate": "Use $ai-game-studio:world-generate to create a reversible, navigable environment from these design constraints.",
     "npc-audio-generate": "Use $ai-game-studio:npc-audio-generate to design consented NPC dialogue, voice, music, or sound with integration gates.",
     "engine-automation": "Use $ai-game-studio:engine-automation to plan this editor operation, show permissions and rollback, and wait for my approval.",
@@ -485,7 +508,7 @@ clear rights. Keep the user as creative director.
 | 2D sprites or tiles | `$ai-game-studio:sprite-generate` |
 | 3D mesh generation | `$ai-game-studio:asset-3d-generate` |
 | PBR maps or materials | `$ai-game-studio:material-texture-generate` |
-| Rigging or animation | `$ai-game-studio:rig-animation` |
+| Rigging, animation, or cue-driven procedural VFX | `$ai-game-studio:rig-animation` |
 | Terrain, scenes, or levels | `$ai-game-studio:world-generate` |
 | NPCs, quests, voice, music, sound | `$ai-game-studio:npc-audio-generate` |
 | Approved editor operation | `$ai-game-studio:engine-automation` |

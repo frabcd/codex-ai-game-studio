@@ -1,0 +1,469 @@
+{
+  "schemaVersion": "1.0.0",
+  "threeRevision": "0.180.0",
+  "unitsPerMeter": 1.0,
+  "seed": 1337,
+  "style": {
+    "silhouette": "chunky-crescents-shards-and-broken-rings",
+    "banding": {
+      "steps": 4,
+      "softness": 0.04
+    },
+    "erosion": {
+      "strength": 0.38,
+      "scale": 3.5
+    },
+    "contour": {
+      "width": 0.08
+    },
+    "heat": {
+      "bias": 0.42
+    },
+    "glow": {
+      "layers": 2,
+      "intensity": 0.9
+    },
+    "forbiddenFeatures": [
+      "particle-engine",
+      "postprocessing",
+      "remote-assets"
+    ]
+  },
+  "registries": {
+    "geometryGenerators": [
+      "triangle",
+      "crescent",
+      "flare-ring",
+      "ground-disc",
+      "star",
+      "shard",
+      "rubble",
+      "puff",
+      "flame-shell",
+      "flame-tongue"
+    ],
+    "transportTube": {
+      "frameMethod": "double-reflection",
+      "modes": [
+        "straight",
+        "wobbly",
+        "jagged",
+        "split"
+      ],
+      "maxPathSamples": 128,
+      "radialSegments": 8,
+      "preallocated": true,
+      "dynamicDraw": true
+    },
+    "shaderBlocks": [
+      "precision",
+      "constants",
+      "safe-math",
+      "hash11",
+      "hash22",
+      "value-noise-2d",
+      "fbm-2d",
+      "domain-warp-2d",
+      "radial-cracks",
+      "shape-sdf",
+      "palette-bands",
+      "erosion",
+      "ink-contour",
+      "heat-gradient",
+      "uv-polar",
+      "billboard",
+      "radial-expand",
+      "trail-frame",
+      "lifetime-deform",
+      "slash",
+      "flare-ring",
+      "ground-disc",
+      "starburst",
+      "shard",
+      "rubble",
+      "puff",
+      "flame-shell",
+      "flame-tongue",
+      "tube-energy"
+    ]
+  },
+  "rendering": {
+    "postprocessing": false,
+    "particleEngine": false,
+    "layeredAdditiveGlow": true,
+    "meshPooling": true,
+    "sparks": "instanced-mesh",
+    "debris": "instanced-mesh",
+    "additiveDepthWrite": false,
+    "computedTextureChannels": [
+      "value-noise",
+      "fbm",
+      "domain-warp",
+      "radial-cracks"
+    ]
+  },
+  "palettes": {
+    "steel": {
+      "core": "#F8FAFC",
+      "body": "#CBD5E1",
+      "edge": "#7DD3FC",
+      "ink": "#334155",
+      "ash": "#0F172A"
+    },
+    "ember": {
+      "core": "#FFF7CC",
+      "body": "#FFB000",
+      "edge": "#FF5A1F",
+      "ink": "#7C1D12",
+      "ash": "#24100B"
+    },
+    "gold": {
+      "core": "#FFFBE6",
+      "body": "#FFD447",
+      "edge": "#E89B19",
+      "ink": "#6B3D0C",
+      "ash": "#2A1A08"
+    },
+    "arcane": {
+      "core": "#F5E9FF",
+      "body": "#C084FC",
+      "edge": "#7C3AED",
+      "ink": "#3B1675",
+      "ash": "#170B2E"
+    },
+    "frost": {
+      "core": "#F0FDFF",
+      "body": "#A5F3FC",
+      "edge": "#38BDF8",
+      "ink": "#155E75",
+      "ash": "#082F49"
+    },
+    "venom": {
+      "core": "#F2FFD0",
+      "body": "#A3E635",
+      "edge": "#22C55E",
+      "ink": "#166534",
+      "ash": "#092B19"
+    },
+    "storm": {
+      "core": "#F8FAFF",
+      "body": "#A5B4FC",
+      "edge": "#3B82F6",
+      "ink": "#1E3A8A",
+      "ash": "#111B3D"
+    },
+    "void": {
+      "core": "#FFEAF8",
+      "body": "#F472B6",
+      "edge": "#A21CAF",
+      "ink": "#581C87",
+      "ash": "#240A33"
+    }
+  },
+  "effects": [
+    {
+      "id": "sword-slash",
+      "preset": "slash-trail",
+      "duration": 0.45,
+      "palette": "ember",
+      "seedOffset": 11,
+      "layers": [
+        {
+          "id": "body",
+          "geometry": "crescent",
+          "shader": "slash",
+          "blend": "normal",
+          "parameters": {
+            "radius": 1.0,
+            "thickness": 0.18,
+            "opacity": 0.92
+          }
+        },
+        {
+          "id": "glow-trail",
+          "geometry": "transport-tube",
+          "shader": "tube-energy",
+          "blend": "additive",
+          "parameters": {
+            "radius": 0.06,
+            "opacity": 0.64,
+            "pathJitter": 0.08
+          }
+        }
+      ],
+      "parameters": {
+        "noiseScale": 3.5,
+        "erosion": 0.28
+      },
+      "budgets": {
+        "maxVertices": 4096,
+        "maxDrawCalls": 4
+      }
+    },
+    {
+      "id": "ground-rupture",
+      "preset": "ground-rupture",
+      "duration": 0.9,
+      "palette": "gold",
+      "seedOffset": 29,
+      "layers": [
+        {
+          "id": "crack-disc",
+          "geometry": "ground-disc",
+          "shader": "ground-disc",
+          "blend": "normal",
+          "parameters": {
+            "radius": 1.2,
+            "crackDensity": 9.0,
+            "opacity": 0.88
+          }
+        },
+        {
+          "id": "hot-rubble",
+          "geometry": "rubble",
+          "shader": "rubble",
+          "blend": "additive",
+          "parameters": {
+            "count": 14,
+            "spread": 1.1,
+            "opacity": 0.58
+          }
+        }
+      ],
+      "parameters": {
+        "domainWarp": 0.32,
+        "radialBias": 0.7
+      },
+      "budgets": {
+        "maxVertices": 6144,
+        "maxDrawCalls": 5
+      }
+    },
+    {
+      "id": "fire-burst",
+      "preset": "fire-burst",
+      "duration": 0.7,
+      "palette": "ember",
+      "seedOffset": 47,
+      "layers": [
+        {
+          "id": "shell",
+          "geometry": "flame-shell",
+          "shader": "flame-shell",
+          "blend": "normal",
+          "parameters": {
+            "radius": 0.55,
+            "rise": 0.8,
+            "opacity": 0.86
+          }
+        },
+        {
+          "id": "tongues",
+          "geometry": "flame-tongue",
+          "shader": "flame-tongue",
+          "blend": "additive",
+          "parameters": {
+            "count": 8,
+            "spread": 0.62,
+            "opacity": 0.7
+          }
+        },
+        {
+          "id": "smoke",
+          "geometry": "puff",
+          "shader": "puff",
+          "blend": "additive",
+          "parameters": {
+            "count": 6,
+            "rise": 0.45,
+            "opacity": 0.3
+          }
+        }
+      ],
+      "parameters": {
+        "heatBias": 0.55,
+        "erosion": 0.34
+      },
+      "budgets": {
+        "maxVertices": 8192,
+        "maxDrawCalls": 6
+      }
+    },
+    {
+      "id": "arcane-bolt",
+      "preset": "beam-bolt",
+      "duration": 0.55,
+      "palette": "arcane",
+      "seedOffset": 71,
+      "layers": [
+        {
+          "id": "bolt-core",
+          "geometry": "transport-tube",
+          "shader": "tube-energy",
+          "blend": "normal",
+          "parameters": {
+            "radius": 0.035,
+            "pathJitter": 0.12,
+            "opacity": 0.95
+          }
+        },
+        {
+          "id": "bolt-glow",
+          "geometry": "transport-tube",
+          "shader": "tube-energy",
+          "blend": "additive",
+          "parameters": {
+            "radius": 0.075,
+            "pathJitter": 0.18,
+            "opacity": 0.58
+          }
+        }
+      ],
+      "parameters": {
+        "splitChance": 0.24,
+        "wobble": 0.16
+      },
+      "budgets": {
+        "maxVertices": 4096,
+        "maxDrawCalls": 4
+      }
+    }
+  ],
+  "cueTracks": [
+    {
+      "clip": "synthetic-sword-slash",
+      "sourceFps": 30,
+      "cues": [
+        {
+          "id": "slash-main",
+          "normalizedTime": 0.42,
+          "effectId": "sword-slash",
+          "socket": "weapon-tip",
+          "aimMode": "tip-velocity",
+          "scaleMetric": "weapon-length",
+          "multiplier": 1.05,
+          "previewPolicy": "scrub-no-gameplay-fire"
+        },
+        {
+          "id": "bolt-release",
+          "normalizedTime": 0.76,
+          "effectId": "arcane-bolt",
+          "socket": "weapon-tip",
+          "aimMode": "target",
+          "scaleMetric": "weapon-length",
+          "multiplier": 2.4,
+          "previewPolicy": "scrub-no-gameplay-fire"
+        }
+      ]
+    },
+    {
+      "clip": "synthetic-ground-strike",
+      "sourceFps": 30,
+      "cues": [
+        {
+          "id": "rupture-window",
+          "normalizedWindow": [
+            0.48,
+            0.62
+          ],
+          "effectId": "ground-rupture",
+          "socket": "weapon-tip",
+          "aimMode": "character-forward",
+          "scaleMetric": "rig-height",
+          "multiplier": 0.72,
+          "previewPolicy": "scrub-preview-window"
+        },
+        {
+          "id": "fire-impact",
+          "normalizedTime": 0.58,
+          "effectId": "fire-burst",
+          "socket": "weapon-tip",
+          "aimMode": "tip-velocity",
+          "scaleMetric": "weapon-length",
+          "multiplier": 0.8,
+          "previewPolicy": "scrub-no-gameplay-fire"
+        }
+      ]
+    }
+  ],
+  "rig": {
+    "boneMap": {
+      "root": "Root",
+      "hips": "Hips",
+      "rightHand": "RightHand"
+    },
+    "weaponBaseSocket": "weapon-base",
+    "weaponTipSocket": "weapon-tip",
+    "forwardAxis": "+z",
+    "upAxis": "+y"
+  },
+  "budgets": {
+    "maxActiveEffects": 24,
+    "maxLayersPerEffect": 8,
+    "maxVertices": 24000,
+    "maxDrawCalls": 48,
+    "maxTextures": 8,
+    "maxShaderPrograms": 16,
+    "frameTimeDeltaMs": 2.0
+  },
+  "editor": {
+    "localOnly": true,
+    "panels": [
+      "viewport",
+      "effect-sheet",
+      "effect-browser",
+      "transport",
+      "cue-timeline",
+      "inspector",
+      "shader-log",
+      "metrics"
+    ],
+    "history": {
+      "undo": true,
+      "redo": true
+    },
+    "projectIo": {
+      "jsonImport": true,
+      "jsonExport": true
+    },
+    "deterministicCapture": true,
+    "accessibility": {
+      "keyboard": true,
+      "reducedMotion": true,
+      "pausable": true
+    },
+    "network": false,
+    "telemetry": false
+  },
+  "capture": {
+    "resolution": [
+      1280,
+      720
+    ],
+    "devicePixelRatio": 1.0,
+    "camera": {
+      "position": [
+        3.0,
+        2.2,
+        4.5
+      ],
+      "target": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "backgrounds": [
+      "dark",
+      "light",
+      "checker"
+    ],
+    "sampleTimes": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ]
+  }
+}

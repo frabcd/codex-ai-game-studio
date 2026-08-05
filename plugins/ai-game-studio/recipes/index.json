@@ -29,7 +29,7 @@
     },
     {
       "id": "rig-animation",
-      "title": "Rig, retarget, and validate animation",
+      "title": "Rig, animate, compose, and validate procedural VFX",
       "path": "rig-animation.recipe.json"
     },
     {

@@ -132,6 +132,22 @@ deformation, root trajectory, foot contacts/sliding, loop seam, blend transition
 and engine avatar import. Provide slow-motion overlays and metrics.
 ```
 
+### Procedural animation-cued VFX
+
+```text
+$ai-game-studio:rig-animation Build a project-local Three.js VFX pass for this
+rights-cleared rig and licensed animation set. Use [effect breakdown], [style
+guide], [palette], and [performance budget]. First inspect the renderer, rig,
+weapon reach, cue timeline, and existing effects. Then propose deterministic
+runtime noise, procedural geometry or tubes, shared GLSL chunks, palette-driven
+bands, and additive mesh layers that do not require a new post-processing or
+particle pipeline. After confirmation, preserve sources, create isolated
+candidates plus a VFX sheet, bind effects to measured animation cues, and
+validate shader compilation, timing, readability, draw calls, frame budget,
+degradation tiers, and rollback. Do not download or copy an unlicensed reference
+video; use its textual breakdown only as functional inspiration.
+```
+
 ## Worlds, narrative, and audio
 
 ### Deterministic procedural level
