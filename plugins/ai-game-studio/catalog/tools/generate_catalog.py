@@ -19,13 +19,18 @@ from typing import Any
 from urllib.parse import urlsplit
 
 
-EXPECTED_SHA256 = "acdfbb53d66400127f68529e447cc22872a7bc71e5cd994b0f4e32b10c2355a6"
+EXPECTED_SHA256 = "cc348551c912736f3d5f6c3f275ee5b14e5e7e0154159ad5e711abe2011275e9"
 VERIFIED_DATE = "2026-07-30"
 SCHEMA_BASE = "https://frabcd.github.io/codex-ai-game-studio/schemas"
 
 LINK_RE = re.compile(r"\[([^\]]+)]\((https://github\.com/[^)\s]+)\)")
 HEADING_RE = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
 TYPE_RE = re.compile(r"\*\*([^*]+)\*\*")
+# Standalone websites in this section are not GitHub repositories and must not
+# become repository counts or installable catalog records.
+NON_CATALOG_SECTIONS = frozenset({
+    "External references — pricing and licensing",
+})
 
 WORKFLOW_BY_SECTION = {
     "1": ["tool-discovery", "studio-workflows"],
@@ -476,6 +481,8 @@ def parse_source(source: Path) -> tuple[list[dict[str, Any]], dict[str, int | No
                 h2, h3 = heading.group(2), None
             else:
                 h3 = heading.group(2)
+            continue
+        if h2 in NON_CATALOG_SECTIONS:
             continue
         for match in LINK_RE.finditer(line):
             source_url = match.group(2).rstrip(".,;")

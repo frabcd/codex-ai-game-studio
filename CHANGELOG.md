@@ -6,6 +6,9 @@ All notable changes are recorded here. The project follows Semantic Versioning.
 
 ### Added
 
+- The landscape document cites RespawnStack under External references —
+  pricing and licensing. That standalone website is excluded from repository
+  counts and the 163-record installable catalog.
 - DCO 1.1 certification, AI-assistance provenance fields, a contribution
   proposal form, and a documented contributor verification path.
 - A focused README outcome, stable-install default, dynamic star badge, real

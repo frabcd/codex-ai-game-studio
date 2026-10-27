@@ -9,6 +9,7 @@ The catalog is a curation database, not an install list. A record describes what
 - Schemas: `plugins/ai-game-studio/catalog/schemas/`
 - Deterministic generator: `plugins/ai-game-studio/catalog/tools/generate_catalog.py`
 - Immutable input snapshot: `sources/AI_GAME_GENERATION_GITHUB_LANDSCAPE.md`
+- Excluded from that snapshot's repository counts and catalog records: the landscape section "External references — pricing and licensing"
 
 Do not put stars, recent activity, latest release, archive state, or current default-branch SHA into stable curation. Do not let a metadata refresh rewrite summaries, capability decisions, risks, or licenses.
 

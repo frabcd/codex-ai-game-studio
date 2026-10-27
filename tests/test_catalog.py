@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import importlib.util
 import json
 import re
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_ROOT = ROOT / "plugins" / "ai-game-studio" / "catalog"
 RECIPE_ROOT = ROOT / "plugins" / "ai-game-studio" / "recipes"
-EXPECTED_SOURCE_SHA256 = "acdfbb53d66400127f68529e447cc22872a7bc71e5cd994b0f4e32b10c2355a6"
+EXPECTED_SOURCE_SHA256 = "cc348551c912736f3d5f6c3f275ee5b14e5e7e0154159ad5e711abe2011275e9"
 EXPECTED_SCHEMA_PREFIX = "https://frabcd.github.io/codex-ai-game-studio/schemas/"
 BLOCKING_LICENSE_STATES = {"unknown", "custom", "restricted", "prohibited"}
 SECRET_PATTERNS = (
@@ -117,6 +120,54 @@ class CatalogTests(unittest.TestCase):
                 self.assertTrue(schema["$id"].startswith(EXPECTED_SCHEMA_PREFIX))
         self.assertEqual(f"{EXPECTED_SCHEMA_PREFIX}catalog.schema.json", self.catalog["$schema"])
         self.assertEqual(f"{EXPECTED_SCHEMA_PREFIX}catalog-snapshot.schema.json", self.snapshot["$schema"])
+
+    def test_respawnstack_stays_outside_repository_counts(self) -> None:
+        landscape_path = ROOT / "sources" / "AI_GAME_GENERATION_GITHUB_LANDSCAPE.md"
+        data = landscape_path.read_bytes()
+        self.assertEqual(EXPECTED_SOURCE_SHA256, hashlib.sha256(data).hexdigest())
+        text = data.decode("utf-8")
+        section_1 = text.split("## 1. Master indexes", 1)[1].split("## 2. ", 1)[0]
+        external = text.split("## External references — pricing and licensing", 1)[1]
+        bullet = (
+            "[RespawnStack](https://respawnstack.com/) — **External reference**. "
+            "Free-to-read directory of AI game-tool pricing, commercial-use terms, and output ownership, "
+            "with dated vendor quotes where verified and explicit unverified entries. "
+            "Advertising/affiliate-supported; recheck original vendor terms before commercial use."
+        )
+        self.assertNotIn("respawnstack", section_1.casefold())
+        self.assertIn(bullet, external)
+        self.assertIn("outside repository counts and outside the installable catalog", text)
+        serialized = json.dumps(self.catalog).casefold()
+        self.assertNotIn("respawnstack", serialized)
+        self.assertTrue(all(url.startswith("https://github.com/") for url in (
+            record["repository"]["canonical_url"] for record in self.records
+        )))
+
+    def test_external_reference_section_cannot_add_catalog_records(self) -> None:
+        generator_path = ROOT / "plugins" / "ai-game-studio" / "catalog" / "tools" / "generate_catalog.py"
+        spec = importlib.util.spec_from_file_location("generate_catalog_under_test", generator_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        fixture = "\n".join((
+            "## 1. Master indexes, surveys, and agent skills",
+            "",
+            "- [example/kept](https://github.com/example/kept) — **Index**. Kept repository.",
+            "",
+            "## External references — pricing and licensing",
+            "",
+            "- [RespawnStack](https://respawnstack.com/) — **External reference**. Standalone website.",
+            "- [example/excluded](https://github.com/example/excluded) — **Index**. Must stay out of the catalog.",
+            "",
+        ))
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary) / "landscape.md"
+            source.write_text(fixture, encoding="utf-8")
+            module.EXPECTED_SHA256 = hashlib.sha256(source.read_bytes()).hexdigest()
+            records, _stars = module.parse_source(source)
+        names = {record["repository"]["full_name"] for record in records}
+        self.assertEqual({"example/kept"}, names)
 
 
 class RecipeTests(unittest.TestCase):
