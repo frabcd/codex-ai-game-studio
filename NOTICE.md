@@ -41,9 +41,9 @@ license remains in the plugin and skill distribution.
 
 ## Repository catalog
 
-`sources/AI_GAME_GENERATION_GITHUB_LANDSCAPE.md` is the immutable source snapshot used to produce the 163-record offline catalog. Its SHA-256 is:
+`sources/AI_GAME_GENERATION_GITHUB_LANDSCAPE.md` is the immutable source snapshot used to produce the 163-record offline catalog. The section "External references — pricing and licensing" is excluded from that catalog and from repository counts. Its SHA-256 is:
 
-`ACDFBB53D66400127F68529E447CC22872A7BC71E5CD994B0F4E32B10C2355A6`
+`CC348551C912736F3D5F6C3F275EE5B14E5E7E0154159AD5E711ABE2011275E9`
 
 Catalog entries are factual metadata and links. Listed repositories, source code, model weights, datasets, documentation, trademarks, and outputs remain the property of their respective owners and are governed by their own licenses and terms. Inclusion is not endorsement.
 

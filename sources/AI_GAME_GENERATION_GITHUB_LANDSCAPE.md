@@ -2,7 +2,7 @@
 
 Snapshot: 2026-07-30
 
-This is a broad, high-signal catalog of public GitHub repositories for AI-assisted or AI-generated games. It intentionally removes most forks, one-off student demos, SEO repositories, and tiny clones. It is not literally every repository on GitHub; GitHub search is continuously changing and many projects do not use consistent topics.
+This is a broad, high-signal catalog of public GitHub repositories for AI-assisted or AI-generated games. It intentionally removes most forks, one-off student demos, SEO repositories, and tiny clones. It is not literally every repository on GitHub; GitHub search is continuously changing and many projects do not use consistent topics. Repository sections are the only source of repository counts and installable catalog records. **External references — pricing and licensing** is the explicit exception: it cites a standalone website, and entries there stay outside repository counts and outside the installable catalog.
 
 Legend:
 
@@ -357,3 +357,9 @@ These are not generators, but they catch problems that visual AI judges often mi
 5. **Playability**: the asset behaves correctly in an actual build, not only in a turntable render.
 6. **Regression evidence**: store engine screenshots/video, automated results, generation settings, model/weight versions, and source commit.
 7. **Human approval**: art direction, fun, readability, originality, and legal risk still require a responsible reviewer.
+
+## External references — pricing and licensing
+
+These entries are standalone websites. They are excluded from repository counts and installable catalog records.
+
+- [RespawnStack](https://respawnstack.com/) — **External reference**. Free-to-read directory of AI game-tool pricing, commercial-use terms, and output ownership, with dated vendor quotes where verified and explicit unverified entries. Advertising/affiliate-supported; recheck original vendor terms before commercial use.
